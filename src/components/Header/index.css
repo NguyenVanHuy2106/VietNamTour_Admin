@@ -1,0 +1,112 @@
+.logoClass {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.logoClass h2 {
+    padding-left: 15px;
+}
+
+.admin {
+    display: flex;
+  
+    align-items: center;
+} 
+
+.admin div {
+    margin-left: 10px;
+}
+
+
+.menu-container {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #1d61ad;
+  width: 100%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  height: 50px;
+  padding: 0 15px;
+}
+
+/* Các mục trong menu */
+.menu-items {
+   
+    display: flex;
+  gap: 10px;
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+   position: sticky;
+  top: 0;
+  z-index: 1000;
+  justify-content: center;
+  background-color: #1d61ad;
+  width: 100%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  height: 50px;
+  padding: 0 15px;
+}
+.menu-items .menu-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left:10px;
+    padding-right: 10px;
+    
+}
+.menu-item:hover {
+  background-color: #ffffff;
+  color: #1d61ad !important;
+}
+
+
+.menu-items {
+  display: flex;
+  gap: 20px;
+}
+
+.menu-item {
+  position: relative;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.submenu {
+  position: absolute;
+  top: 100%; /* Hiển thị ngay bên dưới */
+  left: 0;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  display: none;
+  flex-direction: column;
+  width: 200px;
+ 
+  /* border-radius: 5px; */
+  z-index: 10;
+}
+
+.menu-item:hover .submenu {
+  display: flex;
+}
+
+.submenu .submenu-item {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  color: #1d61ad;
+
+  transition: 0.3s;
+  font-weight: 0;
+}
+
+.submenu-item:hover {
+  background-color: #1d61ad;
+  color: white !important
+}

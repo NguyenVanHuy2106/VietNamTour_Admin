@@ -1,12 +1,12 @@
 // src/pages/Users.js
 import React from "react";
 
-const Users = () => {
+const TravelLocation = () => {
   return (
     <div className="d-flex" style={{ marginLeft: "50px", marginRight: "50px" }}>
-      Huy
+      TravelLocation
     </div>
   );
 };
 
-export default Users;
+export default TravelLocation;
