@@ -9,6 +9,7 @@ import { FaPlus } from "react-icons/fa";
 import { CiTrash, CiEdit } from "react-icons/ci";
 
 import Modal from "@mui/material/Modal";
+
 import Box from "@mui/material/Box";
 import { TextField } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
@@ -16,6 +17,9 @@ import Snackbar from "@mui/material/Snackbar";
 import Button from "@mui/material/Button";
 import { RingLoader } from "react-spinners";
 import Backdrop from "@mui/material/Backdrop";
+
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
 import "./index.css";
 
@@ -54,6 +58,49 @@ const TourType = () => {
   const itemsPerPage = 10;
   const classes = useStyles();
   let [loading, setLoading] = useState(false);
+  const [deleteId, setDeleteId] = useState(null); // lưu id cần xoá
+
+  const [openModalDelete, setOpenModalDelete] = useState(false);
+  const handleCloseModalDelete = () => {
+    setOpenModalDelete(false);
+  };
+
+  const handleOpenModalDelete = (id) => {
+    setOpenModalDelete(true);
+    setDeleteId(id);
+  };
+  const handleAgrreDelete = async () => {
+    try {
+      setLoading(true);
+      const response = await APIToken.delete(`/tourType/delete/${deleteId}`);
+      if (response.status === 200) {
+        setAlertMessage("Xoá loại tour thành công");
+      }
+    } catch (error) {
+      return error;
+    } finally {
+      setDeleteId(null);
+      setLoading(false);
+      setOpenModalDelete(false);
+      getData();
+    }
+  };
+
+  const action = (
+    <React.Fragment>
+      <Button color="secondary" size="small" onClick={handleAgrreDelete}>
+        OK
+      </Button>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleCloseModalDelete}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
 
   const getData = async () => {
     try {
@@ -176,7 +223,11 @@ const TourType = () => {
                     <div className="Edit" style={{ marginRight: 10 }}>
                       <CiEdit />
                     </div>
-                    <div className="Trash" style={{ marginLeft: 10 }}>
+                    <div
+                      className="Trash"
+                      style={{ marginLeft: 10 }}
+                      onClick={() => handleOpenModalDelete(tourType.tourtypeid)}
+                    >
                       <CiTrash />
                     </div>
                   </div>
@@ -259,28 +310,7 @@ const TourType = () => {
             >
               Thêm mới loại Tour
             </div>
-            <div style={{ marginLeft: 37, marginTop: 12 }}>
-              {/* <label htmlFor="image-uploader">
-                {url ? (
-                  <img src={url} alt="Selected file" width={150} height={150} />
-                ) : (
-                  <div
-                    className="d-flex border border-dashed justify-content-center align-items-center"
-                    style={{ width: 150, height: 150 }}
-                  >
-                    Chọn ảnh
-                  </div>
-                )}
-              </label> */}
-              {/* <input
-                className="border"
-                id="image-uploader"
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                style={{ display: "none" }}
-              /> */}
-            </div>
+
             <div
               className="d-flex align-items-center flex-column"
               style={{ marginTop: 20 }}
@@ -340,6 +370,13 @@ const TourType = () => {
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         message={alertMessage}
         //action={action}
+      />
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={openModalDelete}
+        onClose={handleCloseModalDelete}
+        message="Bạn có chắc chắn xoá"
+        action={action}
       />
     </div>
   );

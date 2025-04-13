@@ -17,7 +17,8 @@ import Backdrop from "@mui/material/Backdrop";
 import { makeStyles } from "@material-ui/core/styles";
 import ImageUploader from "../../components/ImageUploader";
 import APIToken from "../../config/APIToken";
-
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 const useStyles = makeStyles((theme) => ({
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
@@ -46,6 +47,12 @@ const Customer = () => {
   const [error, setError] = useState("");
   const [isError, setIsError] = useState(false);
   let [loading, setLoading] = useState(false);
+  const [deleteId, setDeleteId] = useState(null); // lưu id cần xoá
+
+  const [openModalDelete, setOpenModalDelete] = useState(false);
+  const handleCloseModalDelete = () => {
+    setOpenModalDelete(false);
+  };
 
   const [successAlertOpen, setSuccessAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
@@ -76,10 +83,46 @@ const Customer = () => {
     setIsError(false);
     setError("");
   };
+  const handleOpenModalDelete = (id) => {
+    setOpenModalDelete(true);
+    setDeleteId(id);
+  };
+
+  const handleAgrreDelete = async () => {
+    try {
+      setLoading(true);
+      const response = await APIToken.delete(`/customer/delete/${deleteId}`);
+      if (response.status === 200) {
+        setAlertMessage("Xoá khách hàng thành công");
+      }
+    } catch (error) {
+      return error;
+    } finally {
+      setDeleteId(null);
+      setLoading(false);
+      setOpenModalDelete(false);
+      getData();
+    }
+  };
   const handleUploadSuccess = (url) => {
     setImageLink(url);
     //console.log("🔗 Link ảnh cần lưu DB:", url);
   };
+  const action = (
+    <React.Fragment>
+      <Button color="secondary" size="small" onClick={handleAgrreDelete}>
+        OK
+      </Button>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleCloseModalDelete}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
   const handleAgrre = async () => {
     if (tFCustomerValue.length === 0) {
       setError("Vui lòng nhập tên khách hàng");
@@ -193,7 +236,11 @@ const Customer = () => {
                       <CiEdit />
                     </div>
                     <div className="Trash" style={{ marginLeft: 10 }}>
-                      <CiTrash />
+                      <CiTrash
+                        onClick={() =>
+                          handleOpenModalDelete(customer.customerid)
+                        }
+                      />
                     </div>
                   </div>
                 </td>
@@ -354,6 +401,13 @@ const Customer = () => {
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         message={alertMessage}
         //action={action}
+      />
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={openModalDelete}
+        onClose={handleCloseModalDelete}
+        message="Bạn có chắc chắn xoá"
+        action={action}
       />
     </div>
   );

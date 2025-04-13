@@ -105,7 +105,8 @@ const HeaderNavData = [
     subMenu: [
       { id: 3.1, name: "Danh sách dịch vụ", link: "service" },
       { id: 3.2, name: "Danh sách Tỉnh/TP", link: "province" },
-      { id: 3.2, name: "Địa điểm du lịch", link: "travel-location" },
+      { id: 3.3, name: "Địa điểm du lịch", link: "travel-location" },
+      { id: 3.4, name: "Cẩm nang du lịch", link: "guide-travel" },
     ],
   },
   { id: 4, name: "KHUYẾN MÃI", link: "#" },

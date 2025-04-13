@@ -13,6 +13,11 @@ import Snackbar from "@mui/material/Snackbar";
 import Button from "@mui/material/Button";
 import { RingLoader } from "react-spinners";
 import Backdrop from "@mui/material/Backdrop";
+
+import { CiTrash, CiEdit } from "react-icons/ci";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+
 const useStyles = makeStyles((theme) => ({
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
@@ -48,6 +53,49 @@ const HotelType = () => {
   let userId = localStorage.getItem("userId");
   const classes = useStyles();
   let [loading, setLoading] = useState(false);
+  const [deleteId, setDeleteId] = useState(null); // lưu id cần xoá
+
+  const [openModalDelete, setOpenModalDelete] = useState(false);
+  const handleCloseModalDelete = () => {
+    setOpenModalDelete(false);
+  };
+
+  const handleOpenModalDelete = (id) => {
+    setOpenModalDelete(true);
+    setDeleteId(id);
+  };
+
+  const handleAgrreDelete = async () => {
+    try {
+      setLoading(true);
+      const response = await APIToken.delete(`/hotelType/delete/${deleteId}`);
+      if (response.status === 200) {
+        setAlertMessage("Xoá loại nơi ở thành công");
+      }
+    } catch (error) {
+      return error;
+    } finally {
+      setDeleteId(null);
+      setLoading(false);
+      setOpenModalDelete(false);
+      getData();
+    }
+  };
+  const action = (
+    <React.Fragment>
+      <Button color="secondary" size="small" onClick={handleAgrreDelete}>
+        OK
+      </Button>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleCloseModalDelete}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
 
   const getData = async () => {
     try {
@@ -143,9 +191,10 @@ const HotelType = () => {
           <tr>
             <th style={{ width: "10%" }}>Mã loại nơi ở</th>
             <th style={{ width: "25%" }}>Tên loại nơi ở</th>
-            <th style={{ width: "25%" }}>Mô tả</th>
-            <th>Người thêm</th>
-            <th style={{ width: "20%" }}>Ngày thêm</th>
+            <th style={{ width: "20%" }}>Mô tả</th>
+            <th style={{ width: "20%" }}>Người thêm</th>
+            <th style={{ width: "15%" }}>Ngày thêm</th>
+            <th style={{ width: "15%" }}>Tác vụ</th>
           </tr>
         </thead>
         <tbody>
@@ -157,6 +206,22 @@ const HotelType = () => {
                 <td>{hotelType.description}</td>
                 <td>{hotelType.created_by}</td>
                 <td>{hotelType.created_at}</td>
+                <td>
+                  <div className="d-flex">
+                    <div className="Edit" style={{ marginRight: 10 }}>
+                      <CiEdit />
+                    </div>
+                    <div
+                      className="Trash"
+                      style={{ marginLeft: 10 }}
+                      onClick={() =>
+                        handleOpenModalDelete(hotelType.hoteltypeid)
+                      }
+                    >
+                      <CiTrash />
+                    </div>
+                  </div>
+                </td>
               </tr>
             ))
           ) : (
@@ -295,6 +360,13 @@ const HotelType = () => {
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         message={alertMessage}
         //action={action}
+      />
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={openModalDelete}
+        onClose={handleCloseModalDelete}
+        message="Bạn có chắc chắn xoá"
+        action={action}
       />
     </div>
   );

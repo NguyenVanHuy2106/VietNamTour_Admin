@@ -15,6 +15,7 @@ import Service from "../../app/Service";
 import Province from "../../app/Province";
 import TravelLocation from "../../app/TravelLocation";
 import Customer from "../../app/Customer";
+import GuideTravel from "../../app/GuideTravel";
 
 import SignIn from "../SignIn";
 import APIToken from "../../config/APIToken";
@@ -69,6 +70,7 @@ const RoutePage = () => {
         <Route path="province" element={<Province />} />
         <Route path="travel-location" element={<TravelLocation />} />
         <Route path="customer" element={<Customer />} />
+        <Route path="guide-travel" element={<GuideTravel />} />
       </Route>
     </Routes>
   );
