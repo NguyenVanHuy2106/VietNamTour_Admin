@@ -1,39 +1,21 @@
 import React, { useState, useEffect } from "react";
 import API from "../../config/APINoToken";
 import APIToken from "../../config/APIToken";
-import { makeStyles } from "@material-ui/core/styles";
-
 import { BsCaretLeft, BsCaretRight } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import { TextField } from "@mui/material";
-import Checkbox from "@mui/material/Checkbox";
-import Snackbar from "@mui/material/Snackbar";
-import Button from "@mui/material/Button";
-import { RingLoader } from "react-spinners";
-import Backdrop from "@mui/material/Backdrop";
-
+import {
+  Modal,
+  Button,
+  Checkbox,
+  Alert,
+  Spinner,
+  Row,
+  Col,
+  Toast,
+} from "react-bootstrap";
 import { CiTrash, CiEdit } from "react-icons/ci";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
 
-const useStyles = makeStyles((theme) => ({
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
-    color: "#fff",
-  },
-}));
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 800,
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-};
+import "./index.css";
 
 const HotelType = () => {
   const [dataHotelType, setDataHotelType] = useState([]);
@@ -51,14 +33,11 @@ const HotelType = () => {
   const [tFDesValue, setTFDesValue] = useState("");
 
   let userId = localStorage.getItem("userId");
-  const classes = useStyles();
   let [loading, setLoading] = useState(false);
-  const [deleteId, setDeleteId] = useState(null); // lưu id cần xoá
+  const [deleteId, setDeleteId] = useState(null);
 
   const [openModalDelete, setOpenModalDelete] = useState(false);
-  const handleCloseModalDelete = () => {
-    setOpenModalDelete(false);
-  };
+  const handleCloseModalDelete = () => setOpenModalDelete(false);
 
   const handleOpenModalDelete = (id) => {
     setOpenModalDelete(true);
@@ -73,7 +52,7 @@ const HotelType = () => {
         setAlertMessage("Xoá loại nơi ở thành công");
       }
     } catch (error) {
-      return error;
+      console.error(error);
     } finally {
       setDeleteId(null);
       setLoading(false);
@@ -81,21 +60,6 @@ const HotelType = () => {
       getData();
     }
   };
-  const action = (
-    <React.Fragment>
-      <Button color="secondary" size="small" onClick={handleAgrreDelete}>
-        OK
-      </Button>
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="inherit"
-        onClick={handleCloseModalDelete}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </React.Fragment>
-  );
 
   const getData = async () => {
     try {
@@ -108,6 +72,7 @@ const HotelType = () => {
       );
     }
   };
+
   const handleCloseModal = () => {
     setOpenModal(false);
     setIsError(false);
@@ -134,19 +99,21 @@ const HotelType = () => {
           setSuccessAlertOpen(true);
         }
       } catch (error) {
-        return error;
+        console.error(error);
       } finally {
         setLoading(false);
         getData();
         setOpenModal(false);
+        setTFDesValue("");
+        setTFHotelTypeValue("");
       }
     }
   };
+
   useEffect(() => {
     getData();
   }, []);
 
-  // Tính toán dữ liệu hiển thị cho trang hiện tại
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = dataHotelType.slice(indexOfFirstItem, indexOfLastItem);
@@ -159,15 +126,18 @@ const HotelType = () => {
     <div className="container mt-1">
       <div
         style={{
-          borderBottom: "1px #000000 solid",
-          fontSize: 25,
-          padding: 10,
+          borderBottom: "1px solid #1D61AD",
+          fontSize: 20,
+          paddingTop: 10,
+          paddingBottom: 10,
+          marginBottom: 20,
+          color: "#1d61ad",
         }}
       >
-        Loại nơi ở
+        LOẠI NƠI Ở
       </div>
       <div className="plus" style={{ marginRight: "50px" }}>
-        <Button variant="contained" onClick={handleOpenModal}>
+        <Button variant="primary" onClick={handleOpenModal}>
           <div
             style={{
               display: "flex",
@@ -226,7 +196,7 @@ const HotelType = () => {
             ))
           ) : (
             <tr>
-              <td colSpan="4" className="text-center">
+              <td colSpan="6" className="text-center">
                 Không có dữ liệu
               </td>
             </tr>
@@ -234,7 +204,6 @@ const HotelType = () => {
         </tbody>
       </table>
 
-      {/* Pagination - Luôn giữ vị trí, không thay đổi kích thước */}
       {dataHotelType.length > itemsPerPage && (
         <div className="d-flex justify-content-center mt-3">
           <nav>
@@ -280,94 +249,73 @@ const HotelType = () => {
           </nav>
         </div>
       )}
-      <div>
-        {loading ? (
-          <Backdrop className={classes.backdrop} open>
-            <RingLoader color="#36d7b7" />
-          </Backdrop>
-        ) : null}
-      </div>
-      <div>
-        <Modal
-          open={openModal}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <div
-              className="border-bottom fw-bold"
-              style={{ paddingBottom: "20px" }}
-            >
-              Thêm mới loại nơi ở
-            </div>
-            <div style={{ marginLeft: 37, marginTop: 12 }}></div>
-            <div
-              className="d-flex align-items-center flex-column"
-              style={{ marginTop: 20 }}
-            >
-              <TextField
-                required
-                id="outlined-basic"
-                label="Tên loại nơi ở"
-                variant="outlined"
-                style={{ width: "90%" }}
-                onChange={(newValue) =>
-                  setTFHotelTypeValue(newValue.target.value)
-                }
-                helperText={error}
-                error={isError}
-              />
+      {loading && (
+        <div className="loading-overlay">
+          <div className="loading-spinner">
+            <Spinner animation="border" role="status" />
+          </div>
+        </div>
+      )}
 
-              <TextField
-                id="outlined-multiline-flexible"
-                label="Mô tả"
-                multiline
-                rows={6}
-                style={{ width: "90%", marginTop: 20 }}
-                onChange={(newValue) => setTFDesValue(newValue.target.value)}
-              />
-            </div>
-            <div style={{ marginTop: 10, marginLeft: 37 }}>
-              Kích hoạt{" "}
-              <Checkbox
-                disabled
-                checked={checked}
-                //onChange={handleChange}
-              />
-            </div>
-            <div
-              className="d-flex justify-content-center"
-              style={{ marginTop: 20 }}
-            >
-              <div style={{ marginRight: 20 }}>
-                <Button variant="outlined" onClick={handleCloseModal}>
-                  Quay lại
-                </Button>
-              </div>
-              <div style={{ marginLeft: 20 }}>
-                <Button variant="contained" onClick={handleAgrre}>
-                  Đồng ý
-                </Button>
-              </div>
-            </div>
-          </Box>
-        </Modal>
-      </div>
-      <Snackbar
-        open={successAlertOpen}
-        autoHideDuration={3000}
+      <Modal show={openModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Thêm mới loại nơi ở</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="mb-3">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Tên loại nơi ở"
+              value={tFHotelTypeValue}
+              onChange={(e) => setTFHotelTypeValue(e.target.value)}
+            />
+            {isError && <div className="text-danger">{error}</div>}
+          </div>
+          <div className="mb-3">
+            <textarea
+              className="form-control"
+              placeholder="Mô tả"
+              rows="4"
+              value={tFDesValue}
+              onChange={(e) => setTFDesValue(e.target.value)}
+            />
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Quay lại
+          </Button>
+          <Button variant="primary" onClick={handleAgrre}>
+            Đồng ý
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Toast
         onClose={() => setSuccessAlertOpen(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        message={alertMessage}
-        //action={action}
-      />
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        open={openModalDelete}
-        onClose={handleCloseModalDelete}
-        message="Bạn có chắc chắn xoá"
-        action={action}
-      />
+        show={successAlertOpen}
+        delay={3000}
+        autohide
+        className="position-fixed top-0 end-0 m-3"
+      >
+        <Toast.Body>{alertMessage}</Toast.Body>
+      </Toast>
+
+      <Modal show={openModalDelete} onHide={handleCloseModalDelete}>
+        <Modal.Header closeButton>
+          <Modal.Title>Xác nhận xoá</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Bạn có chắc chắn xoá?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModalDelete}>
+            Đóng
+          </Button>
+          <Button variant="danger" onClick={handleAgrreDelete}>
+            Xoá
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

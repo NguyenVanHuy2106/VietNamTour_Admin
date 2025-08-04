@@ -1,51 +1,15 @@
 import React, { useState, useEffect } from "react";
 import API from "../../config/APINoToken";
 import APIToken from "../../config/APIToken";
-
 import { BsCaretLeft, BsCaretRight } from "react-icons/bs";
-import { CiTrash, CiEdit } from "react-icons/ci";
-import IconButton from "@mui/material/IconButton";
-import { makeStyles } from "@material-ui/core/styles";
-import CloseIcon from "@mui/icons-material/Close";
-import Snackbar from "@mui/material/Snackbar";
-import Button from "@mui/material/Button";
 import { FaPlus } from "react-icons/fa";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import { TextField } from "@mui/material";
-import Checkbox from "@mui/material/Checkbox";
-import { RingLoader } from "react-spinners";
-import Backdrop from "@mui/material/Backdrop";
+import { CiTrash, CiEdit } from "react-icons/ci";
+import { Button, Modal, Form, Spinner, Toast } from "react-bootstrap";
+import "./index.css";
 
-const useStyles = makeStyles((theme) => ({
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
-    color: "#fff",
-  },
-}));
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 800,
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-};
 const Service = () => {
   const [dataService, setDataService] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-  let userId = localStorage.getItem("userId");
-  const classes = useStyles();
-
-  const [openModalDelete, setOpenModalDelete] = useState(false);
-  const handleCloseModalDelete = () => {
-    setOpenModalDelete(false);
-  };
-  let [loading, setLoading] = useState(false);
-  const [deleteId, setDeleteId] = useState(null); // lưu id cần xoá
   const [openModal, setOpenModal] = useState(false);
   const [error, setError] = useState("");
   const [isError, setIsError] = useState(false);
@@ -57,13 +21,15 @@ const Service = () => {
   const [tFServiceValue, setTFServiceValue] = useState("");
   const [tFDesValue, setTFDesValue] = useState("");
 
-  const handleCloseModal = () => {
-    setOpenModal(false);
-    setIsError(false);
-    setError("");
-  };
+  let userId = localStorage.getItem("userId");
+  const itemsPerPage = 10;
+  let [loading, setLoading] = useState(false);
+  const [deleteId, setDeleteId] = useState(null); // lưu id cần xoá
 
-  const handleOpenModal = () => setOpenModal(true);
+  const [openModalDelete, setOpenModalDelete] = useState(false);
+  const handleCloseModalDelete = () => {
+    setOpenModalDelete(false);
+  };
 
   const handleOpenModalDelete = (id) => {
     setOpenModalDelete(true);
@@ -75,7 +41,7 @@ const Service = () => {
       setLoading(true);
       const response = await APIToken.delete(`/services/delete/${deleteId}`);
       if (response.status === 200) {
-        setAlertMessage("Xoá loại nơi ở thành công");
+        setAlertMessage("Xoá dịch vụ thành công");
       }
     } catch (error) {
       return error;
@@ -86,24 +52,10 @@ const Service = () => {
       getData();
     }
   };
-  const action = (
-    <React.Fragment>
-      <Button color="secondary" size="small" onClick={handleAgrreDelete}>
-        OK
-      </Button>
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="inherit"
-        onClick={handleCloseModalDelete}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </React.Fragment>
-  );
 
   const getData = async () => {
     try {
+      setLoading(true);
       const response = await API.get("/services/get");
       setDataService(response.data.data || []);
     } catch (error) {
@@ -111,11 +63,22 @@ const Service = () => {
         "Lỗi khi lấy danh sách loại Tour:",
         error.response || error
       );
+    } finally {
+      setLoading(false); // ✅ Luôn tắt loading sau khi xong
     }
   };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setIsError(false);
+    setError("");
+  };
+
+  const handleOpenModal = () => setOpenModal(true);
+
   const handleAgrre = async () => {
     if (tFServiceValue.length === 0) {
-      setError("Vui long nhap tên loại nơi ở ");
+      setError("Vui lòng nhập tên danh mục");
       setIsError(true);
     } else {
       try {
@@ -125,9 +88,8 @@ const Service = () => {
           description: tFDesValue,
           created_by: userId,
         });
-
         if (response.status === 201) {
-          setAlertMessage("Thêm mới dịch vụ thành công");
+          setAlertMessage("Thêm mới loại tour thành công");
           setSuccessAlertOpen(true);
         }
       } catch (error) {
@@ -136,9 +98,12 @@ const Service = () => {
         setLoading(false);
         getData();
         setOpenModal(false);
+        setTFServiceValue("");
+        setTFDesValue("");
       }
     }
   };
+
   useEffect(() => {
     getData();
   }, []);
@@ -158,10 +123,10 @@ const Service = () => {
           padding: 10,
         }}
       >
-        Dịch vụ
+        Loại tour
       </div>
       <div className="plus" style={{ marginRight: "50px" }}>
-        <Button variant="contained" onClick={handleOpenModal}>
+        <Button variant="primary" onClick={handleOpenModal}>
           <div
             style={{
               display: "flex",
@@ -184,9 +149,8 @@ const Service = () => {
         <thead>
           <tr>
             <th style={{ width: "10%" }}>Mã dịch vụ</th>
-            <th style={{ width: "25%" }}>Tên dịch vụ</th>
-            <th style={{ width: "20%" }}>Mô tả</th>
-
+            <th style={{ width: "30%" }}>Tên dịch vụ</th>
+            <th style={{ width: "15%" }}>Trạng thái</th>
             <th style={{ width: "20%" }}>Người thêm</th>
             <th style={{ width: "15%" }}>Ngày thêm</th>
             <th style={{ width: "10%" }}>Tác vụ</th>
@@ -198,7 +162,13 @@ const Service = () => {
               <tr key={service.serviceid}>
                 <td>{service.serviceid}</td>
                 <td>{service.servicename}</td>
-                <td>{service.description}</td>
+                <td>
+                  {service.status === 1
+                    ? "Hoạt động"
+                    : service.status === 2
+                    ? "Không hoạt động"
+                    : "Không rõ"}
+                </td>
 
                 <td>{service.created_by}</td>
                 <td>{service.created_at}</td>
@@ -228,7 +198,7 @@ const Service = () => {
         </tbody>
       </table>
 
-      {/* Pagination - Luôn giữ vị trí, không thay đổi kích thước */}
+      {/* Pagination */}
       {dataService.length > itemsPerPage && (
         <div className="d-flex justify-content-center mt-3">
           <nav>
@@ -274,94 +244,100 @@ const Service = () => {
           </nav>
         </div>
       )}
-      <div>
-        {loading ? (
-          <Backdrop className={classes.backdrop} open>
-            <RingLoader color="#36d7b7" />
-          </Backdrop>
-        ) : null}
-      </div>
-      <div>
-        <Modal
-          open={openModal}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <div
-              className="border-bottom fw-bold"
-              style={{ paddingBottom: "20px" }}
-            >
-              Thêm mới dịch vụ
-            </div>
-            <div style={{ marginLeft: 37, marginTop: 12 }}></div>
-            <div
-              className="d-flex align-items-center flex-column"
-              style={{ marginTop: 20 }}
-            >
-              <TextField
-                required
-                id="outlined-basic"
-                label="Tên loại dịch vụ"
-                variant="outlined"
-                style={{ width: "90%" }}
-                onChange={(newValue) =>
-                  setTFServiceValue(newValue.target.value)
-                }
-                helperText={error}
-                error={isError}
-              />
 
-              <TextField
-                id="outlined-multiline-flexible"
-                label="Mô tả"
-                multiline
-                rows={6}
-                style={{ width: "90%", marginTop: 20 }}
-                onChange={(newValue) => setTFDesValue(newValue.target.value)}
+      {/* Loading Spinner */}
+      {loading && (
+        <div className="loading-overlay">
+          <div className="loading-spinner">
+            <Spinner animation="border" role="status" />
+          </div>
+        </div>
+      )}
+
+      {/* Modal Add */}
+      <Modal show={openModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Thêm mới dịch vụ</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group controlId="tourtypeName">
+              <Form.Label>Tên dịch vụ</Form.Label>
+              <Form.Control
+                type="text"
+                value={tFServiceValue}
+                onChange={(e) => setTFServiceValue(e.target.value)}
+                isInvalid={isError}
+                isValid={!!tFServiceValue}
               />
-            </div>
-            <div style={{ marginTop: 10, marginLeft: 37 }}>
-              Kích hoạt{" "}
-              <Checkbox
-                disabled
-                checked={checked}
-                //onChange={handleChange}
+              <Form.Control.Feedback type="invalid">
+                {error}
+              </Form.Control.Feedback>
+            </Form.Group>
+
+            <Form.Group controlId="tourtypeDescription">
+              <Form.Label>Mô tả</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={tFDesValue}
+                onChange={(e) => setTFDesValue(e.target.value)}
               />
-            </div>
-            <div
-              className="d-flex justify-content-center"
-              style={{ marginTop: 20 }}
-            >
-              <div style={{ marginRight: 20 }}>
-                <Button variant="outlined" onClick={handleCloseModal}>
-                  Quay lại
-                </Button>
-              </div>
-              <div style={{ marginLeft: 20 }}>
-                <Button variant="contained" onClick={handleAgrre}>
-                  Đồng ý
-                </Button>
-              </div>
-            </div>
-          </Box>
-        </Modal>
-      </div>
-      <Snackbar
-        open={successAlertOpen}
-        autoHideDuration={3000}
+            </Form.Group>
+
+            <Form.Check
+              type="checkbox"
+              label="Kích hoạt"
+              checked={checked}
+              disabled
+            />
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Đóng
+          </Button>
+          <Button variant="primary" onClick={handleAgrre}>
+            {loading ? (
+              <Spinner
+                animation="border"
+                variant="light"
+                size="sm"
+                className="mr-2"
+              />
+            ) : (
+              "Thêm"
+            )}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Success Alert */}
+      <Toast
         onClose={() => setSuccessAlertOpen(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        message={alertMessage}
-        //action={action}
-      />
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        open={openModalDelete}
-        onClose={handleCloseModalDelete}
-        message="Bạn có chắc chắn xoá"
-        action={action}
-      />
+        show={successAlertOpen}
+        delay={3000}
+        autohide
+        className="position-fixed top-0 end-0 m-3"
+      >
+        <Toast.Body>{alertMessage}</Toast.Body>
+      </Toast>
+
+      {/* Delete Modal */}
+      <Modal show={openModalDelete} onHide={handleCloseModalDelete}>
+        <Modal.Header closeButton>
+          <Modal.Title>Xoá loại tour</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Bạn có chắc chắn muốn xoá dịch vụ này không?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModalDelete}>
+            Huỷ
+          </Button>
+          <Button variant="danger" onClick={handleAgrreDelete}>
+            Xoá
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

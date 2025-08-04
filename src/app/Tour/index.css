@@ -1,0 +1,10 @@
+table .detailLink {
+    color: blue;
+
+}
+
+table .detailLink:hover {
+    cursor: pointer;
+    color: blue;
+}
+

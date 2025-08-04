@@ -1,51 +1,30 @@
 import React, { useState, useEffect } from "react";
-
 import API from "../../config/APINoToken";
-import { BsCaretLeft, BsCaretRight } from "react-icons/bs";
-import { FaPlus, FaRegTrashAlt } from "react-icons/fa";
-import { CiTrash, CiEdit } from "react-icons/ci";
-import "./index.css";
-
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import { TextField } from "@mui/material";
-import Checkbox from "@mui/material/Checkbox";
-import Snackbar from "@mui/material/Snackbar";
-import Button from "@mui/material/Button";
-import { RingLoader } from "react-spinners";
-import Backdrop from "@mui/material/Backdrop";
-import { makeStyles } from "@material-ui/core/styles";
-import ImageUploader from "../../components/ImageUploader";
 import APIToken from "../../config/APIToken";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-const useStyles = makeStyles((theme) => ({
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
-    color: "#fff",
-  },
-}));
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 800,
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-};
+import { BsCaretLeft, BsCaretRight } from "react-icons/bs";
+import { FaPlus } from "react-icons/fa";
+import { CiTrash, CiEdit } from "react-icons/ci";
+import { Button, Modal, Form, Spinner, Toast } from "react-bootstrap";
+import "./index.css";
+import ImageCDNCloud from "../../components/ImageCDNCloud";
 
 const Customer = () => {
   const [dataCustomer, setDataCustomer] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [openModal, setOpenModal] = useState(false);
-  const [checked, setChecked] = useState(true);
-  //   const [url, setUrl] = useState("");
-  const [imageLink, setImageLink] = useState("");
-
   const [error, setError] = useState("");
   const [isError, setIsError] = useState(false);
+  const [checked, setChecked] = useState(true);
+  const [imageLink, setImageLink] = useState("");
+
+  const [successAlertOpen, setSuccessAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+
+  const [tFCustomerName, setTFCustomerName] = useState("");
+  const [tFDesValue, setTFDesValue] = useState("");
+
+  let userId = localStorage.getItem("userId");
+  const itemsPerPage = 10;
   let [loading, setLoading] = useState(false);
   const [deleteId, setDeleteId] = useState(null); // lưu id cần xoá
 
@@ -54,35 +33,6 @@ const Customer = () => {
     setOpenModalDelete(false);
   };
 
-  const [successAlertOpen, setSuccessAlertOpen] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
-
-  const [tFCustomerValue, setTFCustomerValue] = useState("");
-  const [tFDesValue, setTFDesValue] = useState("");
-
-  let userId = localStorage.getItem("userId");
-  const classes = useStyles();
-
-  const itemsPerPage = 10;
-  const getData = async () => {
-    try {
-      const response = await API.get("/customer/get");
-      setDataCustomer(response.data.data || []);
-    } catch (error) {
-      console.error(
-        "Lỗi khi lấy danh sách khách hàng",
-        error.response || error
-      );
-    }
-  };
-  const handleOpenModal = () => setOpenModal(true);
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-    setImageLink("");
-    setIsError(false);
-    setError("");
-  };
   const handleOpenModalDelete = (id) => {
     setOpenModalDelete(true);
     setDeleteId(id);
@@ -106,52 +56,57 @@ const Customer = () => {
   };
   const handleUploadSuccess = (url) => {
     setImageLink(url);
-    //console.log("🔗 Link ảnh cần lưu DB:", url);
   };
-  const action = (
-    <React.Fragment>
-      <Button color="secondary" size="small" onClick={handleAgrreDelete}>
-        OK
-      </Button>
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="inherit"
-        onClick={handleCloseModalDelete}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </React.Fragment>
-  );
+
+  const getData = async () => {
+    try {
+      setLoading(true);
+      const response = await API.get("/customer/get");
+      setDataCustomer(response.data.data || []);
+    } catch (error) {
+      console.error(
+        "Lỗi khi lấy danh sách loại Tour:",
+        error.response || error
+      );
+    } finally {
+      setLoading(false); // ✅ Luôn tắt loading sau khi xong
+    }
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setIsError(false);
+    setError("");
+  };
+
+  const handleOpenModal = () => setOpenModal(true);
+
   const handleAgrre = async () => {
-    if (tFCustomerValue.length === 0) {
-      setError("Vui lòng nhập tên khách hàng");
+    if (tFCustomerName.length === 0) {
+      setError("Vui lòng nhập tên danh mục");
       setIsError(true);
     } else {
       try {
         setLoading(true);
-        //console.log("Huy 2");
         const response = await APIToken.post("/customer/add", {
-          customername: tFCustomerValue,
+          customername: tFCustomerName,
           customerfieldtypeid: 1,
           customerlogo: imageLink,
           description: tFDesValue,
           created_by: userId,
         });
-        //console.log("Thành công", response);
-
         if (response.status === 201) {
-          setAlertMessage("Thêm mới banner thành công");
+          setAlertMessage("Thêm mới khách hàng thành công");
           setSuccessAlertOpen(true);
         }
       } catch (error) {
-        //console.log("Thất bại", error);
         return error;
       } finally {
         setLoading(false);
         getData();
         setOpenModal(false);
-        setImageLink("");
+        setTFCustomerName("");
+        setTFDesValue("");
       }
     }
   };
@@ -175,10 +130,10 @@ const Customer = () => {
           padding: 10,
         }}
       >
-        Banner
+        Loại tour
       </div>
       <div className="plus" style={{ marginRight: "50px" }}>
-        <Button variant="contained" onClick={handleOpenModal}>
+        <Button variant="primary" onClick={handleOpenModal}>
           <div
             style={{
               display: "flex",
@@ -204,7 +159,7 @@ const Customer = () => {
             <th style={{ width: "20%" }}>Tên khách hàng</th>
             <th style={{ width: "15%" }}>Mô tả</th>
             <th style={{ width: "10%" }}>Logo</th>
-            <th style={{ width: "10%" }}>Lĩnh vực</th>
+            {/* <th style={{ width: "10%" }}>Lĩnh vực</th> */}
             <th style={{ width: "15%" }}>Người thêm</th>
             <th style={{ width: "12%" }}>Ngày thêm</th>
             <th style={{ width: "10%" }}>Tác vụ</th>
@@ -227,7 +182,15 @@ const Customer = () => {
                     />
                   ) : null}
                 </td>
-                <td>{customer.customerfieldtypeid}</td>
+                {/* <td>{customer.customerfieldtypeid}</td> */}
+                {/* <td>
+                  {customer.status === 1
+                    ? "Hoạt động"
+                    : customer.status === 2
+                    ? "Không hoạt động"
+                    : "Không rõ"}
+                </td> */}
+
                 <td>{customer.created_by}</td>
                 <td>{customer.created_at}</td>
                 <td>
@@ -235,12 +198,12 @@ const Customer = () => {
                     <div className="Edit" style={{ marginRight: 10 }}>
                       <CiEdit />
                     </div>
-                    <div className="Trash" style={{ marginLeft: 10 }}>
-                      <CiTrash
-                        onClick={() =>
-                          handleOpenModalDelete(customer.customerid)
-                        }
-                      />
+                    <div
+                      className="Trash"
+                      style={{ marginLeft: 10 }}
+                      onClick={() => handleOpenModalDelete(customer.customerid)}
+                    >
+                      <CiTrash />
                     </div>
                   </div>
                 </td>
@@ -256,7 +219,7 @@ const Customer = () => {
         </tbody>
       </table>
 
-      {/* Pagination - Luôn giữ vị trí, không thay đổi kích thước */}
+      {/* Pagination */}
       {dataCustomer.length > itemsPerPage && (
         <div className="d-flex justify-content-center mt-3">
           <nav>
@@ -302,113 +265,103 @@ const Customer = () => {
           </nav>
         </div>
       )}
-      <div>
-        {loading ? (
-          <Backdrop className={classes.backdrop} open>
-            <RingLoader color="#36d7b7" />
-          </Backdrop>
-        ) : null}
-      </div>
-      <div>
-        <Modal
-          open={openModal}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <div
-              className="border-bottom fw-bold"
-              style={{ paddingBottom: "20px" }}
-            >
-              Thêm khách hàng (150x80px)
-            </div>
-            <div style={{ marginLeft: 37, marginTop: 12 }}>
-              {imageLink ? (
-                <img
-                  src={imageLink}
-                  alt="Selected file"
-                  width={300}
-                  height={160}
-                />
-              ) : null}
-              <div className="d-flex mt-3">
-                <div
-                  style={{
-                    marginRight: 10,
-                  }}
-                >
-                  Chọn logo:{" "}
-                </div>
-                <ImageUploader onUploadSuccess={handleUploadSuccess} />
-              </div>
-            </div>
-            <div
-              className="d-flex align-items-center flex-column"
-              style={{ marginTop: 20 }}
-            >
-              <TextField
-                required
-                id="outlined-basic"
-                label="Tên khách hàng"
-                variant="outlined"
-                style={{ width: "90%" }}
-                onChange={(newValue) =>
-                  setTFCustomerValue(newValue.target.value)
-                }
-                helperText={error}
-                error={isError}
-              />
 
-              <TextField
-                id="outlined-multiline-flexible"
-                label="Mô tả"
-                multiline
-                rows={6}
-                style={{ width: "90%", marginTop: 20 }}
-                onChange={(newValue) => setTFDesValue(newValue.target.value)}
+      {/* Loading Spinner */}
+      {loading && (
+        <div className="loading-overlay">
+          <div className="loading-spinner">
+            <Spinner animation="border" role="status" />
+          </div>
+        </div>
+      )}
+
+      {/* Modal Add */}
+      <Modal show={openModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Thêm mới khách hàng</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group controlId="tourtypeName">
+              <Form.Label>Tên khách hàng</Form.Label>
+              <Form.Control
+                type="text"
+                value={tFCustomerName}
+                onChange={(e) => setTFCustomerName(e.target.value)}
+                isInvalid={isError}
+                isValid={!!tFCustomerName}
               />
-            </div>
-            <div style={{ marginTop: 10, marginLeft: 37 }}>
-              Kích hoạt{" "}
-              <Checkbox
-                disabled
-                checked={checked}
-                //onChange={handleChange}
+              <Form.Control.Feedback type="invalid">
+                {error}
+              </Form.Control.Feedback>
+            </Form.Group>
+
+            <Form.Group controlId="tourtypeDescription">
+              <Form.Label>Mô tả</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={tFDesValue}
+                onChange={(e) => setTFDesValue(e.target.value)}
               />
+            </Form.Group>
+            <div className="form-group mt-3">
+              <Form.Label>Ảnh Banner</Form.Label>
+              <ImageCDNCloud onUploadSuccess={handleUploadSuccess} />
             </div>
-            <div
-              className="d-flex justify-content-center"
-              style={{ marginTop: 20 }}
-            >
-              <div style={{ marginRight: 20 }}>
-                <Button variant="outlined" onClick={handleCloseModal}>
-                  Quay lại
-                </Button>
-              </div>
-              <div style={{ marginLeft: 20 }}>
-                <Button variant="contained" onClick={handleAgrre}>
-                  Đồng ý
-                </Button>
-              </div>
-            </div>
-          </Box>
-        </Modal>
-      </div>
-      <Snackbar
-        open={successAlertOpen}
-        autoHideDuration={3000}
+            <Form.Check
+              type="checkbox"
+              label="Kích hoạt"
+              checked={checked}
+              disabled
+            />
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Đóng
+          </Button>
+          <Button variant="primary" onClick={handleAgrre}>
+            {loading ? (
+              <Spinner
+                animation="border"
+                variant="light"
+                size="sm"
+                className="mr-2"
+              />
+            ) : (
+              "Thêm"
+            )}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Success Alert */}
+      <Toast
         onClose={() => setSuccessAlertOpen(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        message={alertMessage}
-        //action={action}
-      />
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        open={openModalDelete}
-        onClose={handleCloseModalDelete}
-        message="Bạn có chắc chắn xoá"
-        action={action}
-      />
+        show={successAlertOpen}
+        delay={3000}
+        autohide
+        className="position-fixed top-0 end-0 m-3"
+      >
+        <Toast.Body>{alertMessage}</Toast.Body>
+      </Toast>
+
+      {/* Delete Modal */}
+      <Modal show={openModalDelete} onHide={handleCloseModalDelete}>
+        <Modal.Header closeButton>
+          <Modal.Title>Xoá khách hàng</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Bạn có chắc chắn muốn xoá khách hàng này không?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModalDelete}>
+            Huỷ
+          </Button>
+          <Button variant="danger" onClick={handleAgrreDelete}>
+            Xoá
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

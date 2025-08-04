@@ -1,0 +1,106 @@
+.title {
+    font-weight: bold;
+    font-size: 1.6rem;
+    color: #1d61ad;
+}
+
+.description {
+    margin-top: 15px;
+    font-size: 1.0rem;
+    color: #444444;
+    font-style: italic;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: #EEEEEE;
+    text-align: justify;
+}
+.ContainerCombo {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+.combo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: #444444;
+}
+.TagDetail {
+    background-color: #009999;
+    padding-left: 15px;
+    padding-right: 15px;
+    color: #ffffff;
+    border-radius: 30px;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    -ms-border-radius: 30px;
+    -o-border-radius: 30px;
+    margin: 3px;
+}
+.TagDetail:hover {
+    cursor: pointer;
+    background-color: #1d61ad;
+}
+.titleRelation {
+    font-weight: bold;
+    color: #1d61ad;
+}
+
+.card {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 8px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: block;
+  width: 100%;
+  border: none; 
+   box-shadow: -1px 4px 20px -3px rgba(80, 79, 79, 0.3);
+   margin-top: 10px;
+}
+
+.card:hover {
+  cursor: pointer;
+  transform: translateY(-0.2em);
+  box-shadow: -4px 8px 15px -3px rgba(80, 79, 79, 0.4);
+}
+
+.card-img {
+  width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.card-title {
+  font-weight: bold;
+  color: #1d61ad;
+  margin-bottom: 8px;
+}
+
+.card-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 10px;
+}
+
+.combo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.card-description {
+  text-align: justify;
+  font-size: 14px;
+  color: #444;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

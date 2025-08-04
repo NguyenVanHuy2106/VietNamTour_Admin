@@ -1,0 +1,122 @@
+.tourName {
+    font-size: 27px;
+    font-weight: bold;
+    color: #1d41ad;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+}
+.tourDetail {
+    margin-top: 20px;
+    text-align: justify;
+    max-width: 770px;
+
+}
+.tourDetailInfo {
+    margin-left: 15px;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+
+    
+}
+.tourDetailInfoText {
+    margin-left: 10px;
+}
+.tourDetail img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1rem auto;
+}
+.BodyTour {
+    display: flex;
+}
+.tourInfoDes {
+    text-align: justify;
+    padding: 15px;
+    font-style: italic;
+    background-color: #eeeeee;
+   
+
+}
+.tourDetailPrice {
+    background-color: #eeeeee;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+}
+.tourInfoOrder {
+    border: 0.5px solid #1d61ad;
+    background-color: #ffffff;
+    margin-bottom: 20px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-weight: bold;
+    color: #1d61ad;
+}
+.tourInfoOrderTour {
+     border: 0.5px solid #1d61ad;
+    background-color: #1d61ad;
+    margin-bottom: 20px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-weight: bold;
+    color: #ffffff;
+}
+.tourInfoOrderTour:hover {
+
+    cursor: pointer;
+    color: #ffffff;
+    background-color: #000000;
+}
+.tourInfoOrder:hover {
+
+    color: #ffffff;
+    cursor: pointer;
+    background-color: #000000;
+}
+.tourHighlight {
+    background-color: #eeeeee;
+    padding-left: 30px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-bottom: 22px;
+}
+.tourHighlight li {
+    font-weight: bold;
+    color: #ff0000;
+}
+
+
+.imageContent:hover {
+    cursor: pointer;
+    display: inline-block;
+    transition: transform 0.3s ease;
+    object-fit: cover;
+    transform-origin: center center;
+}
+.RelativeTour {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+.RelativeTour:hover {
+    border: 1px solid #ffffff;
+    cursor: pointer;
+    display: inline-block;
+    transition: transform 0.3s ease;
+    object-fit: cover;
+    transform-origin: center center;
+
+}

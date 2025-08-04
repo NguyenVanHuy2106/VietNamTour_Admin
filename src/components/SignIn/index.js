@@ -1,15 +1,6 @@
 import React, { useState } from "react";
 import API from "../../config/APINoToken";
-
-import {
-  TextField,
-  Button,
-  Container,
-  Typography,
-  Box,
-  Avatar,
-} from "@mui/material";
-import { LockOutlined } from "@mui/icons-material";
+import { Button, Container, Form, Image, Row, Col } from "react-bootstrap";
 
 export default function SignIn() {
   const [username, setUsername] = useState("");
@@ -30,8 +21,6 @@ export default function SignIn() {
         // Lưu token vào localStorage
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("userId", username);
-        //console.log("Đăng nhập thành công:", response.data);
-
         // Chuyển hướng người dùng đến trang chủ (hoặc trang nào bạn muốn)
         window.location.href = "/"; // Hoặc bạn có thể dùng React Router để điều hướng
       } else {
@@ -47,14 +36,13 @@ export default function SignIn() {
 
   return (
     <div
-      component="main"
-      maxWidth="xs"
       style={{
         border: "1px #000000 solid",
         height: "100vh",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        position: "relative",
       }}
     >
       <video
@@ -78,8 +66,9 @@ export default function SignIn() {
         />
         Trình duyệt của bạn không hỗ trợ video.
       </video>
-      <Box
-        sx={{
+
+      <Container
+        style={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -88,69 +77,78 @@ export default function SignIn() {
           width: "40%",
           position: "relative",
           zIndex: 1,
-          paddingLeft: 2,
-          paddingRight: 2,
+          paddingLeft: "2rem",
+          paddingRight: "2rem",
+          paddingTop: "2rem",
+          paddingBottom: "2rem",
         }}
       >
         <div className="logoClass mb-4 mt-3">
           <img
-            src="https://firebasestorage.googleapis.com/v0/b/core-pilates-e0144.firebasestorage.app/o/LOGO%20VIETNAM%20TOUR.png?alt=media&token=1072008e-42cf-45c8-a23f-ad1817f428f7"
+            src="https://images.vietnamluxtour.com/uploads/1.png"
             alt="React Logo"
             width="100"
           />
         </div>
-        <Typography component="h1" variant="h5">
-          Đăng Nhập
-        </Typography>
-        <Box component="form" onSubmit={handleLogin} noValidate sx={{ mt: 1 }}>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="username"
-            label="Tên đăng nhập"
-            name="username"
-            autoComplete="username"
-            autoFocus
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Mật khẩu"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Đăng Nhập
-          </Button>
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              className="d-flex"
+        <h1>Đăng Nhập</h1>
+        <Form onSubmit={handleLogin} noValidate>
+          <Form.Group controlId="username" className="mb-3">
+            <Form.Label>Tên đăng nhập</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Nhập tên đăng nhập"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              style={{
+                height: "50px", // Tăng chiều cao của trường
+                width: "400px",
+              }}
+              required
+            />
+          </Form.Group>
+          <Form.Group controlId="password" className="mb-3">
+            <Form.Label>Mật khẩu</Form.Label>
+            <Form.Control
+              type="password"
+              placeholder="Nhập mật khẩu"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              style={{
+                height: "50px", // Tăng chiều cao của trường
+                width: "400px",
+              }}
+              required
+            />
+          </Form.Group>
+          <div className="d-flex justify-content-center">
+            <Button
+              type="submit"
+              fullWidth
+              variant="primary"
+              style={{ marginTop: "1rem", marginBottom: "1rem" }}
             >
-              Chưa có tài khoản?{"    "}
-              <p href="#" style={{ textDecoration: "none", color: "#1976d2" }}>
-                Liên hệ IT ngay
+              Đăng Nhập
+            </Button>
+          </div>
+          <Row style={{ display: "flex", justifyContent: "center" }}>
+            <Col>
+              <p style={{ color: "gray", textAlign: "center" }}>
+                Chưa có tài khoản?{" "}
+                <a
+                  href="#"
+                  style={{
+                    textDecoration: "none",
+                    color: "#1976d2",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Liên hệ IT ngay
+                </a>
               </p>
-            </Typography>
-          </Box>
-        </Box>
-      </Box>
+            </Col>
+          </Row>
+        </Form>
+      </Container>
     </div>
   );
 }

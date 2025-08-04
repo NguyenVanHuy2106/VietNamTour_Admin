@@ -3,37 +3,12 @@ import API from "../../config/APINoToken";
 import APIToken from "../../config/APIToken";
 
 import { BsCaretLeft, BsCaretRight } from "react-icons/bs";
-import { makeStyles } from "@material-ui/core/styles";
 import { FaPlus } from "react-icons/fa";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import { TextField } from "@mui/material";
-import Checkbox from "@mui/material/Checkbox";
-import Snackbar from "@mui/material/Snackbar";
-import Button from "@mui/material/Button";
-import { RingLoader } from "react-spinners";
-import Backdrop from "@mui/material/Backdrop";
-
 import { CiTrash, CiEdit } from "react-icons/ci";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
 
-const useStyles = makeStyles((theme) => ({
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
-    color: "#fff",
-  },
-}));
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 800,
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-};
+import { Modal, Button, Form, Spinner, Alert, Toast } from "react-bootstrap";
+import "./index.css";
+
 const TimeType = () => {
   const [dataTimeType, setDataTimeType] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -41,34 +16,31 @@ const TimeType = () => {
   const [openModal, setOpenModal] = useState(false);
   const [error, setError] = useState("");
   const [isError, setIsError] = useState(false);
-  const [checked, setChecked] = useState(true);
-
+  const [checked] = useState(true);
   const [successAlertOpen, setSuccessAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
-
   const [tFTimeTypeValue, setTFTimeTypeValue] = useState("");
   const [tFDesValue, setTFDesValue] = useState("");
 
   let userId = localStorage.getItem("userId");
-  const classes = useStyles();
   let [loading, setLoading] = useState(false);
-  const [deleteId, setDeleteId] = useState(null); // lưu id cần xoá
-
+  const [deleteId, setDeleteId] = useState(null);
   const [openModalDelete, setOpenModalDelete] = useState(false);
-  const handleCloseModalDelete = () => {
-    setOpenModalDelete(false);
-  };
+
+  const handleCloseModalDelete = () => setOpenModalDelete(false);
 
   const handleOpenModalDelete = (id) => {
     setOpenModalDelete(true);
     setDeleteId(id);
   };
-  const handleAgrreDelete = async () => {
+
+  const handleAgreeDelete = async () => {
     try {
       setLoading(true);
       const response = await APIToken.delete(`/timeType/delete/${deleteId}`);
       if (response.status === 200) {
         setAlertMessage("Xoá loại phương tiện thành công");
+        setSuccessAlertOpen(true);
       }
     } catch (error) {
       return error;
@@ -79,33 +51,16 @@ const TimeType = () => {
       getData();
     }
   };
-  const action = (
-    <React.Fragment>
-      <Button color="secondary" size="small" onClick={handleAgrreDelete}>
-        OK
-      </Button>
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="inherit"
-        onClick={handleCloseModalDelete}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </React.Fragment>
-  );
 
   const getData = async () => {
     try {
       const response = await API.get("/timeType/get");
       setDataTimeType(response.data.data || []);
     } catch (error) {
-      console.error(
-        "Lỗi khi lấy danh sách loại Tour:",
-        error.response || error
-      );
+      console.error("Lỗi khi lấy danh sách loại Tour:", error);
     }
   };
+
   const handleCloseModal = () => {
     setOpenModal(false);
     setIsError(false);
@@ -114,9 +69,9 @@ const TimeType = () => {
 
   const handleOpenModal = () => setOpenModal(true);
 
-  const handleAgrre = async () => {
+  const handleAgree = async () => {
     if (tFTimeTypeValue.length === 0) {
-      setError("Vui long nhap tên loại thời gian ");
+      setError("Vui lòng nhập tên loại thời gian");
       setIsError(true);
     } else {
       try {
@@ -140,11 +95,11 @@ const TimeType = () => {
       }
     }
   };
+
   useEffect(() => {
     getData();
   }, []);
 
-  // Tính toán dữ liệu hiển thị cho trang hiện tại
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = dataTimeType.slice(indexOfFirstItem, indexOfLastItem);
@@ -154,74 +109,54 @@ const TimeType = () => {
     <div className="container">
       <div
         style={{
-          borderBottom: "1px #000000 solid",
-          fontSize: 25,
-          padding: 10,
+          borderBottom: "1px solid #1D61AD",
+          fontSize: 20,
+          paddingTop: 10,
+          paddingBottom: 10,
+          marginBottom: 20,
+          color: "#1d61ad",
         }}
       >
-        Loại thời gian
+        LOẠI THỜI GIAN
       </div>
-      <div className="plus" style={{ marginRight: "50px" }}>
-        <Button variant="contained" onClick={handleOpenModal}>
-          <div
-            style={{
-              display: "flex",
-              justifyItems: "center",
-              alignItems: "center",
-            }}
-          >
-            <FaPlus size={16} />
-            <div
-              style={{
-                paddingLeft: "8px",
-              }}
-            >
-              Thêm mới
-            </div>
-          </div>
+      <div className="d-flex justify-content-end my-3">
+        <Button variant="primary" onClick={handleOpenModal}>
+          <FaPlus className="me-2" /> Thêm mới
         </Button>
       </div>
-      <table className="table table-striped mt-2">
+
+      <table className="table table-striped">
         <thead>
           <tr>
-            <th style={{ width: "10%" }}>Mã loại</th>
-            <th style={{ width: "25%" }}>Tên loại thời gian</th>
-            <th style={{ width: "15%" }}>Mô tả</th>
-
-            <th style={{ width: "20%" }}>Người thêm</th>
-            <th style={{ width: "15%" }}>Ngày thêm</th>
-            <th style={{ width: "10%" }}>Tác vụ</th>
+            <th>Mã loại</th>
+            <th>Tên loại thời gian</th>
+            <th>Mô tả</th>
+            <th>Người thêm</th>
+            <th>Ngày thêm</th>
+            <th>Tác vụ</th>
           </tr>
         </thead>
         <tbody>
           {currentItems.length > 0 ? (
-            currentItems.map((timeType) => (
-              <tr key={timeType.timetypeid}>
-                <td>{timeType.timetypeid}</td>
-                <td>{timeType.timetypename}</td>
-                <td>{timeType.description}</td>
-
-                <td>{timeType.created_by}</td>
-                <td>{timeType.created_at}</td>
+            currentItems.map((item) => (
+              <tr key={item.timetypeid}>
+                <td>{item.timetypeid}</td>
+                <td>{item.timetypename}</td>
+                <td>{item.description}</td>
+                <td>{item.created_by}</td>
+                <td>{item.created_at}</td>
                 <td>
-                  <div className="d-flex">
-                    <div className="Edit" style={{ marginRight: 10 }}>
-                      <CiEdit />
-                    </div>
-                    <div
-                      className="Trash"
-                      style={{ marginLeft: 10 }}
-                      onClick={() => handleOpenModalDelete(timeType.timetypeid)}
-                    >
-                      <CiTrash />
-                    </div>
-                  </div>
+                  <CiEdit className="me-2" />
+                  <CiTrash
+                    onClick={() => handleOpenModalDelete(item.timetypeid)}
+                    style={{ cursor: "pointer" }}
+                  />
                 </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="4" className="text-center">
+              <td colSpan="6" className="text-center">
                 Không có dữ liệu
               </td>
             </tr>
@@ -229,140 +164,137 @@ const TimeType = () => {
         </tbody>
       </table>
 
-      {/* Pagination - Luôn giữ vị trí, không thay đổi kích thước */}
       {dataTimeType.length > itemsPerPage && (
         <div className="d-flex justify-content-center mt-3">
-          <nav>
-            <ul className="pagination">
-              <li
-                className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+          <ul className="pagination">
+            <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+              <button
+                className="page-link"
+                onClick={() => setCurrentPage(currentPage - 1)}
               >
-                <button
-                  className="page-link"
-                  onClick={() => setCurrentPage(currentPage - 1)}
-                >
-                  <BsCaretLeft />
-                </button>
-              </li>
-              {[...Array(totalPages)].map((_, index) => (
-                <li
-                  key={index}
-                  className={`page-item ${
-                    currentPage === index + 1 ? "active" : ""
-                  }`}
-                >
-                  <button
-                    className="page-link"
-                    onClick={() => setCurrentPage(index + 1)}
-                  >
-                    {index + 1}
-                  </button>
-                </li>
-              ))}
+                <BsCaretLeft />
+              </button>
+            </li>
+            {[...Array(totalPages)].map((_, index) => (
               <li
+                key={index}
                 className={`page-item ${
-                  currentPage === totalPages ? "disabled" : ""
+                  currentPage === index + 1 ? "active" : ""
                 }`}
               >
                 <button
                   className="page-link"
-                  onClick={() => setCurrentPage(currentPage + 1)}
+                  onClick={() => setCurrentPage(index + 1)}
                 >
-                  <BsCaretRight />
+                  {index + 1}
                 </button>
               </li>
-            </ul>
-          </nav>
+            ))}
+            <li
+              className={`page-item ${
+                currentPage === totalPages ? "disabled" : ""
+              }`}
+            >
+              <button
+                className="page-link"
+                onClick={() => setCurrentPage(currentPage + 1)}
+              >
+                <BsCaretRight />
+              </button>
+            </li>
+          </ul>
         </div>
       )}
-      <div>
-        {loading ? (
-          <Backdrop className={classes.backdrop} open>
-            <RingLoader color="#36d7b7" />
-          </Backdrop>
-        ) : null}
-      </div>
-      <div>
-        <Modal
-          open={openModal}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <div
-              className="border-bottom fw-bold"
-              style={{ paddingBottom: "20px" }}
-            >
-              Thêm mới loại nơi ở
-            </div>
-            <div style={{ marginLeft: 37, marginTop: 12 }}></div>
-            <div
-              className="d-flex align-items-center flex-column"
-              style={{ marginTop: 20 }}
-            >
-              <TextField
-                required
-                id="outlined-basic"
-                label="Tên loại thời gian"
-                variant="outlined"
-                style={{ width: "90%" }}
-                onChange={(newValue) =>
-                  setTFTimeTypeValue(newValue.target.value)
-                }
-                helperText={error}
-                error={isError}
-              />
 
-              <TextField
-                id="outlined-multiline-flexible"
-                label="Mô tả"
-                multiline
-                rows={6}
-                style={{ width: "90%", marginTop: 20 }}
-                onChange={(newValue) => setTFDesValue(newValue.target.value)}
+      <Modal show={openModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Thêm mới loại thời gian</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group controlId="tourtypeName">
+              <Form.Label>Tên loại thời gian</Form.Label>
+              <Form.Control
+                type="text"
+                value={tFTimeTypeValue}
+                onChange={(e) => setTFTimeTypeValue(e.target.value)}
+                isInvalid={isError}
+                isValid={!!tFTimeTypeValue}
               />
-            </div>
-            <div style={{ marginTop: 10, marginLeft: 37 }}>
-              Kích hoạt{" "}
-              <Checkbox
-                disabled
-                checked={checked}
-                //onChange={handleChange}
+              <Form.Control.Feedback type="invalid">
+                {error}
+              </Form.Control.Feedback>
+            </Form.Group>
+
+            <Form.Group controlId="tourtypeDescription">
+              <Form.Label>Mô tả</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={tFDesValue}
+                onChange={(e) => setTFDesValue(e.target.value)}
               />
-            </div>
-            <div
-              className="d-flex justify-content-center"
-              style={{ marginTop: 20 }}
-            >
-              <div style={{ marginRight: 20 }}>
-                <Button variant="outlined" onClick={handleCloseModal}>
-                  Quay lại
-                </Button>
-              </div>
-              <div style={{ marginLeft: 20 }}>
-                <Button variant="contained" onClick={handleAgrre}>
-                  Đồng ý
-                </Button>
-              </div>
-            </div>
-          </Box>
-        </Modal>
-      </div>
-      <Snackbar
-        open={successAlertOpen}
-        autoHideDuration={3000}
+            </Form.Group>
+
+            <Form.Check
+              type="checkbox"
+              label="Kích hoạt"
+              checked={checked}
+              disabled
+            />
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Đóng
+          </Button>
+          <Button variant="primary" onClick={handleAgree}>
+            {loading ? (
+              <Spinner
+                animation="border"
+                variant="light"
+                size="sm"
+                className="mr-2"
+              />
+            ) : (
+              "Thêm"
+            )}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      {/* Success Alert */}
+      <Toast
         onClose={() => setSuccessAlertOpen(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        message={alertMessage}
-        //action={action}
-      />
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        open={openModalDelete}
-        onClose={handleCloseModalDelete}
-        message="Bạn có chắc chắn xoá"
-        action={action}
-      />
+        show={successAlertOpen}
+        delay={3000}
+        autohide
+        className="position-fixed top-0 end-0 m-3"
+      >
+        <Toast.Body>{alertMessage}</Toast.Body>
+      </Toast>
+
+      <Modal show={openModalDelete} onHide={handleCloseModalDelete} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Xác nhận xoá</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Bạn có chắc chắn muốn xoá không?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModalDelete}>
+            Huỷ
+          </Button>
+          <Button variant="danger" onClick={handleAgreeDelete}>
+            OK
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {loading && (
+        <div className="text-center mt-3">
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        </div>
+      )}
     </div>
   );
 };

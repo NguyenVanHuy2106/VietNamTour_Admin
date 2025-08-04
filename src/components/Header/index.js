@@ -10,18 +10,16 @@ const Header = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Xử lý đăng xuất tại đây, ví dụ: xóa token, xóa thông tin user,...
-    localStorage.removeItem("token"); // hoặc sessionStorage.clear()
-
-    // Điều hướng về trang chủ
-    window.location.href = "/";
+    localStorage.removeItem("token");
+    navigate("/"); // dùng navigate thay vì reload
   };
+
   return (
     <div>
       <header style={styles.header}>
         <div className="logoClass">
           <img
-            src="https://firebasestorage.googleapis.com/v0/b/core-pilates-e0144.firebasestorage.app/o/images%2F1744194735278_2000x2000.webp?alt=media&token=76c42935-2b28-4d30-b00d-61b576fe096d"
+            src="https://images.vietnamluxtour.com/uploads/1.png"
             alt="React Logo"
             width="50"
           />
@@ -45,20 +43,29 @@ const Header = () => {
             onMouseEnter={() => item.subMenu && setShowSubMenu(item.id)}
             onMouseLeave={() => item.subMenu && setShowSubMenu(false)}
           >
-            <Nav.Link href={item.link}>{item.name}</Nav.Link>
+            {/* Nếu item.link là "#" thì không điều hướng */}
+            <Nav.Link
+              as="div"
+              onClick={() => item.link !== "#" && navigate(item.link)}
+              style={{ cursor: item.link !== "#" ? "pointer" : "default" }}
+            >
+              {item.name}
+            </Nav.Link>
 
             {/* Hiển thị submenu */}
             {item.subMenu && showSubMenu === item.id && (
               <div className="submenu">
                 {item.subMenu.map((sub) => (
-                  <Nav.Link
+                  <div
                     key={sub.id}
-                    href={sub.link}
-                    onClick={sub.name === "Thoát" ? handleLogout : undefined}
+                    onClick={() =>
+                      sub.name === "Thoát" ? handleLogout() : navigate(sub.link)
+                    }
                     className="submenu-item"
+                    style={{ cursor: "pointer", padding: "5px 10px" }}
                   >
                     {sub.name}
-                  </Nav.Link>
+                  </div>
                 ))}
               </div>
             )}
@@ -95,18 +102,24 @@ const HeaderNavData = [
       { id: 1.3, name: "Khai báo loại phương tiện", link: "/vehicle-type" },
       { id: 1.4, name: "Khai báo loại thời gian", link: "/time-type" },
       { id: 1.5, name: "Khai báo banner", link: "/banner" },
+      { id: 1.6, name: "Khai báo bộ sưu tập", link: "/collection" },
     ],
   },
-  { id: 2, name: "TOUR", link: "#" },
+  {
+    id: 2,
+    name: "TOUR",
+    link: "#",
+    subMenu: [{ id: 2.1, name: "Quản lý tour", link: "/tour" }],
+  },
   {
     id: 3,
     name: "DỊCH VỤ",
     link: "#",
     subMenu: [
-      { id: 3.1, name: "Danh sách dịch vụ", link: "service" },
-      { id: 3.2, name: "Danh sách Tỉnh/TP", link: "province" },
-      { id: 3.3, name: "Địa điểm du lịch", link: "travel-location" },
-      { id: 3.4, name: "Cẩm nang du lịch", link: "guide-travel" },
+      { id: 3.1, name: "Danh sách dịch vụ", link: "/service" },
+      { id: 3.2, name: "Danh sách Tỉnh/TP", link: "/province" },
+      { id: 3.3, name: "Địa điểm du lịch", link: "/travel-location" },
+      { id: 3.4, name: "Cẩm nang du lịch", link: "/guide-travel-list" },
     ],
   },
   { id: 4, name: "KHUYẾN MÃI", link: "#" },
@@ -115,8 +128,9 @@ const HeaderNavData = [
     name: "NGƯỜI DÙNG",
     link: "#",
     subMenu: [
-      { id: 5.1, name: "Khách hàng", link: "customer" },
+      { id: 5.1, name: "Khách hàng", link: "/customer" },
       { id: 5.2, name: "Người dùng hệ thống", link: "#" },
+      { id: 5.3, name: "Hình ảnh", link: "/image-list" },
     ],
   },
   { id: 6, name: "THỐNG KÊ", link: "#" },
