@@ -1,337 +1,397 @@
 import React, { useState, useEffect } from "react";
 import API from "../../config/APINoToken";
-import { BsCaretLeft, BsCaretRight } from "react-icons/bs";
-import { FaPlus, FaRegTrashAlt } from "react-icons/fa";
-import { Modal, Button, Form, Toast, Spinner } from "react-bootstrap";
-import { RingLoader } from "react-spinners";
-import ImageUploader from "../../components/ImageUploader";
-
-import ImageCDNCloud from "../../components/ImageCDNCloud";
 import APIToken from "../../config/APIToken";
+import { BsCaretLeft, BsCaretRight, BsSearch } from "react-icons/bs";
+import { FaPlus, FaImage } from "react-icons/fa";
 import { CiTrash, CiEdit } from "react-icons/ci";
+import {
+  Button,
+  Modal,
+  Form,
+  Spinner,
+  Toast,
+  ToastContainer,
+  Badge,
+  InputGroup,
+} from "react-bootstrap";
+import ImageCDNCloud from "../../components/ImageCDNCloud";
+import "./index.css";
 
 const Banner = () => {
   const [dataBanner, setDataBanner] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const itemsPerPage = 5; // Banner ảnh to nên để ít item mỗi trang
+
   const [openModal, setOpenModal] = useState(false);
-  const [checked, setChecked] = useState(true);
-  const [url, setUrl] = useState("");
-  const [imageLink, setImageLink] = useState("");
-
-  const [error, setError] = useState("");
-  const [isError, setIsError] = useState(false);
-  let [loading, setLoading] = useState(false);
-
-  const [successAlertOpen, setSuccessAlertOpen] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
+  const [editMode, setEditMode] = useState(false);
+  const [currentId, setCurrentId] = useState(null);
 
   const [tFBannerValue, setTFBannerValue] = useState("");
   const [tFDesValue, setTFDesValue] = useState("");
+  const [imageLink, setImageLink] = useState("");
+  const [status, setStatus] = useState(1);
+
+  const [isError, setIsError] = useState(false);
+  const [error, setError] = useState("");
+
+  const [successAlertOpen, setSuccessAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [openModalDelete, setOpenModalDelete] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
 
-  let userId = localStorage.getItem("userId");
-
-  const itemsPerPage = 10;
-
-  const [openModalDelete, setOpenModalDelete] = useState(false);
-  const handleCloseModalDelete = () => {
-    setOpenModalDelete(false);
-  };
-
-  const handleOpenModalDelete = (id) => {
-    setOpenModalDelete(true);
-    setDeleteId(id);
-  };
-  const handleAgrreDelete = async () => {
-    try {
-      setLoading(true);
-      const response = await APIToken.delete(`/banner/delete/${deleteId}`);
-      if (response.status === 200) {
-        setAlertMessage("Xoá loại phương tiện thành công");
-      }
-    } catch (error) {
-      return error;
-    } finally {
-      setDeleteId(null);
-      setLoading(false);
-      setOpenModalDelete(false);
-      getData();
-    }
-  };
-
-  const action = (
-    <React.Fragment>
-      <Button variant="secondary" size="sm" onClick={handleAgrreDelete}>
-        OK
-      </Button>
-      <Button
-        size="sm"
-        aria-label="close"
-        variant="link"
-        onClick={handleCloseModalDelete}
-      >
-        <CiTrash size={16} />
-      </Button>
-    </React.Fragment>
-  );
-
-  const getData = async () => {
-    try {
-      const response = await API.get("/banner/get");
-      setDataBanner(response.data.data || []);
-    } catch (error) {
-      console.error(
-        "Lỗi khi lấy danh sách loại Tour:",
-        error.response || error
-      );
-    }
-  };
-
-  const handleOpenModal = () => setOpenModal(true);
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-    setImageLink("");
-    setIsError(false);
-    setError("");
-  };
-  const handleUploadSuccess = (url) => {
-    //console.log(url);
-    setImageLink(url);
-  };
-  const handleAgrre = async () => {
-    if (tFBannerValue.length === 0) {
-      setError("Vui lòng nhập tên Banner");
-      setIsError(true);
-    } else {
-      try {
-        setLoading(true);
-        const response = await APIToken.post("/banner/add", {
-          bannername: tFBannerValue,
-          bannerurl: imageLink,
-          description: tFDesValue,
-          created_by: userId,
-        });
-
-        if (response.status === 201) {
-          setAlertMessage("Thêm mới banner thành công");
-          setSuccessAlertOpen(true);
-        }
-      } catch (error) {
-        return error;
-      } finally {
-        setLoading(false);
-        getData();
-        setOpenModal(false);
-        setImageLink("");
-      }
-    }
-  };
+  const userId = localStorage.getItem("userId");
 
   useEffect(() => {
     getData();
   }, []);
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = dataBanner.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.max(1, Math.ceil(dataBanner.length / itemsPerPage));
+  const getData = async () => {
+    try {
+      setLoading(true);
+      const response = await API.get("/banner/get");
+      setDataBanner(response.data.data || []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleOpenAdd = () => {
+    setEditMode(false);
+    setTFBannerValue("");
+    setTFDesValue("");
+    setImageLink("");
+    setStatus(1);
+    setIsError(false);
+    setOpenModal(true);
+  };
+
+  const handleOpenEdit = (item) => {
+    setEditMode(true);
+    setCurrentId(item.bannerid);
+    setTFBannerValue(item.bannername);
+    setTFDesValue(item.description);
+    setImageLink(item.bannerurl);
+    setStatus(item.status || 1);
+    setIsError(false);
+    setOpenModal(true);
+  };
+
+  const handleSave = async () => {
+    if (tFBannerValue.trim().length === 0) {
+      setError("Vui lòng nhập tên banner");
+      setIsError(true);
+      return;
+    }
+    try {
+      setLoading(true);
+      const payload = {
+        bannername: tFBannerValue,
+        bannerurl: imageLink,
+        description: tFDesValue,
+        status: status,
+        created_by: userId,
+      };
+
+      let response;
+      if (editMode) {
+        response = await APIToken.put(`/banner/update/${currentId}`, payload);
+      } else {
+        response = await APIToken.post("/banner/add", payload);
+      }
+
+      if (response.status === 200 || response.status === 201) {
+        setAlertMessage(
+          editMode ? "Cập nhật thành công ✨" : "Thêm mới thành công ✨"
+        );
+        setSuccessAlertOpen(true);
+        setOpenModal(false);
+        getData();
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleOpenModalDelete = (id) => {
+    setDeleteId(id);
+    setOpenModalDelete(true);
+  };
+
+  const handleAgreeDelete = async () => {
+    try {
+      setLoading(true);
+      const response = await APIToken.delete(`/banner/delete/${deleteId}`);
+      if (response.status === 200) {
+        setAlertMessage("Xoá banner thành công");
+        setSuccessAlertOpen(true);
+        getData();
+      }
+    } finally {
+      setLoading(false);
+      setOpenModalDelete(false);
+    }
+  };
+
+  const filteredData = dataBanner.filter((item) =>
+    item.bannername.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const currentItems = filteredData.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
-    <div className="container">
-      <div
-        style={{
-          borderBottom: "1px solid #1D61AD",
-          fontSize: 20,
-          paddingTop: 10,
-          paddingBottom: 10,
-          marginBottom: 20,
-          color: "#1d61ad",
-        }}
-      >
-        BANNER
-      </div>
-      <div className="d-flex justify-content-end mt-2">
-        <Button variant="primary" onClick={handleOpenModal}>
-          <div
-            style={{
-              display: "flex",
-              justifyItems: "center",
-              alignItems: "center",
-            }}
-          >
-            <FaPlus size={16} />
-            <div
-              style={{
-                paddingLeft: "8px",
-              }}
-            >
-              Thêm mới
-            </div>
-          </div>
-        </Button>
-      </div>
-      <table className="table table-striped mt-2">
-        <thead>
-          <tr>
-            <th style={{ width: "10%" }}>Mã banner</th>
-            <th style={{ width: "15%" }}>Tên banner</th>
-            <th style={{ width: "15%" }}>Mô tả</th>
-            <th style={{ width: "15%" }}>Banner</th>
-            <th style={{ width: "15%" }}>Người thêm</th>
-            <th style={{ width: "10%" }}>Ngày thêm</th>
-            <th style={{ width: "8%" }}>Tác vụ</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentItems.length > 0 ? (
-            currentItems.map((banner) => (
-              <tr key={banner.bannerid}>
-                <td>{banner.bannerid}</td>
-                <td>{banner.bannername}</td>
-                <td>{banner.description}</td>
-                <td>
-                  {banner.bannerurl ? (
-                    <img
-                      src={banner.bannerurl}
-                      alt={banner.bannername}
-                      width={220}
-                      height={70}
-                    />
-                  ) : null}
-                </td>
-                <td>{banner.created_by}</td>
-                <td>{banner.created_at}</td>
-                <td>
-                  <div className="d-flex">
-                    <div className="Edit" style={{ marginRight: 10 }}>
-                      <CiEdit />
-                    </div>
-                    <div
-                      className="Trash"
-                      style={{ marginLeft: 10 }}
-                      onClick={() => handleOpenModalDelete(banner.bannerid)}
-                    >
-                      <CiTrash />
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="4" className="text-center">
-                Không có dữ liệu
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-
-      {dataBanner.length > itemsPerPage && (
-        <div className="d-flex justify-content-center mt-3">
-          <nav>
-            <ul className="pagination">
-              <li
-                className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-              >
-                <Button
-                  className="page-link"
-                  onClick={() => setCurrentPage(currentPage - 1)}
-                >
-                  <BsCaretLeft />
-                </Button>
-              </li>
-              {[...Array(totalPages)].map((_, index) => (
-                <li
-                  key={index}
-                  className={`page-item ${
-                    currentPage === index + 1 ? "active" : ""
-                  }`}
-                >
-                  <Button
-                    className="page-link"
-                    onClick={() => setCurrentPage(index + 1)}
-                  >
-                    {index + 1}
-                  </Button>
-                </li>
-              ))}
-              <li
-                className={`page-item ${
-                  currentPage === totalPages ? "disabled" : ""
-                }`}
-              >
-                <Button
-                  className="page-link"
-                  onClick={() => setCurrentPage(currentPage + 1)}
-                >
-                  <BsCaretRight />
-                </Button>
-              </li>
-            </ul>
-          </nav>
+    <div className="bn-container">
+      <div className="bn-header">
+        <div className="bn-header-info">
+          <h2>Quản Lý Banner</h2>
+          <p>
+            Cấu hình hình ảnh trình chiếu tại trang chủ và các trang sự kiện
+          </p>
         </div>
-      )}
-
-      {/* Modal Add */}
-      <Modal show={openModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Thêm mới banner</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="form-group">
-            <Form.Label>Tên banner</Form.Label>
+        <div className="bn-header-actions">
+          <InputGroup className="bn-search-bar">
+            <InputGroup.Text>
+              <BsSearch />
+            </InputGroup.Text>
             <Form.Control
-              type="text"
-              value={tFBannerValue}
-              onChange={(e) => setTFBannerValue(e.target.value)}
+              placeholder="Tìm tên banner..."
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
             />
-          </div>
-          <div className="form-group mt-3">
-            <Form.Label>Mô tả</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={3}
-              value={tFDesValue}
-              onChange={(e) => setTFDesValue(e.target.value)}
-            />
-          </div>
-          <div className="form-group mt-3">
-            <Form.Label>Ảnh Banner</Form.Label>
-            <ImageCDNCloud onUploadSuccess={handleUploadSuccess} />
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Đóng
+          </InputGroup>
+          <Button
+            variant="primary"
+            className="bn-btn-add"
+            onClick={handleOpenAdd}
+          >
+            <FaPlus /> <span>Thêm Banner</span>
           </Button>
-          <Button variant="primary" onClick={handleAgrre} disabled={loading}>
-            {loading ? (
-              <Spinner
-                as="span"
-                animation="border"
-                size="sm"
-                role="status"
-                aria-hidden="true"
-              />
-            ) : (
-              "Thêm mới"
-            )}
+        </div>
+      </div>
+
+      <div className="bn-content-card">
+        <div className="table-responsive">
+          <table className="bn-table">
+            <thead>
+              <tr>
+                <th>Mã</th>
+                <th>Hình ảnh</th>
+                <th>Tên Banner</th>
+                <th>Người tạo</th>
+                <th>Trạng thái</th>
+                <th className="text-center">Tác vụ</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentItems.length > 0 ? (
+                currentItems.map((item) => (
+                  <tr key={item.bannerid}>
+                    <td>
+                      <span className="bn-id-label">#{item.bannerid}</span>
+                    </td>
+                    <td>
+                      <div className="bn-img-preview">
+                        {item.bannerurl ? (
+                          <img src={item.bannerurl} alt="banner" />
+                        ) : (
+                          <div className="bn-no-img">
+                            <FaImage />
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                    <td>
+                      <div className="fw-bold text-dark">{item.bannername}</div>
+                      <div className="small text-muted bn-desc-truncate">
+                        {item.description}
+                      </div>
+                    </td>
+                    <td>
+                      <Badge bg="light" text="dark" className="border">
+                        {item.created_by || "Admin"}
+                      </Badge>
+                    </td>
+                    <td>
+                      <Badge bg={item.status === 1 ? "success" : "secondary"}>
+                        {item.status === 1 ? "Hoạt động" : "Ẩn"}
+                      </Badge>
+                    </td>
+                    <td>
+                      <div className="bn-actions">
+                        <button
+                          className="bn-action-btn edit"
+                          onClick={() => handleOpenEdit(item)}
+                          disabled={true}
+                        >
+                          <CiEdit size={20} />
+                        </button>
+                        <button
+                          className="bn-action-btn delete"
+                          onClick={() => handleOpenModalDelete(item.bannerid)}
+                        >
+                          <CiTrash size={20} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="text-center py-5">
+                    Chưa có banner nào được tạo
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bn-pagination">
+          <span className="text-muted small">
+            Tổng số: {filteredData.length} banner
+          </span>
+          <div className="bn-page-nav">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage((v) => v - 1)}
+            >
+              <BsCaretLeft />
+            </button>
+            <button className="bn-page-current">{currentPage}</button>
+            <button
+              disabled={currentPage === totalPages || totalPages === 0}
+              onClick={() => setCurrentPage((v) => v + 1)}
+            >
+              <BsCaretRight />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Modal Add/Edit */}
+      <Modal
+        show={openModal}
+        onHide={() => setOpenModal(false)}
+        centered
+        size="lg"
+      >
+        <Modal.Header closeButton className="border-0 px-4 pt-4">
+          <Modal.Title className="fw-bold">
+            {editMode ? "Cập Nhật Banner" : "Tạo Banner Mới"}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="px-4">
+          <Form>
+            <div className="row">
+              <div className="col-md-7">
+                <Form.Group className="mb-3">
+                  <Form.Label className="fw-bold">Tên Banner</Form.Label>
+                  <Form.Control
+                    value={tFBannerValue}
+                    onChange={(e) => setTFBannerValue(e.target.value)}
+                    isInvalid={isError}
+                    placeholder="Nhập tên chương trình khuyến mãi/sự kiện..."
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {error}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label className="fw-bold">Mô tả ngắn</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    value={tFDesValue}
+                    onChange={(e) => setTFDesValue(e.target.value)}
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label className="fw-bold d-block">
+                    Trạng thái hiển thị
+                  </Form.Label>
+                  <Form.Check
+                    type="switch"
+                    label={status === 1 ? "Đang bật" : "Đang tắt"}
+                    checked={status === 1}
+                    onChange={(e) => setStatus(e.target.checked ? 1 : 2)}
+                  />
+                </Form.Group>
+              </div>
+              <div className="col-md-5">
+                <Form.Label className="fw-bold">Hình ảnh Banner</Form.Label>
+                <ImageCDNCloud onUploadSuccess={(url) => setImageLink(url)} />
+                {imageLink && (
+                  <div className="mt-2 border rounded p-1 bg-light">
+                    <img
+                      src={imageLink}
+                      alt="preview"
+                      className="img-fluid rounded"
+                      style={{
+                        maxHeight: "150px",
+                        width: "100%",
+                        objectFit: "cover",
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer className="border-0 px-4 pb-4">
+          <Button variant="light" onClick={() => setOpenModal(false)}>
+            Hủy bỏ
+          </Button>
+          <Button variant="primary" onClick={handleSave} className="px-4">
+            {loading ? <Spinner size="sm" /> : "Lưu banner"}
           </Button>
         </Modal.Footer>
       </Modal>
 
-      {/* Success Alert */}
-      <Toast
-        show={successAlertOpen}
-        onClose={() => setSuccessAlertOpen(false)}
-        delay={3000}
-        autohide
-        style={{ position: "absolute", top: 20, right: 20 }}
+      {/* Modal Xóa */}
+      <Modal
+        show={openModalDelete}
+        onHide={() => setOpenModalDelete(false)}
+        centered
+        size="sm"
       >
-        <Toast.Body>{alertMessage}</Toast.Body>
-      </Toast>
+        <div className="p-4 text-center">
+          <CiTrash size={50} color="#e63757" />
+          <h5 className="mt-3 fw-bold">Xóa banner này?</h5>
+          <p className="text-muted small">
+            Ảnh sẽ bị gỡ khỏi giao diện trang chủ ngay lập tức.
+          </p>
+          <div className="d-flex gap-2 justify-content-center mt-4">
+            <Button variant="light" onClick={() => setOpenModalDelete(false)}>
+              Đóng
+            </Button>
+            <Button variant="danger" onClick={handleAgreeDelete}>
+              Xác nhận xóa
+            </Button>
+          </div>
+        </div>
+      </Modal>
+
+      <ToastContainer position="top-end" className="p-3">
+        <Toast
+          bg="success"
+          show={successAlertOpen}
+          onClose={() => setSuccessAlertOpen(false)}
+          delay={3000}
+          autohide
+        >
+          <Toast.Body className="text-white fw-bold">{alertMessage}</Toast.Body>
+        </Toast>
+      </ToastContainer>
     </div>
   );
 };

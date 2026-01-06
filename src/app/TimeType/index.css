@@ -1,27 +1,153 @@
-/* loading spinner */
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.3);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
+.timet-container {
+    padding: 30px;
+    background-color: #f8f9fa;
+    min-height: 100vh;
 }
 
-.loading-spinner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.timet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
 }
 
-/* Toast position */
-.toast {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 1050;
+.timet-header-info h2 {
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.timet-header-info p {
+    color: #7f8c8d;
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+.timet-header-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.timet-search-bar {
+    width: 280px;
+}
+
+.timet-btn-add {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+/* Content Card Area */
+.timet-content-card {
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
+}
+
+/* Table Design */
+.timet-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+.timet-table thead th {
+    color: #888;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 11px;
+    padding: 15px;
+    border: none;
+}
+
+.timet-table tbody tr {
+    background: #fff;
+    transition: all 0.3s;
+}
+
+.timet-table tbody tr:hover {
+    background: #f8fbff;
+    transform: translateY(-2px);
+}
+
+.timet-table tbody td {
+    padding: 15px;
+    vertical-align: middle;
+    border-top: 1px solid #f1f1f1;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.timet-id-badge {
+    color: #95aac9;
+    font-weight: 500;
+}
+
+.timet-desc-cell {
+    max-width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #6c757d;
+}
+
+.timet-user-tag {
+    background: #e9ecef;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+/* Action Buttons */
+.timet-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.timet-action-btn {
+    border: none;
+    background: none;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+
+.timet-action-btn.edit { background: #eaeeff; color: #4e73df; }
+.timet-action-btn.delete { background: #ffebee; color: #e74a3b; }
+
+.timet-action-btn:hover {
+    transform: scale(1.1);
+    filter: brightness(0.9);
+}
+
+/* Pagination UI */
+.timet-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.timet-page-nav button {
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 5px 15px;
+    border-radius: 8px;
+    margin-left: 5px;
+}
+
+.timet-page-active {
+    background: #4e73df !important;
+    color: white !important;
+    border-color: #4e73df !important;
 }

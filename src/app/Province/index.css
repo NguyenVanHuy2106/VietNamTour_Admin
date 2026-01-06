@@ -1,0 +1,101 @@
+.pv-container {
+  padding: 25px;
+  background-color: #f4f7f6;
+  min-height: 100vh;
+}
+
+.pv-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.pv-header-info h2 {
+  font-weight: 700;
+  color: #1a3353;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.pv-search-bar { width: 300px; }
+
+.pv-content-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border: 1px solid #edf2f9;
+}
+
+.pv-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+}
+
+.pv-table thead th {
+  color: #adb5bd;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  padding: 12px;
+}
+
+.pv-table tbody td {
+  padding: 15px;
+  background: #fff;
+  border-top: 1px solid #f1f4f8;
+  border-bottom: 1px solid #f1f4f8;
+}
+
+.pv-id { color: #95aac9; font-weight: 500; }
+.pv-user {
+  background: #f1f4f8;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+/* Pagination Style chuẩn yêu cầu */
+.pv-pagination {
+  display: flex;
+  justify-content: space-between; /* Đẩy 2 phần về 2 phía */
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pv-page-text {
+  font-weight: 500;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.pv-page-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.pv-page-btns button {
+  background: #fff;
+  border: 1px solid #d8e2ef;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: 0.2s;
+  color: #2c7be5;
+}
+
+.pv-page-btns button:hover:not(:disabled) {
+  background: #f9fbfd;
+  border-color: #2c7be5;
+}
+
+.pv-page-btns button:disabled {
+  color: #d8e2ef;
+  border-color: #edf2f9;
+  cursor: not-allowed;
+}

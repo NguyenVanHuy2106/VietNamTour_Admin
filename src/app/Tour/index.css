@@ -1,10 +1,222 @@
-table .detailLink {
-    color: blue;
-
+.sv-container {
+  padding: 20px;
+  background-color: #f8f9fc;
+  min-height: 100vh;
 }
 
-table .detailLink:hover {
-    cursor: pointer;
-    color: blue;
+.sv-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #1d61ad;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
 }
 
+.sv-header-left h2 {
+  font-weight: 800;
+  color: #1d61ad;
+  margin: 0;
+  font-size: 24px;
+}
+
+.sv-btn-add {
+  background-color: #1d61ad;
+  border: none;
+  font-weight: 600;
+  padding: 8px 20px;
+  border-radius: 6px;
+}
+
+/* Table Style */
+.sv-card-table {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+
+.sv-table { margin-bottom: 0; }
+
+.sv-table thead th {
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 13px;
+  padding: 15px;
+  border: none;
+}
+
+/* Cột hình ảnh */
+.sv-img-wrapper {
+  width: 80px;
+  height: 55px;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.sv-tour-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.sv-table tbody tr:hover .sv-tour-img {
+  transform: scale(1.1);
+}
+
+.sv-tour-name {
+  font-weight: 700;
+  color: #1d61ad;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.sv-price {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+.sv-loc { font-size: 13px; color: #64748b; }
+
+/* Tác vụ */
+.sv-actions { display: flex; justify-content: center; gap: 8px; }
+
+.sv-icon-btn {
+  border: none;
+  background: #f8fafc;
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+
+.sv-icon-btn.view:hover { background: #1d61ad; color: white; }
+.sv-icon-btn.edit:hover { background: #f59e0b; color: white; }
+.sv-icon-btn.delete:hover { background: #ef4444; color: white; }
+
+/* PHÂN TRANG KIỂU SERVICE */
+.sv-pagination-bar {
+  padding: 15px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #edf2f7;
+}
+
+.sv-page-count {
+  font-size: 14px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.sv-page-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sv-page-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 5px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  transition: 0.2s;
+}
+
+.sv-page-btn:hover:not(:disabled) {
+  background: #1d61ad;
+  color: white;
+  border-color: #1d61ad;
+}
+
+.sv-page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.sv-page-number {
+  width: 35px;
+  height: 35px;
+  background: #1d61ad;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  font-weight: 700;
+  font-size: 14px;
+}
+.sv-tour-id {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 4px;
+}
+
+.sv-tour-desc-short {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.5;
+  text-align: justify;
+  
+  /* Cấu trúc quan trọng để giới hạn 2 dòng */
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Số dòng muốn hiển thị */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
+  max-width: 400px; /* Bạn có thể điều chỉnh độ rộng này tùy màn hình */
+}
+
+/* Chỉnh lại padding của td để thông tin trông thoáng hơn */
+.sv-table tbody td {
+  padding: 12px 15px;
+  vertical-align: top; /* Cho nội dung canh trên sẽ đẹp hơn khi có mô tả */
+}
+
+/* Style chung cho nhãn loại tour */
+.sv-badge-type {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+/* Màu cho Tour Đoàn - Thường dùng màu Tím hoặc Cam để nổi bật */
+.sv-badge-type.group {
+  background-color: #f3e8ff;
+  color: #7e22ce;
+  border: 1px solid #e9d5ff;
+}
+
+/* Màu cho Tour Khách Lẻ - Thường dùng màu Xanh Lá hoặc Lam */
+.sv-badge-type.retail {
+  background-color: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+/* Điều chỉnh lại sv-tour-name để không bị quá dài khi có nhãn đi kèm */
+.sv-tour-name {
+  font-weight: 700;
+  color: #1d61ad;
+  cursor: pointer;
+  font-size: 15px;
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -1,0 +1,251 @@
+.im-container {
+  padding: 25px;
+  background-color: #f4f7f6;
+  min-height: 100vh;
+}
+
+.im-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.im-header-info h2 {
+  font-weight: 700;
+  color: #1d61ad;
+  margin: 0;
+  font-size: 20px;
+}
+
+.im-header-info p {
+  color: #6c757d;
+  font-size: 14px;
+  margin: 0;
+}
+
+.im-header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.im-search-bar { width: 300px; }
+
+.im-btn-add {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 8px;
+  padding: 8px 18px;
+}
+
+.im-content-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border: 1px solid #edf2f9;
+}
+
+.im-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+}
+
+.im-table thead th {
+  color: #adb5bd;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  padding: 12px;
+}
+
+.im-table tbody td {
+  padding: 12px;
+  vertical-align: middle;
+  background: #fff;
+  border-top: 1px solid #f1f4f8;
+  border-bottom: 1px solid #f1f4f8;
+}
+
+.im-img-wrapper {
+  width: 120px;
+  height: 80px;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+.im-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.im-id { color: #95aac9; font-weight: 500; }
+.im-user {
+  background: #f1f4f8;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.im-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.im-btn {
+  border: none;
+  background: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+
+.im-btn.edit { background: #e3ebf6; color: #2c7be5; }
+.im-btn.delete { background: #fbeae9; color: #e63757; }
+.im-btn:hover { filter: brightness(0.9); }
+
+/* Pagination Style chuẩn Service */
+.im-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #f1f4f8;
+}
+
+.im-page-info {
+  font-weight: 500;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.im-page-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.im-page-btns button {
+  background: #fff;
+  border: 1px solid #d8e2ef;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: 0.2s;
+  color: #1d61ad;
+}
+
+.im-page-btns button:hover:not(:disabled) {
+  background: #f9fbfd;
+  border-color: #1d61ad;
+}
+
+.im-page-btns button:disabled {
+  color: #d8e2ef;
+  cursor: not-allowed;
+}
+
+/* Modal preview */
+.im-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
+  margin-top: 15px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.im-preview-item img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+
+/* --- Hiệu ứng cho hàng trong bảng --- */
+.im-table tbody tr {
+  transition: all 0.3s ease; /* Tạo độ mượt */
+  cursor: pointer;
+}
+
+.im-table tbody tr:hover {
+  background-color: #f0f7ff !important; /* Màu xanh nhạt khi hover */
+  transform: translateY(-2px); /* Nhấc nhẹ hàng lên */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); /* Đổ bóng nhẹ cho hàng */
+}
+
+/* --- Hiệu ứng cho Hình ảnh thumbnail --- */
+.im-img-wrapper {
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.im-img-wrapper:hover {
+  transform: scale(1.1); /* Phóng to ảnh nhẹ */
+  border-color: #1d61ad; /* Hiện viền xanh */
+  z-index: 10;
+}
+
+/* --- Hiệu ứng cho nút Tác vụ (Edit/Delete) --- */
+.im-btn {
+  transition: all 0.2s ease-in-out;
+}
+
+.im-btn.edit:hover {
+  background: #2c7be5; /* Đổi nền xanh đậm */
+  color: #fff; /* Chữ trắng */
+  transform: scale(1.15);
+}
+
+.im-btn.delete:hover {
+  background: #e63757; /* Đổi nền đỏ đậm */
+  color: #fff; /* Chữ trắng */
+  transform: scale(1.15);
+}
+
+/* --- Hiệu ứng cho nút Phân trang --- */
+.im-page-btns button {
+  transition: all 0.2s ease;
+}
+
+.im-page-btns button:hover:not(:disabled) {
+  background: #1d61ad;
+  color: #ffffff;
+  border-color: #1d61ad;
+  box-shadow: 0 2px 5px rgba(29, 97, 173, 0.3);
+}
+
+/* --- Hiệu ứng cho nút Thêm mới --- */
+.im-btn-add {
+  transition: all 0.3s ease;
+}
+
+.im-btn-add:hover {
+  background-color: #154a85; /* Đậm màu hơn */
+  box-shadow: 0 4px 8px rgba(29, 97, 173, 0.4);
+  transform: translateY(-1px);
+}
+
+/* Hiệu ứng cho Badge danh mục */
+.im-badge-cat {
+  transition: opacity 0.2s;
+}
+
+.im-badge-cat:hover {
+  opacity: 0.8;
+  cursor: default;
+}

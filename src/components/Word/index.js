@@ -5,18 +5,38 @@ import { uploadImageToR2 } from "../ImageCDNCloud";
 export default function Word({ onSave, value = "" }) {
   const editorRef = useRef(null);
 
-  const handleImageUpload = async (blobInfo, success, failure) => {
+  // const handleImageUpload = async (blobInfo, success, failure) => {
+  //   try {
+  //     const file = blobInfo.blob();
+  //     const filename = blobInfo.filename();
+
+  //     const url = await uploadImageToR2(file, filename);
+  //     success({
+  //       location: String(url),
+  //     });
+  //   } catch (error) {
+  //     console.error("Lỗi upload ảnh:", error);
+  //     failure("Lỗi upload ảnh: " + error.message);
+  //   }
+  // };
+
+  // Word.js
+
+  const handleImageUpload = async (blobInfo) => {
     try {
       const file = blobInfo.blob();
       const filename = blobInfo.filename();
 
+      // Gọi hàm upload của bạn
       const url = await uploadImageToR2(file, filename);
-      success({
-        location: String(url),
-      });
+
+      // QUAN TRỌNG: Trả về trực tiếp chuỗi URL
+      // TinyMCE sẽ tự động đưa URL này vào thuộc tính 'src' của thẻ <img>
+      return String(url);
     } catch (error) {
       console.error("Lỗi upload ảnh:", error);
-      failure("Lỗi upload ảnh: " + error.message);
+      // Nếu có lỗi, quăng lỗi để TinyMCE bắt được và hiển thị thông báo
+      throw new Error("Lỗi upload ảnh: " + error.message);
     }
   };
 
@@ -68,12 +88,19 @@ export default function Word({ onSave, value = "" }) {
           images_upload_handler: handleImageUpload,
           drag_drop: true,
           image_resize: true,
-          // image_caption: true,
+          image_caption: true,
           image_uploadtab: true,
           min_height: 300,
           autoresize_bottom_margin: 10,
           powerpaste_allow_local_images: true,
           powerpaste_word_import: "merge",
+          content_style: `
+              img {
+              max-width: none;
+              height: auto;
+              }
+          `,
+
           // content_style: `
           //   ol {
           //     counter-reset: item;

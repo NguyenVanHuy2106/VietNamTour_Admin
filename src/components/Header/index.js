@@ -11,7 +11,7 @@ const Header = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/"); // dùng navigate thay vì reload
+    navigate("/sign-in"); // dùng navigate thay vì reload
   };
 
   return (
@@ -19,7 +19,7 @@ const Header = () => {
       <header style={styles.header}>
         <div className="logoClass">
           <img
-            src="https://images.vietnamluxtour.com/uploads/1.png"
+            src="https://cdn.myvietnamtour.vn/uploads/1.png"
             alt="React Logo"
             width="50"
           />
@@ -93,6 +93,11 @@ export default Header;
 
 const HeaderNavData = [
   {
+    id: 10,
+    name: "TRANG CHỦ",
+    link: "/",
+  },
+  {
     id: 1,
     name: "KHAI BÁO",
     link: "#",
@@ -103,6 +108,7 @@ const HeaderNavData = [
       { id: 1.4, name: "Khai báo loại thời gian", link: "/time-type" },
       { id: 1.5, name: "Khai báo banner", link: "/banner" },
       { id: 1.6, name: "Khai báo bộ sưu tập", link: "/collection" },
+      { id: 1.7, name: "Khai báo danh mục hình ảnh", link: "/image-category" },
     ],
   },
   {
@@ -120,6 +126,7 @@ const HeaderNavData = [
       { id: 3.2, name: "Danh sách Tỉnh/TP", link: "/province" },
       { id: 3.3, name: "Địa điểm du lịch", link: "/travel-location" },
       { id: 3.4, name: "Cẩm nang du lịch", link: "/guide-travel-list" },
+      { id: 3.5, name: "Hình ảnh", link: "/image" },
     ],
   },
   { id: 4, name: "KHUYẾN MÃI", link: "#" },

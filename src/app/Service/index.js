@@ -1,282 +1,272 @@
 import React, { useState, useEffect } from "react";
 import API from "../../config/APINoToken";
 import APIToken from "../../config/APIToken";
-import { BsCaretLeft, BsCaretRight } from "react-icons/bs";
+import { BsCaretLeft, BsCaretRight, BsSearch } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa";
 import { CiTrash, CiEdit } from "react-icons/ci";
-import { Button, Modal, Form, Spinner, Toast } from "react-bootstrap";
+import {
+  Button,
+  Modal,
+  Form,
+  Spinner,
+  Toast,
+  ToastContainer,
+  Badge,
+  InputGroup,
+} from "react-bootstrap";
 import "./index.css";
 
 const Service = () => {
   const [dataService, setDataService] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const itemsPerPage = 10;
+
   const [openModal, setOpenModal] = useState(false);
-  const [error, setError] = useState("");
+  const [editMode, setEditMode] = useState(false);
+  const [currentId, setCurrentId] = useState(null);
+  const [tFServiceValue, setTFServiceValue] = useState("");
+  const [tFDesValue, setTFDesValue] = useState("");
   const [isError, setIsError] = useState(false);
-  const [checked, setChecked] = useState(true);
+  const [error, setError] = useState("");
 
   const [successAlertOpen, setSuccessAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
-
-  const [tFServiceValue, setTFServiceValue] = useState("");
-  const [tFDesValue, setTFDesValue] = useState("");
-
-  let userId = localStorage.getItem("userId");
-  const itemsPerPage = 10;
-  let [loading, setLoading] = useState(false);
-  const [deleteId, setDeleteId] = useState(null); // lưu id cần xoá
-
   const [openModalDelete, setOpenModalDelete] = useState(false);
-  const handleCloseModalDelete = () => {
-    setOpenModalDelete(false);
-  };
+  const [deleteId, setDeleteId] = useState(null);
 
-  const handleOpenModalDelete = (id) => {
-    setOpenModalDelete(true);
-    setDeleteId(id);
-  };
+  const userId = localStorage.getItem("userId");
 
-  const handleAgrreDelete = async () => {
-    try {
-      setLoading(true);
-      const response = await APIToken.delete(`/services/delete/${deleteId}`);
-      if (response.status === 200) {
-        setAlertMessage("Xoá dịch vụ thành công");
-      }
-    } catch (error) {
-      return error;
-    } finally {
-      setDeleteId(null);
-      setLoading(false);
-      setOpenModalDelete(false);
-      getData();
-    }
-  };
+  useEffect(() => {
+    getData();
+  }, []);
 
   const getData = async () => {
     try {
       setLoading(true);
       const response = await API.get("/services/get");
       setDataService(response.data.data || []);
-    } catch (error) {
-      console.error(
-        "Lỗi khi lấy danh sách loại Tour:",
-        error.response || error
-      );
+    } catch (err) {
+      console.error("Lỗi:", err);
     } finally {
-      setLoading(false); // ✅ Luôn tắt loading sau khi xong
+      setLoading(false);
     }
   };
 
-  const handleCloseModal = () => {
-    setOpenModal(false);
+  const handleOpenAdd = () => {
+    setEditMode(false);
+    setTFServiceValue("");
+    setTFDesValue("");
     setIsError(false);
-    setError("");
+    setOpenModal(true);
   };
 
-  const handleOpenModal = () => setOpenModal(true);
+  const handleOpenEdit = (item) => {
+    setEditMode(true);
+    setCurrentId(item.serviceid);
+    setTFServiceValue(item.servicename);
+    setTFDesValue(item.description);
+    setIsError(false);
+    setOpenModal(true);
+  };
 
-  const handleAgrre = async () => {
-    if (tFServiceValue.length === 0) {
-      setError("Vui lòng nhập tên danh mục");
+  const handleSave = async () => {
+    if (tFServiceValue.trim().length === 0) {
+      setError("Vui lòng nhập tên dịch vụ");
       setIsError(true);
-    } else {
-      try {
-        setLoading(true);
-        const response = await APIToken.post("/services/add", {
-          servicename: tFServiceValue,
-          description: tFDesValue,
-          created_by: userId,
-        });
-        if (response.status === 201) {
-          setAlertMessage("Thêm mới loại tour thành công");
-          setSuccessAlertOpen(true);
-        }
-      } catch (error) {
-        return error;
-      } finally {
-        setLoading(false);
-        getData();
-        setOpenModal(false);
-        setTFServiceValue("");
-        setTFDesValue("");
+      return;
+    }
+    try {
+      setLoading(true);
+      const payload = {
+        servicename: tFServiceValue,
+        description: tFDesValue,
+        created_by: userId,
+      };
+      let response;
+      if (editMode) {
+        response = await APIToken.put(`/services/update/${currentId}`, payload);
+      } else {
+        response = await APIToken.post("/services/add", payload);
       }
+      if (response.status === 200 || response.status === 201) {
+        setAlertMessage(
+          editMode ? "Cập nhật thành công ✨" : "Thêm mới thành công ✨"
+        );
+        setSuccessAlertOpen(true);
+        setOpenModal(false);
+        getData();
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
+  const handleAgreeDelete = async () => {
+    try {
+      setLoading(true);
+      const response = await APIToken.delete(`/services/delete/${deleteId}`);
+      if (response.status === 200) {
+        setAlertMessage("Xoá dịch vụ thành công");
+        setSuccessAlertOpen(true);
+        getData();
+      }
+    } finally {
+      setLoading(false);
+      setOpenModalDelete(false);
+    }
+  };
 
-  // Tính toán dữ liệu hiển thị cho trang hiện tại
+  const filteredData = dataService.filter((item) =>
+    item.servicename.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = dataService.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.max(1, Math.ceil(dataService.length / itemsPerPage));
+  const currentItems = filteredData.slice(
+    indexOfLastItem - itemsPerPage,
+    indexOfLastItem
+  );
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   return (
-    <div className="container">
-      <div
-        style={{
-          borderBottom: "1px #000000 solid",
-          fontSize: 25,
-          padding: 10,
-        }}
-      >
-        Loại tour
-      </div>
-      <div className="plus" style={{ marginRight: "50px" }}>
-        <Button variant="primary" onClick={handleOpenModal}>
-          <div
-            style={{
-              display: "flex",
-              justifyItems: "center",
-              alignItems: "center",
-            }}
-          >
-            <FaPlus size={16} />
-            <div
-              style={{
-                paddingLeft: "8px",
+    <div className="sv-container">
+      <div className="sv-header">
+        <div className="sv-header-info">
+          <h2>Quản lý Dịch Vụ</h2>
+          <p>Danh mục các dịch vụ tiện ích đi kèm</p>
+        </div>
+        <div className="sv-header-actions">
+          <InputGroup className="sv-search-bar">
+            <InputGroup.Text>
+              <BsSearch />
+            </InputGroup.Text>
+            <Form.Control
+              placeholder="Tìm kiếm dịch vụ..."
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
               }}
-            >
-              Thêm mới
-            </div>
-          </div>
-        </Button>
+            />
+          </InputGroup>
+          <Button
+            variant="primary"
+            className="sv-btn-add"
+            onClick={handleOpenAdd}
+          >
+            <FaPlus /> <span>Thêm mới</span>
+          </Button>
+        </div>
       </div>
-      <table className="table table-striped mt-2">
-        <thead>
-          <tr>
-            <th style={{ width: "10%" }}>Mã dịch vụ</th>
-            <th style={{ width: "30%" }}>Tên dịch vụ</th>
-            <th style={{ width: "15%" }}>Trạng thái</th>
-            <th style={{ width: "20%" }}>Người thêm</th>
-            <th style={{ width: "15%" }}>Ngày thêm</th>
-            <th style={{ width: "10%" }}>Tác vụ</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentItems.length > 0 ? (
-            currentItems.map((service) => (
-              <tr key={service.serviceid}>
-                <td>{service.serviceid}</td>
-                <td>{service.servicename}</td>
-                <td>
-                  {service.status === 1
-                    ? "Hoạt động"
-                    : service.status === 2
-                    ? "Không hoạt động"
-                    : "Không rõ"}
-                </td>
 
-                <td>{service.created_by}</td>
-                <td>{service.created_at}</td>
-                <td>
-                  <div className="d-flex">
-                    <div className="Edit" style={{ marginRight: 10 }}>
-                      <CiEdit />
-                    </div>
-                    <div
-                      className="Trash"
-                      style={{ marginLeft: 10 }}
-                      onClick={() => handleOpenModalDelete(service.serviceid)}
-                    >
-                      <CiTrash />
-                    </div>
-                  </div>
-                </td>
+      <div className="sv-content-card">
+        <div className="table-responsive">
+          <table className="sv-table">
+            <thead>
+              <tr>
+                <th>Mã</th>
+                <th>Tên dịch vụ</th>
+                <th>Mô tả</th>
+                <th>Người tạo</th>
+                <th>Trạng thái</th>
+                <th className="text-center">Tác vụ</th>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="4" className="text-center">
-                Không có dữ liệu
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-
-      {/* Pagination */}
-      {dataService.length > itemsPerPage && (
-        <div className="d-flex justify-content-center mt-3">
-          <nav>
-            <ul className="pagination">
-              <li
-                className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => setCurrentPage(currentPage - 1)}
-                >
-                  <BsCaretLeft />
-                </button>
-              </li>
-              {[...Array(totalPages)].map((_, index) => (
-                <li
-                  key={index}
-                  className={`page-item ${
-                    currentPage === index + 1 ? "active" : ""
-                  }`}
-                >
-                  <button
-                    className="page-link"
-                    onClick={() => setCurrentPage(index + 1)}
-                  >
-                    {index + 1}
-                  </button>
-                </li>
-              ))}
-              <li
-                className={`page-item ${
-                  currentPage === totalPages ? "disabled" : ""
-                }`}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => setCurrentPage(currentPage + 1)}
-                >
-                  <BsCaretRight />
-                </button>
-              </li>
-            </ul>
-          </nav>
+            </thead>
+            <tbody>
+              {currentItems.length > 0 ? (
+                currentItems.map((item) => (
+                  <tr key={item.serviceid}>
+                    <td>
+                      <span className="sv-id">#{item.serviceid}</span>
+                    </td>
+                    <td className="fw-bold">{item.servicename}</td>
+                    <td className="sv-desc-cell">
+                      {item.description || "---"}
+                    </td>
+                    <td>
+                      <span className="sv-user">
+                        {item.created_by || "Admin"}
+                      </span>
+                    </td>
+                    <td>
+                      <Badge bg={item.status === 1 ? "success" : "secondary"}>
+                        {item.status === 1 ? "Hoạt động" : "Tạm dừng"}
+                      </Badge>
+                    </td>
+                    <td>
+                      <div className="sv-actions">
+                        <button
+                          className="sv-btn edit"
+                          onClick={() => handleOpenEdit(item)}
+                        >
+                          <CiEdit />
+                        </button>
+                        <button
+                          className="sv-btn delete"
+                          onClick={() => {
+                            setDeleteId(item.serviceid);
+                            setOpenModalDelete(true);
+                          }}
+                        >
+                          <CiTrash />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="text-center py-5">
+                    Chưa có dữ liệu dịch vụ
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
-      )}
 
-      {/* Loading Spinner */}
-      {loading && (
-        <div className="loading-overlay">
-          <div className="loading-spinner">
-            <Spinner animation="border" role="status" />
+        <div className="sv-pagination">
+          <span className="text-muted">
+            Trang {currentPage} / {totalPages || 1}
+          </span>
+          <div className="sv-page-btns">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage((v) => v - 1)}
+            >
+              <BsCaretLeft />
+            </button>
+            <button className="sv-page-active">{currentPage}</button>
+            <button
+              disabled={currentPage === totalPages || totalPages === 0}
+              onClick={() => setCurrentPage((v) => v + 1)}
+            >
+              <BsCaretRight />
+            </button>
           </div>
         </div>
-      )}
+      </div>
 
-      {/* Modal Add */}
-      <Modal show={openModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Thêm mới dịch vụ</Modal.Title>
+      <Modal show={openModal} onHide={() => setOpenModal(false)} centered>
+        <Modal.Header closeButton className="border-0">
+          <Modal.Title className="fw-bold">
+            {editMode ? "Sửa dịch vụ" : "Thêm dịch vụ"}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group controlId="tourtypeName">
-              <Form.Label>Tên dịch vụ</Form.Label>
+            <Form.Group className="mb-3">
+              <Form.Label className="fw-bold">Tên dịch vụ</Form.Label>
               <Form.Control
-                type="text"
                 value={tFServiceValue}
                 onChange={(e) => setTFServiceValue(e.target.value)}
                 isInvalid={isError}
-                isValid={!!tFServiceValue}
               />
               <Form.Control.Feedback type="invalid">
                 {error}
               </Form.Control.Feedback>
             </Form.Group>
-
-            <Form.Group controlId="tourtypeDescription">
-              <Form.Label>Mô tả</Form.Label>
+            <Form.Group className="mb-3">
+              <Form.Label className="fw-bold">Mô tả</Form.Label>
               <Form.Control
                 as="textarea"
                 rows={3}
@@ -284,60 +274,49 @@ const Service = () => {
                 onChange={(e) => setTFDesValue(e.target.value)}
               />
             </Form.Group>
-
-            <Form.Check
-              type="checkbox"
-              label="Kích hoạt"
-              checked={checked}
-              disabled
-            />
           </Form>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Đóng
+        <Modal.Footer className="border-0">
+          <Button variant="light" onClick={() => setOpenModal(false)}>
+            Hủy
           </Button>
-          <Button variant="primary" onClick={handleAgrre}>
-            {loading ? (
-              <Spinner
-                animation="border"
-                variant="light"
-                size="sm"
-                className="mr-2"
-              />
-            ) : (
-              "Thêm"
-            )}
+          <Button variant="primary" onClick={handleSave}>
+            {loading ? <Spinner size="sm" /> : "Lưu"}
           </Button>
         </Modal.Footer>
       </Modal>
 
-      {/* Success Alert */}
-      <Toast
-        onClose={() => setSuccessAlertOpen(false)}
-        show={successAlertOpen}
-        delay={3000}
-        autohide
-        className="position-fixed top-0 end-0 m-3"
+      <Modal
+        show={openModalDelete}
+        onHide={() => setOpenModalDelete(false)}
+        centered
+        size="sm"
       >
-        <Toast.Body>{alertMessage}</Toast.Body>
-      </Toast>
-
-      {/* Delete Modal */}
-      <Modal show={openModalDelete} onHide={handleCloseModalDelete}>
-        <Modal.Header closeButton>
-          <Modal.Title>Xoá loại tour</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Bạn có chắc chắn muốn xoá dịch vụ này không?</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModalDelete}>
-            Huỷ
-          </Button>
-          <Button variant="danger" onClick={handleAgrreDelete}>
-            Xoá
-          </Button>
-        </Modal.Footer>
+        <div className="p-4 text-center">
+          <CiTrash size={50} color="#dc3545" />
+          <h5 className="mt-3 fw-bold">Xác nhận xóa?</h5>
+          <div className="d-flex gap-2 justify-content-center mt-4">
+            <Button variant="light" onClick={() => setOpenModalDelete(false)}>
+              Đóng
+            </Button>
+            <Button variant="danger" onClick={handleAgreeDelete}>
+              Xác nhận
+            </Button>
+          </div>
+        </div>
       </Modal>
+
+      <ToastContainer position="top-end" className="p-3">
+        <Toast
+          bg="success"
+          show={successAlertOpen}
+          onClose={() => setSuccessAlertOpen(false)}
+          delay={3000}
+          autohide
+        >
+          <Toast.Body className="text-white fw-bold">{alertMessage}</Toast.Body>
+        </Toast>
+      </ToastContainer>
     </div>
   );
 };

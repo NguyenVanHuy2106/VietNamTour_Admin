@@ -2,22 +2,22 @@ import React, { useState, useEffect } from "react";
 import API from "../../config/APINoToken";
 import APIToken from "../../config/APIToken";
 import { BsCaretLeft, BsCaretRight, BsSearch } from "react-icons/bs";
-import { FaPlus, FaRegClock } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import { CiTrash, CiEdit } from "react-icons/ci";
 import {
-  Button,
   Modal,
+  Button,
   Form,
   Spinner,
   Toast,
   ToastContainer,
-  InputGroup,
   Badge,
+  InputGroup,
 } from "react-bootstrap";
-import "./index.css";
+import "./index.css"; // Đảm bảo đổi tên file CSS tương ứng
 
-const TimeType = () => {
-  const [dataTimeType, setDataTimeType] = useState([]);
+const ImageCategory = () => {
+  const [dataImageCat, setDataImageCat] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
@@ -26,10 +26,8 @@ const TimeType = () => {
   const [openModal, setOpenModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [currentId, setCurrentId] = useState(null);
-
-  const [tFTimeTypeValue, setTFTimeTypeValue] = useState("");
+  const [tFImageCatValue, setTFImageCatValue] = useState("");
   const [tFDesValue, setTFDesValue] = useState("");
-  const [status, setStatus] = useState(1); // Mặc định là 1 (Hoạt động)
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState("");
 
@@ -47,8 +45,8 @@ const TimeType = () => {
   const getData = async () => {
     try {
       setLoading(true);
-      const response = await API.get("/timeType/get");
-      setDataTimeType(response.data.data || []);
+      const response = await API.get("/imgCat/get");
+      setDataImageCat(response.data.data || []);
     } catch (err) {
       console.error(err);
     } finally {
@@ -58,45 +56,40 @@ const TimeType = () => {
 
   const handleOpenAdd = () => {
     setEditMode(false);
-    setTFTimeTypeValue("");
+    setTFImageCatValue("");
     setTFDesValue("");
-    setStatus(1);
     setIsError(false);
     setOpenModal(true);
   };
 
   const handleOpenEdit = (item) => {
     setEditMode(true);
-    setCurrentId(item.timetypeid);
-    setTFTimeTypeValue(item.timetypename);
+    setCurrentId(item.id);
+    setTFImageCatValue(item.name);
     setTFDesValue(item.description);
-    setStatus(item.status || 1);
     setIsError(false);
     setOpenModal(true);
   };
 
   const handleSave = async () => {
-    if (tFTimeTypeValue.trim().length === 0) {
-      setError("Vui lòng nhập tên loại thời gian");
+    if (tFImageCatValue.trim().length === 0) {
+      setError("Vui lòng nhập tên danh mục");
       setIsError(true);
       return;
     }
     try {
       setLoading(true);
       const payload = {
-        timetypename: tFTimeTypeValue,
+        name: tFImageCatValue,
         description: tFDesValue,
-        status: status,
         created_by: userId,
       };
-
       let response;
       if (editMode) {
-        response = await APIToken.put(`/timeType/update/${currentId}`, payload);
+        response = await APIToken.put(`/imgCat/update/${currentId}`, payload);
       } else {
-        response = await APIToken.post("/timeType/add", payload);
+        response = await APIToken.post("/imgCat/add", payload);
       }
-
       if (response.status === 200 || response.status === 201) {
         setAlertMessage(
           editMode ? "Cập nhật thành công ✨" : "Thêm mới thành công ✨"
@@ -110,15 +103,10 @@ const TimeType = () => {
     }
   };
 
-  const handleOpenModalDelete = (id) => {
-    setDeleteId(id);
-    setOpenModalDelete(true);
-  };
-
   const handleAgreeDelete = async () => {
     try {
       setLoading(true);
-      const response = await APIToken.delete(`/timeType/delete/${deleteId}`);
+      const response = await APIToken.delete(`/imgCat/delete/${deleteId}`);
       if (response.status === 200) {
         setAlertMessage("Xoá dữ liệu thành công");
         setSuccessAlertOpen(true);
@@ -130,24 +118,26 @@ const TimeType = () => {
     }
   };
 
-  const filteredData = dataTimeType.filter((item) =>
-    item.timetypename.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredData = dataImageCat.filter((item) =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const currentItems = filteredData.slice(
+    indexOfLastItem - itemsPerPage,
+    indexOfLastItem
   );
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-  const currentItems = filteredData.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
 
   return (
-    <div className="timet-container">
-      <div className="timet-header">
-        <div className="timet-header-info">
-          <h2>Loại Thời Gian</h2>
-          <p>Quản lý các khung thời gian tour</p>
+    <div className="imgc-container">
+      {/* Header đồng bộ layout TourType */}
+      <div className="imgc-header">
+        <div className="imgc-header-info">
+          <h2>Danh mục hình ảnh</h2>
+          <p>Quản lý các nhóm phân loại hình ảnh hệ thống</p>
         </div>
-        <div className="timet-header-actions">
-          <InputGroup className="timet-search-bar">
+        <div className="imgc-header-actions">
+          <InputGroup className="imgc-search-bar">
             <InputGroup.Text>
               <BsSearch />
             </InputGroup.Text>
@@ -161,7 +151,7 @@ const TimeType = () => {
           </InputGroup>
           <Button
             variant="primary"
-            className="timet-btn-add"
+            className="imgc-btn-add"
             onClick={handleOpenAdd}
           >
             <FaPlus /> <span>Thêm mới</span>
@@ -169,79 +159,83 @@ const TimeType = () => {
         </div>
       </div>
 
-      <div className="timet-content-card">
+      <div className="imgc-content-card">
         <div className="table-responsive">
-          <table className="timet-table">
+          <table className="imgc-table">
             <thead>
               <tr>
                 <th>Mã</th>
-                <th>Tên Loại</th>
+                <th>Tên danh mục</th>
                 <th>Mô tả</th>
-                <th>Người tạo</th>
-                <th>Trạng thái</th> {/* Cột Trạng thái */}
+                <th>Người thêm</th>
+                <th>Trạng thái</th>
                 <th className="text-center">Tác vụ</th>
               </tr>
             </thead>
             <tbody>
-              {currentItems.map((item) => (
-                <tr key={item.timetypeid}>
-                  <td>
-                    <span className="timet-id-badge">#{item.timetypeid}</span>
-                  </td>
-                  <td>
-                    <div className="d-flex align-items-center">
-                      <FaRegClock className="me-2 text-primary" />
-                      <span className="fw-bold">{item.timetypename}</span>
-                    </div>
-                  </td>
-                  <td className="timet-desc-cell">
-                    {item.description || "---"}
-                  </td>
-                  <td>
-                    <span className="timet-user-tag">
-                      {item.created_by || "Admin"}
-                    </span>
-                  </td>
-                  <td>
-                    <Badge bg={item.status === 1 ? "success" : "secondary"}>
-                      {item.status === 1 ? "Hoạt động" : "Tạm dừng"}
-                    </Badge>
-                  </td>
-                  <td>
-                    <div className="timet-actions">
-                      <button
-                        className="timet-action-btn edit"
-                        onClick={() => handleOpenEdit(item)}
-                        disabled={true}
-                      >
-                        <CiEdit size={20} />
-                      </button>
-                      <button
-                        className="timet-action-btn delete"
-                        onClick={() => handleOpenModalDelete(item.timetypeid)}
-                      >
-                        <CiTrash size={20} />
-                      </button>
-                    </div>
+              {currentItems.length > 0 ? (
+                currentItems.map((item) => (
+                  <tr key={item.id}>
+                    <td>
+                      <span className="imgc-id">#{item.id}</span>
+                    </td>
+                    <td className="fw-bold">{item.name}</td>
+                    <td className="imgc-desc-cell">
+                      {item.description || "---"}
+                    </td>
+                    <td>
+                      <span className="imgc-user">
+                        {item.created_by || "Admin"}
+                      </span>
+                    </td>
+                    <td>
+                      <Badge bg="success">Hoạt động</Badge>
+                    </td>
+                    <td>
+                      <div className="imgc-actions">
+                        <button
+                          className="imgc-btn edit"
+                          onClick={() => handleOpenEdit(item)}
+                        >
+                          <CiEdit />
+                        </button>
+                        <button
+                          className="imgc-btn delete"
+                          onClick={() => {
+                            setDeleteId(item.id);
+                            setOpenModalDelete(true);
+                          }}
+                        >
+                          <CiTrash />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="text-center py-4">
+                    Không có dữ liệu
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
 
-        <div className="timet-pagination">
-          <span className="text-muted small">
+        {/* Phân trang đúng kiểu Customer/TourType */}
+        <div className="imgc-pagination">
+          <span className="text-muted">
             Trang {currentPage} / {totalPages || 1}
           </span>
-          <div className="timet-page-nav">
+          <div className="imgc-page-btns">
             <button
               disabled={currentPage === 1}
               onClick={() => setCurrentPage((v) => v - 1)}
             >
               <BsCaretLeft />
             </button>
-            <button className="timet-page-active">{currentPage}</button>
+            <button className="imgc-page-active">{currentPage}</button>
             <button
               disabled={currentPage === totalPages || totalPages === 0}
               onClick={() => setCurrentPage((v) => v + 1)}
@@ -252,19 +246,20 @@ const TimeType = () => {
         </div>
       </div>
 
+      {/* Modal Form */}
       <Modal show={openModal} onHide={() => setOpenModal(false)} centered>
-        <Modal.Header closeButton className="border-0 px-4 pt-4">
+        <Modal.Header closeButton className="border-0">
           <Modal.Title className="fw-bold">
-            {editMode ? "Cập Nhật" : "Thêm Mới"}
+            {editMode ? "Sửa danh mục" : "Thêm danh mục mới"}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body className="px-4">
+        <Modal.Body>
           <Form>
             <Form.Group className="mb-3">
-              <Form.Label className="fw-bold">Tên loại thời gian</Form.Label>
+              <Form.Label className="fw-bold">Tên danh mục hình</Form.Label>
               <Form.Control
-                value={tFTimeTypeValue}
-                onChange={(e) => setTFTimeTypeValue(e.target.value)}
+                value={tFImageCatValue}
+                onChange={(e) => setTFImageCatValue(e.target.value)}
                 isInvalid={isError}
               />
               <Form.Control.Feedback type="invalid">
@@ -280,30 +275,25 @@ const TimeType = () => {
                 onChange={(e) => setTFDesValue(e.target.value)}
               />
             </Form.Group>
-
-            {/* Thêm Switch Trạng thái trong Modal */}
-            <Form.Group className="mb-3">
-              <Form.Label className="fw-bold d-block">Trạng thái</Form.Label>
-              <Form.Check
-                type="switch"
-                id="custom-switch"
-                label={status === 1 ? "Đang hoạt động" : "Tạm ngưng"}
-                checked={status === 1}
-                onChange={(e) => setStatus(e.target.checked ? 1 : 2)}
-              />
-            </Form.Group>
+            <Form.Check
+              type="switch"
+              label="Kích hoạt danh mục"
+              checked
+              disabled
+            />
           </Form>
         </Modal.Body>
-        <Modal.Footer className="border-0 px-4 pb-4">
+        <Modal.Footer className="border-0">
           <Button variant="light" onClick={() => setOpenModal(false)}>
             Hủy
           </Button>
-          <Button variant="primary" onClick={handleSave}>
+          <Button variant="primary" onClick={handleSave} className="px-4">
             {loading ? <Spinner size="sm" /> : "Lưu"}
           </Button>
         </Modal.Footer>
       </Modal>
 
+      {/* Modal Delete */}
       <Modal
         show={openModalDelete}
         onHide={() => setOpenModalDelete(false)}
@@ -311,14 +301,15 @@ const TimeType = () => {
         size="sm"
       >
         <div className="p-4 text-center">
-          <CiTrash size={50} color="#e63757" />
+          <CiTrash size={50} color="#dc3545" />
           <h5 className="mt-3 fw-bold">Xác nhận xóa?</h5>
+          <p className="text-muted small">Dữ liệu này sẽ bị xóa vĩnh viễn.</p>
           <div className="d-flex gap-2 justify-content-center mt-4">
             <Button variant="light" onClick={() => setOpenModalDelete(false)}>
               Đóng
             </Button>
             <Button variant="danger" onClick={handleAgreeDelete}>
-              Xóa
+              Xác nhận
             </Button>
           </div>
         </div>
@@ -339,4 +330,4 @@ const TimeType = () => {
   );
 };
 
-export default TimeType;
+export default ImageCategory;

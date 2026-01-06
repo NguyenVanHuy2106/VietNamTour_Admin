@@ -2,10 +2,16 @@ import React, { useState, useEffect } from "react";
 import API from "../../config/APINoToken";
 import APIToken from "../../config/APIToken";
 import { useNavigate } from "react-router-dom";
-import { Button, Modal, Pagination, Spinner, Toast } from "react-bootstrap";
-import { BsCaretLeft, BsCaretRight } from "react-icons/bs";
-import { FaPlus } from "react-icons/fa";
-import { CiTrash, CiEdit } from "react-icons/ci";
+import {
+  Button,
+  Modal,
+  Spinner,
+  Toast,
+  ToastContainer,
+  Table,
+} from "react-bootstrap";
+import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
+import { FaPlus, FaTrash, FaEdit, FaEye, FaMapMarkerAlt } from "react-icons/fa";
 import "./index.css";
 
 const Tour = () => {
@@ -14,276 +20,244 @@ const Tour = () => {
   const itemsPerPage = 5;
   const navigate = useNavigate();
 
-  const [error, setError] = useState("");
   const [successAlertOpen, setSuccessAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
-  let [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const [openModalDelete, setOpenModalDelete] = useState(false);
 
-  const handleCloseModalDelete = () => setOpenModalDelete(false);
-
-  const handleOpenModalDelete = (id) => {
-    setOpenModalDelete(true);
-    setDeleteId(id);
-  };
-
-  const handleAgrreDelete = async () => {
-    try {
-      setLoading(true);
-      const response = await APIToken.delete(`/tour/delete/${deleteId}`);
-      if (response.status === 200) {
-        setAlertMessage("Xoá Tour thành công");
-        setSuccessAlertOpen(true);
-      }
-    } catch (error) {
-      setError("Có lỗi xảy ra khi xoá Tour");
-    } finally {
-      setDeleteId(null);
-      setLoading(false);
-      setOpenModalDelete(false);
-      getData();
-    }
-  };
-
   const getData = async () => {
     try {
+      setLoading(true);
       const response = await API.get("/tour/get");
       setDataTour(response.data.data || []);
     } catch (error) {
-      console.error(
-        "Lỗi khi lấy danh sách loại Tour:",
-        error.response || error
-      );
+      console.error("Lỗi:", error);
+    } finally {
+      setLoading(false);
     }
-  };
-  const handleGoToDetail = (tourid) => {
-    navigate("/tour-detail", { state: { tourId: tourid } });
-  };
-  const handleGoToEdit = (tourid) => {
-    navigate("/tour-edit", { state: { tourId: tourid } });
   };
 
   useEffect(() => {
     getData();
   }, []);
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = dataTour.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.max(1, Math.ceil(dataTour.length / itemsPerPage));
+  const handleAgreeDelete = async () => {
+    try {
+      setLoading(true);
+      const response = await APIToken.delete(`/tour/delete/${deleteId}`);
+      if (response.status === 200) {
+        setAlertMessage("Xóa tour thành công! ✨");
+        setSuccessAlertOpen(true);
+        getData();
+      }
+    } catch (error) {
+      setAlertMessage("Lỗi khi xóa");
+      setSuccessAlertOpen(true);
+    } finally {
+      setOpenModalDelete(false);
+      setLoading(false);
+    }
+  };
+
+  const totalPages = Math.ceil(dataTour.length / itemsPerPage) || 1;
+  const currentItems = dataTour.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
-    <div className="container mt-1" style={{ padding: 10 }}>
-      <div
-        style={{
-          borderBottom: "1px solid #1D61AD",
-          fontSize: 20,
-          paddingTop: 10,
-          paddingBottom: 10,
-          color: "#1d61ad",
-        }}
-      >
-        QUẢN LÝ TOUR
-      </div>
-
-      <div className="d-flex justify-content-end mt-2">
-        <Button
-          variant="primary"
-          onClick={() => navigate("/tour-add")}
-          style={{ marginBottom: "15px" }}
-        >
-          <FaPlus size={16} style={{ marginRight: "8px" }} />
-          Thêm mới
+    <div className="sv-container">
+      <div className="sv-header">
+        <div className="sv-header-left">
+          <h2>QUẢN LÝ TOUR</h2>
+          <p>Danh sách các chương trình du lịch hiện có</p>
+        </div>
+        <Button className="sv-btn-add" onClick={() => navigate("/tour-add")}>
+          <FaPlus /> Thêm mới
         </Button>
       </div>
 
-      {/* Div chứa bảng có scroll ngang */}
-      <div
-        style={{
-          overflowX: "auto",
-          whiteSpace: "nowrap",
-          border: "1px solid #ccc",
-          padding: 5,
-        }}
-      >
-        <table
-          className="table table-bordered"
-          style={{
-            fontSize: "14px",
-            minWidth: 1300,
-            borderCollapse: "collapse",
-          }}
-        >
+      <div className="sv-card-table">
+        <Table hover className="sv-table">
           <thead>
             <tr>
-              <th colSpan={2} className="text-center">
-                Thông tin tour
-              </th>
-              <th rowSpan={2} className="text-center align-middle">
-                Mô tả ngắn
-              </th>
-              <th colSpan={2} className="text-center">
-                Địa điểm
-              </th>
-              <th colSpan={2} className="text-center">
-                Người tạo
-              </th>
-              <th colSpan={3} className="text-center">
-                Thời gian
-              </th>
-              <th colSpan={3} className="text-center">
-                Giá tour
-              </th>
-              <th rowSpan={2} className="text-center align-middle">
-                Tác vụ
-              </th>
-            </tr>
-            <tr>
-              <th className="text-center">Mã tour</th>
-              <th className="text-center">Tên tour</th>
-              <th className="text-center">Khởi hành</th>
-              <th className="text-center">Điểm đến</th>
-              <th className="text-center">Người tạo</th>
-              <th className="text-center">Ngày tạo</th>
-              <th className="text-center">Loại thời gian</th>
-              <th className="text-center">Ngày đi</th>
-              <th className="text-center">Ngày về</th>
-              <th className="text-center">Người lớn</th>
-              <th className="text-center">Trẻ em</th>
-              <th className="text-center">Free</th>
+              <th className="text-center">Hình ảnh</th>
+              <th>Tên Tour / Mã</th>
+              <th>Địa điểm</th>
+              <th>Giá người lớn</th>
+              <th>Ngày đi</th>
+              <th className="text-center">Tác vụ</th>
             </tr>
           </thead>
           <tbody>
-            {currentItems.length > 0 ? (
+            {loading ? (
+              <tr>
+                <td colSpan="6" className="text-center py-5">
+                  <Spinner animation="border" variant="primary" />
+                </td>
+              </tr>
+            ) : (
               currentItems.map((tour) => (
                 <tr key={tour.tourid}>
-                  <td>{tour.tourid}</td>
-                  <td
-                    className="detailLink"
-                    onClick={() => handleGoToDetail(tour.tourid)}
-                    style={{
-                      maxWidth: "310px",
-                      minWidth: "310px", // Giới hạn chiều rộng
-                      wordBreak: "break-word", // Cho phép ngắt từ khi quá dài
-                      whiteSpace: "normal", // Cho phép xuống dòng
-                      textAlign: "justify",
-                    }}
-                  >
-                    {tour.tourname}
+                  {/* Cột Hình Ảnh */}
+                  <td className="text-center">
+                    <div className="sv-img-wrapper">
+                      {/* Tìm ảnh có imagetype là 0 */}
+                      {(() => {
+                        const avatar = tour.images?.find(
+                          (img) => img.imagetype === 0
+                        );
+                        return (
+                          <img
+                            src={
+                              avatar
+                                ? avatar.imageurl
+                                : "https://placehold.co/80x60?text=No+Avatar"
+                            }
+                            alt="tour-avatar"
+                            className="sv-tour-img"
+                          />
+                        );
+                      })()}
+                    </div>
                   </td>
-                  <td
-                    style={{
-                      maxWidth: "500px",
-                      minWidth: "500px", // Giới hạn chiều rộng
-                      wordBreak: "break-word", // Cho phép ngắt từ khi quá dài
-                      whiteSpace: "normal", // Cho phép xuống dòng
-                      textAlign: "justify",
-                    }}
-                  >
-                    {tour.description}
-                  </td>
-                  <td>{tour.departure_name}</td>
-                  <td>{tour.destination_name}</td>
-                  <td>{tour.created_by}</td>
-                  <td>{tour.created_at || "N/A"}</td>
-                  <td>{tour.timetype_name}</td>
-                  <td>{tour.startdate}</td>
-                  <td>{tour.enddate}</td>
-                  <td>{tour.price.adultprice}</td>
-                  <td>{tour.price.childprice}</td>
-                  <td>{tour.price.freeprice}</td>
                   <td>
-                    <div className="d-flex">
-                      <CiEdit
-                        style={{ marginRight: "10px", cursor: "pointer" }}
-                        onClick={() => handleGoToEdit(tour.tourid)}
-                      />
-                      <CiTrash
-                        style={{ marginLeft: "10px", cursor: "pointer" }}
-                        onClick={() => handleOpenModalDelete(tour.tourid)}
-                      />
+                    <div
+                      className="sv-tour-name"
+                      onClick={() =>
+                        navigate("/tour-detail", {
+                          state: { tourId: tour.tourid },
+                        })
+                      }
+                    >
+                      {tour.tourname}
+                    </div>
+                    {/* Hiển thị nhãn Loại Tour */}
+                    {tour.tourtype === "DOAN" ? (
+                      <span className="sv-badge-type group">Tour đoàn</span>
+                    ) : (
+                      <span className="sv-badge-type retail">Tour lẻ</span>
+                    )}
+                    <div className="sv-tour-id text-muted">
+                      Mã: #{tour.tourid}
+                    </div>
+                    <div className="sv-tour-desc-short">{tour.description}</div>
+                  </td>
+                  <td>
+                    <div className="sv-loc">
+                      <FaMapMarkerAlt size={12} className="text-danger me-1" />
+                      {tour.departure_name} → {tour.destination_name}
+                    </div>
+                  </td>
+                  <td>
+                    <span className="sv-price">
+                      {tour.price.adultprice?.toLocaleString()}đ
+                    </span>
+                  </td>
+                  <td className="sv-text-small">{tour.startdate}</td>
+                  <td>
+                    <div className="sv-actions">
+                      <button
+                        className="sv-icon-btn view"
+                        onClick={() =>
+                          navigate("/tour-detail", {
+                            state: { tourId: tour.tourid },
+                          })
+                        }
+                      >
+                        <FaEye />
+                      </button>
+                      <button
+                        className="sv-icon-btn edit"
+                        onClick={() =>
+                          navigate("/tour-edit", {
+                            state: { tourId: tour.tourid },
+                          })
+                        }
+                      >
+                        <FaEdit />
+                      </button>
+                      <button
+                        className="sv-icon-btn delete"
+                        onClick={() => {
+                          setDeleteId(tour.tourid);
+                          setOpenModalDelete(true);
+                        }}
+                      >
+                        <FaTrash />
+                      </button>
                     </div>
                   </td>
                 </tr>
               ))
-            ) : (
-              <tr>
-                <td colSpan="14" className="text-center">
-                  Không có dữ liệu
-                </td>
-              </tr>
             )}
           </tbody>
-        </table>
+        </Table>
+
+        {/* PHÂN TRANG KIỂU SERVICE */}
+        <div className="sv-pagination-bar">
+          <div className="sv-page-count">
+            Trang {currentPage} / {totalPages}
+          </div>
+          <div className="sv-page-controls">
+            <button
+              className="sv-page-btn"
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage(currentPage - 1)}
+            >
+              <BsChevronLeft />
+            </button>
+
+            <div className="sv-page-number">{currentPage}</div>
+
+            <button
+              className="sv-page-btn"
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage(currentPage + 1)}
+            >
+              <BsChevronRight />
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* Pagination */}
-      {dataTour.length > itemsPerPage && (
-        <Pagination className="d-flex justify-content-center mt-3">
-          <Pagination.Prev
-            onClick={() => setCurrentPage(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            <BsCaretLeft />
-          </Pagination.Prev>
-
-          {[...Array(totalPages)].map((_, index) => (
-            <Pagination.Item
-              key={index}
-              active={currentPage === index + 1}
-              onClick={() => setCurrentPage(index + 1)}
-            >
-              {index + 1}
-            </Pagination.Item>
-          ))}
-
-          <Pagination.Next
-            onClick={() => setCurrentPage(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          >
-            <BsCaretRight />
-          </Pagination.Next>
-        </Pagination>
-      )}
-
-      {/* Delete Modal */}
-      <Modal show={openModalDelete} onHide={handleCloseModalDelete}>
-        <Modal.Header closeButton>
-          <Modal.Title>Xoá Tour</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Bạn có chắc chắn muốn xoá?</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModalDelete}>
-            Hủy
-          </Button>
-          <Button
-            variant="danger"
-            onClick={handleAgrreDelete}
-            disabled={loading}
-          >
-            {loading ? <Spinner animation="border" size="sm" /> : "Xoá"}
-          </Button>
-        </Modal.Footer>
+      <Modal
+        show={openModalDelete}
+        onHide={() => setOpenModalDelete(false)}
+        centered
+      >
+        <Modal.Body className="text-center p-4">
+          <h4 className="mb-3">Xác nhận xóa?</h4>
+          <p>
+            Bạn muốn xóa tour <strong>#{deleteId}</strong>?
+          </p>
+          <div className="d-flex gap-2 justify-content-center mt-4">
+            <Button variant="light" onClick={() => setOpenModalDelete(false)}>
+              Hủy
+            </Button>
+            <Button variant="danger" onClick={handleAgreeDelete}>
+              Xóa
+            </Button>
+          </div>
+        </Modal.Body>
       </Modal>
 
-      {/* Alert */}
-      <Toast
-        onClose={() => setSuccessAlertOpen(false)}
-        show={successAlertOpen}
-        delay={3000}
-        autohide
-        className="position-fixed top-0 end-0 m-3"
+      <ToastContainer
+        position="top-end"
+        className="p-3"
+        style={{ position: "fixed", zIndex: 10000 }}
       >
-        <Toast.Body>{alertMessage}</Toast.Body>
-      </Toast>
-
-      {/* Loading Spinner */}
-      {loading && (
-        <div className="d-flex justify-content-center mt-3">
-          <Spinner animation="border" variant="primary" />
-        </div>
-      )}
+        <Toast
+          show={successAlertOpen}
+          onClose={() => setSuccessAlertOpen(false)}
+          delay={3000}
+          autohide
+          bg="primary"
+        >
+          <Toast.Body className="text-white fw-bold">{alertMessage}</Toast.Body>
+        </Toast>
+      </ToastContainer>
     </div>
   );
 };

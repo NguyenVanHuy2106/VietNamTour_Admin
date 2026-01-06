@@ -11,7 +11,7 @@ import {
 } from "react-bootstrap";
 import Word from "../../components/Word";
 import Form from "react-bootstrap/Form";
-import ImageUploader from "../../components/ImageUploader";
+
 import ImageCDNCloud from "../../components/ImageCDNCloud";
 import API from "../../config/APINoToken";
 import APIToken from "../../config/APIToken";
@@ -26,14 +26,14 @@ const TourEdit = () => {
   const [alertMessage, setAlertMessage] = useState("");
   const navigate = useNavigate();
   // const [isGroup, setIsGroup] = useState(false);
-  const [dataTourDetail, setDataTourDetail] = useState([]);
-  const [tourInfo, setTourInfo] = useState("");
-  const [mainImage, setMainImage] = useState("");
+  // const [dataTourDetail, setDataTourDetail] = useState([]);
+  // const [tourInfo, setTourInfo] = useState("");
+  // const [mainImage, setMainImage] = useState("");
 
-  const [tourDetail, setTourDetail] = useState("");
-  const [tourPrice, setTourPrice] = useState("");
-  const [tourQuantity, setTourQuantity] = useState("");
-  const [tourHighlight, setTourHighlight] = useState([]);
+  // const [tourDetail, setTourDetail] = useState("");
+  // const [tourPrice, setTourPrice] = useState("");
+  // const [tourQuantity, setTourQuantity] = useState("");
+  // const [tourHighlight, setTourHighlight] = useState([]);
 
   let userId = localStorage.getItem("userId");
   let [loading, setLoading] = useState(false);
@@ -41,6 +41,7 @@ const TourEdit = () => {
   const [tourData, setTourData] = useState({
     tourid: "",
     tourname: "",
+    slug: "",
     description: "",
     destination: "",
     departure: "",
@@ -68,6 +69,7 @@ const TourEdit = () => {
   });
   const defaultTourData = {
     tourname: "",
+    slug: "",
     description: "",
     destination: "",
     departure: "",
@@ -133,19 +135,20 @@ const TourEdit = () => {
       const response = await API.get(`/tour/get/${tourId}`);
       const data = response.data.data || {};
 
-      setDataTourDetail(data);
-      setTourInfo(data.tour);
-      setTourDetail(data.detail);
-      setTourPrice(data.price);
-      setTourQuantity(data.quantity);
-      setTourHighlight(data.highlights);
-      const mainImg = data.images?.find((img) => img.imagetype === 0);
-      setMainImage(mainImg?.imageurl || "");
+      // setDataTourDetail(data);
+      // setTourInfo(data.tour);
+      // setTourDetail(data.detail);
+      // setTourPrice(data.price);
+      // setTourQuantity(data.quantity);
+      // setTourHighlight(data.highlights);
+      // const mainImg = data.images?.find((img) => img.imagetype === 0);
+      // setMainImage(mainImg?.imageurl || "");
 
       // Đổ dữ liệu vào tourData
       setTourData({
         tourid: data.tour?.tourid || "",
         tourname: data.tour?.tourname || "",
+        slug: data.tour?.slug || "",
         description: data.tour?.description || "",
         destination: data.tour?.destination || "",
         departure: data.tour?.departure || "",
@@ -427,6 +430,17 @@ const TourEdit = () => {
                   </option>
                 ))}
               </select>
+            </Col>
+          </Row>
+          <Row className="mb-3">
+            <Col>
+              <Form.Label>Slug (Đường dẫ thân thiện)</Form.Label>
+              <Form.Control
+                type="text"
+                name="slug"
+                value={tourData.slug}
+                onChange={handleChange}
+              />
             </Col>
           </Row>
 

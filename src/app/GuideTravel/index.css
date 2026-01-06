@@ -1,0 +1,170 @@
+.adv-container {
+  padding: 25px;
+  background-color: #f4f7f6;
+  min-height: 100vh;
+}
+
+.adv-header {
+  margin-bottom: 25px;
+  border-bottom: 2px solid #1d61ad;
+  padding-bottom: 10px;
+}
+
+.adv-header-info h2 {
+  font-weight: 700;
+  color: #1d61ad;
+  margin: 0;
+}
+
+.adv-content-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+/* Tabs */
+.adv-tabs .nav-link {
+  color: #6c757d;
+  font-weight: 600;
+  border: none;
+  padding: 12px 25px;
+  transition: 0.3s;
+}
+
+.adv-tabs .nav-link.active {
+  color: #1d61ad !important;
+  border-bottom: 3px solid #1d61ad !important;
+}
+
+.adv-tabs .nav-link:hover {
+  background-color: #f0f7ff;
+  color: #1d61ad;
+}
+
+/* Form */
+.adv-label {
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 8px;
+}
+
+.adv-input {
+  border-radius: 8px;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.adv-input:focus {
+  border-color: #1d61ad;
+  box-shadow: 0 0 0 0.2rem rgba(29, 97, 173, 0.1);
+}
+
+/* Tags Hover Effect */
+.adv-tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.adv-tag-btn {
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 1px solid #1d61ad;
+  background: white;
+  color: #1d61ad;
+  transition: all 0.3s ease;
+}
+
+.adv-tag-btn:hover {
+  background-color: #1d61ad;
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(29, 97, 173, 0.2);
+}
+
+.adv-tag-btn.active {
+  background-color: #1d61ad;
+  color: white;
+}
+
+/* Preview Image */
+.adv-preview-box {
+  width: 250px;
+  height: 250px;
+  border: 2px dashed #ccc;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fafafa;
+  overflow: hidden;
+}
+
+.adv-preview-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Submit Button */
+.adv-btn-submit {
+  background-color: #1d61ad;
+  border: none;
+  width: 100%;
+  padding: 15px;
+  font-weight: bold;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.adv-btn-submit:hover {
+  background-color: #154a85;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(29, 97, 173, 0.3);
+}
+
+.adv-warning-box {
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 12px 20px;
+  border-left: 5px solid #ffeeba;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.text-danger {
+  margin-left: 3px;
+  font-weight: bold;
+}
+
+
+/* Đảm bảo Toast luôn nổi lên trên cùng và dính ở góc phải */
+.toast-container {
+  position: fixed !important; /* Dùng fixed để khóa vị trí so với màn hình */
+  top: 20px !important;
+  right: 20px !important;
+  z-index: 10000 !important; /* Ưu tiên hiển thị cao nhất */
+}
+
+.toast {
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2); /* Đổ bóng mạnh để nổi bật trên nền nội dung */
+  border: none;
+  min-width: 300px;
+}
+
+/* Hiệu ứng trượt vào cho Toast cho thêm phần xịn xò */
+.toast.showing {
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

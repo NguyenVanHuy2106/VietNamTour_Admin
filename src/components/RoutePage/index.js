@@ -24,6 +24,9 @@ import TourEdit from "../../app/TourEdit";
 // import Collection from "../../app/Collection";
 import GuideTravelList from "../../app/GuideTravelList";
 import GuideTravelDetail from "../../app/GuideTravelDetail";
+import ImageCategory from "../../app/ImageCategory";
+
+import Image from "../../app/Image";
 
 import SignIn from "../SignIn";
 import APIToken from "../../config/APIToken";
@@ -86,6 +89,8 @@ const RoutePage = () => {
         <Route path="tour-edit" element={<TourEdit />} />
         <Route path="collection" element={<Collection />} />
         <Route path="guide-travel-detail" element={<GuideTravelDetail />} />
+        <Route path="image-category" element={<ImageCategory />} />
+        <Route path="image" element={<Image />} />
       </Route>
     </Routes>
   );

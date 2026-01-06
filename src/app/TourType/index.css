@@ -1,40 +1,150 @@
-.plus {
-    display: flex;
-    width: 100%;
-    justify-content: flex-end;
-    margin-top: 10px;
-}
-.Edit {
-    cursor: pointer;
-}
-.Trash {
-    cursor: pointer;
+/* Container đặc thù cho TourType */
+.tt-container {
+  padding: 25px;
+  background-color: #f4f7f6;
+  min-height: 100vh;
 }
 
-/* loading spinner */
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
+.tt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.tt-header-info h2 {
+  font-weight: 700;
+  color: #1a3353;
+  margin: 0;
+}
+
+.tt-header-info p {
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.tt-header-actions {
+  display: flex;
+  gap: 15px;
+}
+
+.tt-search-bar {
+  width: 280px;
+}
+
+.tt-btn-add {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 8px;
+  padding: 8px 20px;
+}
+
+/* Card chứa bảng */
+.tt-content-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border: 1px solid #edf2f9;
+}
+
+/* Table styling */
+.tt-table {
   width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.3);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
+  border-collapse: separate;
+  border-spacing: 0 8px;
 }
 
-.loading-spinner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.tt-table thead th {
+  color: #adb5bd;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 12px;
+  padding: 12px;
+  border: none;
 }
 
-/* Toast position */
-.toast {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 1050;
+.tt-table tbody tr {
+  background: #fff;
+  transition: transform 0.2s;
+}
+
+.tt-table tbody tr:hover {
+  background: #f9fbfd;
+  transform: scale(1.002);
+}
+
+.tt-table tbody td {
+  padding: 15px;
+  vertical-align: middle;
+  border-top: 1px solid #f1f4f8;
+  border-bottom: 1px solid #f1f4f8;
+}
+
+.tt-id {
+  color: #95aac9;
+  font-weight: 500;
+}
+
+.tt-desc-cell {
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #6e84a3;
+}
+
+.tt-user {
+  background: #f1f4f8;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #2c3e50;
+}
+
+/* Nút tác vụ */
+.tt-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.tt-btn {
+  border: none;
+  background: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+
+.tt-btn.edit { background: #e3ebf6; color: #2c7be5; }
+.tt-btn.delete { background: #fbeae9; color: #e63757; }
+.tt-btn:hover { filter: brightness(0.9); }
+
+/* Phân trang */
+.tt-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.tt-page-btns button {
+  background: #fff;
+  border: 1px solid #d8e2ef;
+  padding: 4px 12px;
+  border-radius: 4px;
+  margin-left: 5px;
+}
+
+.tt-page-btns button:disabled { background: #f9fbfd; color: #d8e2ef; }
+.tt-page-active {
+  background: #2c7be5 !important;
+  color: white;
+  border-color: #2c7be5 !important;
 }

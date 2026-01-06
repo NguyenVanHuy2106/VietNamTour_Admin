@@ -16,6 +16,7 @@ import ImageCDNCloud from "../../components/ImageCDNCloud";
 import API from "../../config/APINoToken";
 import APIToken from "../../config/APIToken";
 import { FiTrash } from "react-icons/fi";
+import slugify from "slugify";
 
 const TourAdd = () => {
   const [successAlertOpen, setSuccessAlertOpen] = useState(false);
@@ -27,6 +28,7 @@ const TourAdd = () => {
 
   const [tourData, setTourData] = useState({
     tourname: "",
+    slug: "",
     description: "",
     destination: "",
     departure: "",
@@ -54,6 +56,7 @@ const TourAdd = () => {
   });
   const defaultTourData = {
     tourname: "",
+    slug: "",
     description: "",
     destination: "",
     departure: "",
@@ -113,10 +116,22 @@ const TourAdd = () => {
       console.error("Failed to fetch dropdown data", err);
     }
   };
+  const createSlug = (text) => {
+    return slugify(text, {
+      lower: true, // Chuyển về chữ thường
+      locale: "vi", // Xử lý tiếng Việt (đ, ê, ô...)
+      remove: /[*+~.()'"!:@]/g, // Loại bỏ ký tự đặc biệt
+    });
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setTourData((prev) => ({ ...prev, [name]: value }));
+    setTourData((prev) => ({
+      ...prev,
+      [name]: value,
+      // Tự động sinh slug khi nhập title cho Tour
+      ...(name === "tourname" ? { slug: createSlug(value) } : {}),
+    }));
   };
 
   const handleAddTour = async () => {
@@ -332,6 +347,17 @@ const TourAdd = () => {
                   </option>
                 ))}
               </select>
+            </Col>
+          </Row>
+          <Row className="mb-3">
+            <Col>
+              <Form.Label>Slug (Đường dẫn thân thiện)</Form.Label>
+              <Form.Control
+                type="text"
+                name="slug"
+                value={tourData.slug}
+                onChange={handleChange}
+              />
             </Col>
           </Row>
 

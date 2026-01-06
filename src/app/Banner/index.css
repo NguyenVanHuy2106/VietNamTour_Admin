@@ -1,0 +1,225 @@
+.bn-container {
+    padding: 30px;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.bn-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.bn-header-info h2 {
+    font-weight: 700;
+    color: #1a3353;
+    margin: 0;
+}
+
+.bn-header-info p {
+    color: #6e84a3;
+    font-size: 14px;
+}
+
+.bn-header-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.bn-search-bar {
+    width: 280px;
+}
+
+.bn-btn-add {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+/* Card */
+.bn-content-card {
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+/* Table */
+.bn-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 12px;
+}
+
+.bn-table thead th {
+    color: #adb5bd;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    padding: 10px 15px;
+    border: none;
+}
+
+.bn-table tbody tr {
+    background: #fff;
+    transition: 0.3s;
+}
+
+.bn-table tbody tr:hover {
+    background: #f9fbfd;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.bn-table tbody td {
+    padding: 15px;
+    vertical-align: middle;
+    border-top: 1px solid #f1f4f8;
+    border-bottom: 1px solid #f1f4f8;
+}
+
+/* Image Preview in Table */
+.bn-img-preview {
+    width: 180px;
+    height: 65px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f1f3f5;
+    border: 1px solid #eee;
+}
+
+.bn-img-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.bn-no-img {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #dee2e6;
+    font-size: 24px;
+}
+
+.bn-id-label {
+    color: #95aac9;
+    font-weight: 600;
+}
+
+.bn-desc-truncate {
+    max-width: 250px;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Actions */
+.bn-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.bn-action-btn {
+    border: none;
+    background: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+
+.bn-action-btn.edit { background: #e3ebf6; color: #2c7be5; }
+.bn-action-btn.delete { background: #fbeae9; color: #e63757; }
+.bn-action-btn:hover { filter: brightness(0.9); transform: scale(1.05); }
+
+/* Pagination */
+.bn-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.bn-page-nav button {
+    background: #fff;
+    border: 1px solid #d8e2ef;
+    padding: 5px 12px;
+    border-radius: 6px;
+    margin-left: 5px;
+}
+
+.bn-page-current {
+    background: #2c7be5 !important;
+    color: white !important;
+    border-color: #2c7be5 !important;
+}
+
+/* Thêm vào file CSS của bạn (ví dụ Banner.css) */
+.bn-table tbody tr {
+    transition: all 0.3s ease; /* Tạo cảm giác mượt mà */
+    cursor: pointer;
+}
+
+.bn-table tbody tr:hover {
+    background-color: #f8fbff !important; /* Màu xanh nhạt nhẹ */
+    transform: scale(1.01); /* Phóng to nhẹ 1% */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Đổ bóng xung quanh dòng */
+    z-index: 1;
+    position: relative;
+}
+
+
+.bn-action-btn {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Nút sửa: Xanh đậm hơn khi hover */
+.bn-action-btn.edit:hover {
+    background-color: #2c7be5;
+    color: white !important;
+    transform: translateY(-3px); /* Nhảy lên nhẹ */
+}
+
+/* Nút xóa: Đỏ đậm hơn khi hover */
+.bn-action-btn.delete:hover {
+    background-color: #e63757;
+    color: white !important;
+    transform: translateY(-3px);
+}
+
+.bn-img-preview {
+    overflow: hidden; /* Cắt phần thừa khi ảnh phóng to */
+}
+
+.bn-img-preview img {
+    transition: transform 0.5s ease;
+}
+
+.bn-img-preview:hover img {
+    transform: scale(1.2); /* Phóng to ảnh 20% */
+}
+
+.bn-btn-add {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.bn-btn-add:hover {
+    box-shadow: 0 8px 15px rgba(44, 123, 229, 0.4);
+    transform: translateY(-2px);
+}
+
+.bn-btn-add:active {
+    transform: translateY(1px); /* Hiệu ứng lún xuống khi click */
+}

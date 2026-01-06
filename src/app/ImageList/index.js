@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import API from "../../config/APINoToken";
 import { BsCaretLeft, BsCaretRight } from "react-icons/bs";
-import { FaPlus, FaRegTrashAlt } from "react-icons/fa";
-import { Modal, Button, Form, Toast, Spinner } from "react-bootstrap";
-import { RingLoader } from "react-spinners";
-import ImageUploader from "../../components/ImageUploader";
-import APIToken from "../../config/APIToken";
+
+import { Button } from "react-bootstrap";
+
 import { CiTrash, CiEdit } from "react-icons/ci";
 import { FetchImages } from "../../components/FetchImages";
 

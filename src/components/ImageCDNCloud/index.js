@@ -42,8 +42,7 @@ const ImageCDNCloud = ({ onUploadSuccess }) => {
       },
     });
 
-    const ext = file.name.split(".").pop();
-    const fileKey = `uploads/${Date.now()}.${ext}`;
+    const fileKey = `uploads/${file.name}`; // ✅ giữ nguyên tên gốc
 
     // Đọc file thành array buffer rồi convert sang Uint8Array để SDK nhận đúng
     const arrayBuffer = await file.arrayBuffer();
@@ -57,7 +56,7 @@ const ImageCDNCloud = ({ onUploadSuccess }) => {
 
     try {
       await s3.send(command);
-      const fileUrl = `https://images.vietnamluxtour.com/${fileKey}`;
+      const fileUrl = `https://cdn.myvietnamtour.vn/${fileKey}`;
       if (onUploadSuccess) onUploadSuccess(fileUrl);
     } catch (err) {
       console.error("❌ Lỗi upload lên R2:", err);
@@ -112,5 +111,5 @@ export async function uploadImageToR2(file, filename = null) {
 
   await s3.send(command);
 
-  return `https://images.vietnamluxtour.com/${fileKey}`;
+  return `https://cdn.myvietnamtour.vn/${fileKey}`;
 }

@@ -1,62 +1,44 @@
 import React, { useState, useEffect } from "react";
 import API from "../../config/APINoToken";
 import APIToken from "../../config/APIToken";
-import { BsCaretLeft, BsCaretRight } from "react-icons/bs";
-import { FaPlus } from "react-icons/fa";
+import { BsCaretLeft, BsCaretRight, BsSearch } from "react-icons/bs";
+import { FaPlus, FaRegUser } from "react-icons/fa";
 import { CiTrash, CiEdit } from "react-icons/ci";
-import { Button, Modal, Form, Spinner, Toast } from "react-bootstrap";
-import "./index.css";
+import {
+  Button,
+  Modal,
+  Form,
+  Spinner,
+  Toast,
+  ToastContainer,
+  Badge,
+  InputGroup,
+} from "react-bootstrap";
 import ImageCDNCloud from "../../components/ImageCDNCloud";
+import "./index.css";
 
 const Customer = () => {
   const [dataCustomer, setDataCustomer] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [error, setError] = useState("");
   const [isError, setIsError] = useState(false);
-  const [checked, setChecked] = useState(true);
   const [imageLink, setImageLink] = useState("");
-
   const [successAlertOpen, setSuccessAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
-
   const [tFCustomerName, setTFCustomerName] = useState("");
   const [tFDesValue, setTFDesValue] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+  const [openModalDelete, setOpenModalDelete] = useState(false);
 
   let userId = localStorage.getItem("userId");
-  const itemsPerPage = 10;
-  let [loading, setLoading] = useState(false);
-  const [deleteId, setDeleteId] = useState(null); // lưu id cần xoá
+  const itemsPerPage = 6; // Giảm số lượng để giao diện thoáng hơn
 
-  const [openModalDelete, setOpenModalDelete] = useState(false);
-  const handleCloseModalDelete = () => {
-    setOpenModalDelete(false);
-  };
-
-  const handleOpenModalDelete = (id) => {
-    setOpenModalDelete(true);
-    setDeleteId(id);
-  };
-
-  const handleAgrreDelete = async () => {
-    try {
-      setLoading(true);
-      const response = await APIToken.delete(`/customer/delete/${deleteId}`);
-      if (response.status === 200) {
-        setAlertMessage("Xoá khách hàng thành công");
-      }
-    } catch (error) {
-      return error;
-    } finally {
-      setDeleteId(null);
-      setLoading(false);
-      setOpenModalDelete(false);
-      getData();
-    }
-  };
-  const handleUploadSuccess = (url) => {
-    setImageLink(url);
-  };
+  useEffect(() => {
+    getData();
+  }, []);
 
   const getData = async () => {
     try {
@@ -64,304 +46,297 @@ const Customer = () => {
       const response = await API.get("/customer/get");
       setDataCustomer(response.data.data || []);
     } catch (error) {
-      console.error(
-        "Lỗi khi lấy danh sách loại Tour:",
-        error.response || error
-      );
+      console.error("Lỗi:", error);
     } finally {
-      setLoading(false); // ✅ Luôn tắt loading sau khi xong
+      setLoading(false);
     }
+  };
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+    setTFCustomerName("");
+    setTFDesValue("");
+    setImageLink("");
   };
 
   const handleCloseModal = () => {
     setOpenModal(false);
     setIsError(false);
-    setError("");
   };
 
-  const handleOpenModal = () => setOpenModal(true);
-
   const handleAgrre = async () => {
-    if (tFCustomerName.length === 0) {
-      setError("Vui lòng nhập tên danh mục");
+    if (!tFCustomerName.trim()) {
+      setError("Vui lòng nhập tên khách hàng");
       setIsError(true);
-    } else {
-      try {
-        setLoading(true);
-        const response = await APIToken.post("/customer/add", {
-          customername: tFCustomerName,
-          customerfieldtypeid: 1,
-          customerlogo: imageLink,
-          description: tFDesValue,
-          created_by: userId,
-        });
-        if (response.status === 201) {
-          setAlertMessage("Thêm mới khách hàng thành công");
-          setSuccessAlertOpen(true);
-        }
-      } catch (error) {
-        return error;
-      } finally {
-        setLoading(false);
+      return;
+    }
+    try {
+      setLoading(true);
+      const response = await APIToken.post("/customer/add", {
+        customername: tFCustomerName,
+        customerfieldtypeid: 1,
+        customerlogo: imageLink,
+        description: tFDesValue,
+        created_by: userId,
+      });
+      if (response.status === 201) {
+        setAlertMessage("Thêm khách hàng thành công ✨");
+        setSuccessAlertOpen(true);
         getData();
-        setOpenModal(false);
-        setTFCustomerName("");
-        setTFDesValue("");
+        handleCloseModal();
       }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
+  const handleAgrreDelete = async () => {
+    try {
+      setLoading(true);
+      await APIToken.delete(`/customer/delete/${deleteId}`);
+      setAlertMessage("Đã xóa dữ liệu khách hàng");
+      setSuccessAlertOpen(true);
+      getData();
+    } finally {
+      setOpenModalDelete(false);
+      setLoading(false);
+    }
+  };
 
-  // Tính toán dữ liệu hiển thị cho trang hiện tại
+  // Logic tìm kiếm & phân trang
+  const filteredData = dataCustomer.filter((item) =>
+    item.customername.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = dataCustomer.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.max(1, Math.ceil(dataCustomer.length / itemsPerPage));
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   return (
-    <div className="container">
-      <div
-        style={{
-          borderBottom: "1px #000000 solid",
-          fontSize: 25,
-          padding: 10,
-        }}
-      >
-        Loại tour
-      </div>
-      <div className="plus" style={{ marginRight: "50px" }}>
-        <Button variant="primary" onClick={handleOpenModal}>
-          <div
-            style={{
-              display: "flex",
-              justifyItems: "center",
-              alignItems: "center",
-            }}
-          >
-            <FaPlus size={16} />
-            <div
-              style={{
-                paddingLeft: "8px",
-              }}
-            >
-              Thêm mới
-            </div>
-          </div>
-        </Button>
-      </div>
-      <table className="table table-striped mt-2">
-        <thead>
-          <tr>
-            <th style={{ width: "10%" }}>Mã khách hàng</th>
-            <th style={{ width: "20%" }}>Tên khách hàng</th>
-            <th style={{ width: "15%" }}>Mô tả</th>
-            <th style={{ width: "10%" }}>Logo</th>
-            {/* <th style={{ width: "10%" }}>Lĩnh vực</th> */}
-            <th style={{ width: "15%" }}>Người thêm</th>
-            <th style={{ width: "12%" }}>Ngày thêm</th>
-            <th style={{ width: "10%" }}>Tác vụ</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentItems.length > 0 ? (
-            currentItems.map((customer) => (
-              <tr key={customer.customerid}>
-                <td>{customer.customerid}</td>
-                <td>{customer.customername}</td>
-                <td>{customer.description}</td>
-                <td>
-                  {customer.customerlogo ? (
-                    <img
-                      src={customer.customerlogo}
-                      alt={customer.customername}
-                      width={150}
-                      height={80}
-                    />
-                  ) : null}
-                </td>
-                {/* <td>{customer.customerfieldtypeid}</td> */}
-                {/* <td>
-                  {customer.status === 1
-                    ? "Hoạt động"
-                    : customer.status === 2
-                    ? "Không hoạt động"
-                    : "Không rõ"}
-                </td> */}
-
-                <td>{customer.created_by}</td>
-                <td>{customer.created_at}</td>
-                <td>
-                  <div className="d-flex">
-                    <div className="Edit" style={{ marginRight: 10 }}>
-                      <CiEdit />
-                    </div>
-                    <div
-                      className="Trash"
-                      style={{ marginLeft: 10 }}
-                      onClick={() => handleOpenModalDelete(customer.customerid)}
-                    >
-                      <CiTrash />
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="4" className="text-center">
-                Không có dữ liệu
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-
-      {/* Pagination */}
-      {dataCustomer.length > itemsPerPage && (
-        <div className="d-flex justify-content-center mt-3">
-          <nav>
-            <ul className="pagination">
-              <li
-                className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => setCurrentPage(currentPage - 1)}
-                >
-                  <BsCaretLeft />
-                </button>
-              </li>
-              {[...Array(totalPages)].map((_, index) => (
-                <li
-                  key={index}
-                  className={`page-item ${
-                    currentPage === index + 1 ? "active" : ""
-                  }`}
-                >
-                  <button
-                    className="page-link"
-                    onClick={() => setCurrentPage(index + 1)}
-                  >
-                    {index + 1}
-                  </button>
-                </li>
-              ))}
-              <li
-                className={`page-item ${
-                  currentPage === totalPages ? "disabled" : ""
-                }`}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => setCurrentPage(currentPage + 1)}
-                >
-                  <BsCaretRight />
-                </button>
-              </li>
-            </ul>
-          </nav>
+    <div className="customer-page-container">
+      {/* Header & Search */}
+      <div className="dashboard-header">
+        <div className="header-text">
+          <h2>Đối tác & Khách hàng</h2>
+          <p>Quản lý danh sách đối tác chiến lược của công ty</p>
         </div>
-      )}
-
-      {/* Loading Spinner */}
-      {loading && (
-        <div className="loading-overlay">
-          <div className="loading-spinner">
-            <Spinner animation="border" role="status" />
-          </div>
-        </div>
-      )}
-
-      {/* Modal Add */}
-      <Modal show={openModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Thêm mới khách hàng</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group controlId="tourtypeName">
-              <Form.Label>Tên khách hàng</Form.Label>
-              <Form.Control
-                type="text"
-                value={tFCustomerName}
-                onChange={(e) => setTFCustomerName(e.target.value)}
-                isInvalid={isError}
-                isValid={!!tFCustomerName}
-              />
-              <Form.Control.Feedback type="invalid">
-                {error}
-              </Form.Control.Feedback>
-            </Form.Group>
-
-            <Form.Group controlId="tourtypeDescription">
-              <Form.Label>Mô tả</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                value={tFDesValue}
-                onChange={(e) => setTFDesValue(e.target.value)}
-              />
-            </Form.Group>
-            <div className="form-group mt-3">
-              <Form.Label>Ảnh Banner</Form.Label>
-              <ImageCDNCloud onUploadSuccess={handleUploadSuccess} />
-            </div>
-            <Form.Check
-              type="checkbox"
-              label="Kích hoạt"
-              checked={checked}
-              disabled
+        <div className="header-actions">
+          <InputGroup className="search-bar">
+            <InputGroup.Text>
+              <BsSearch />
+            </InputGroup.Text>
+            <Form.Control
+              placeholder="Tìm tên khách hàng..."
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
+          </InputGroup>
+          <Button
+            variant="primary"
+            className="btn-add"
+            onClick={handleOpenModal}
+          >
+            <FaPlus /> <span>Thêm mới</span>
+          </Button>
+        </div>
+      </div>
+
+      {/* Main Table Card */}
+      <div className="content-card">
+        <div className="table-responsive">
+          <table className="custom-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Thông tin đối tác</th>
+                <th>Mô tả</th>
+                <th>Người tạo</th>
+                <th>Ngày tạo</th>
+                <th className="text-center">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentItems.length > 0 ? (
+                currentItems.map((customer) => (
+                  <tr key={customer.customerid}>
+                    <td className="text-muted">#{customer.customerid}</td>
+                    <td>
+                      <div className="d-flex align-items-center">
+                        <div className="logo-wrapper">
+                          {customer.customerlogo ? (
+                            <img src={customer.customerlogo} alt="logo" />
+                          ) : (
+                            <FaRegUser size={20} color="#ccc" />
+                          )}
+                        </div>
+                        <div className="ms-3">
+                          <div className="fw-bold">{customer.customername}</div>
+                          <Badge bg="light" text="dark" className="border">
+                            Partner
+                          </Badge>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div
+                        className="text-truncate"
+                        style={{ maxWidth: "200px" }}
+                      >
+                        {customer.description || "---"}
+                      </div>
+                    </td>
+                    <td>
+                      <span className="user-tag">
+                        {customer.created_by || "Admin"}
+                      </span>
+                    </td>
+                    <td>
+                      {new Date(customer.created_at).toLocaleDateString(
+                        "vi-VN"
+                      )}
+                    </td>
+                    <td>
+                      <div className="action-buttons">
+                        <button className="btn-action edit">
+                          <CiEdit />
+                        </button>
+                        <button
+                          className="btn-action delete"
+                          onClick={() => {
+                            setDeleteId(customer.customerid);
+                            setOpenModalDelete(true);
+                          }}
+                        >
+                          <CiTrash />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="text-center py-5">
+                    Không tìm thấy dữ liệu
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Custom Pagination */}
+        <div className="pagination-wrapper">
+          <p className="mb-0 text-muted">
+            Trang {currentPage} / {totalPages}
+          </p>
+          <div className="custom-pagination">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage((v) => v - 1)}
+            >
+              <BsCaretLeft />
+            </button>
+            <button
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage((v) => v + 1)}
+            >
+              <BsCaretRight />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Modals & Alerts */}
+      <Modal show={openModal} onHide={handleCloseModal} centered size="lg">
+        <Modal.Header closeButton className="border-0">
+          <Modal.Title>Thêm đối tác mới</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="px-4">
+          <Form>
+            <div className="row">
+              <div className="col-md-6">
+                <Form.Group className="mb-3">
+                  <Form.Label className="fw-bold">Tên khách hàng</Form.Label>
+                  <Form.Control
+                    placeholder="VD: VinPearl, VietJet..."
+                    value={tFCustomerName}
+                    onChange={(e) => setTFCustomerName(e.target.value)}
+                    isInvalid={isError}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {error}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label className="fw-bold">Mô tả chi tiết</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={4}
+                    value={tFDesValue}
+                    onChange={(e) => setTFDesValue(e.target.value)}
+                  />
+                </Form.Group>
+              </div>
+              <div className="col-md-6 text-center">
+                <Form.Label className="fw-bold d-block text-start">
+                  Logo đối tác
+                </Form.Label>
+                <div className="upload-preview-area">
+                  <ImageCDNCloud onUploadSuccess={(url) => setImageLink(url)} />
+                  {imageLink && (
+                    <img
+                      src={imageLink}
+                      className="img-preview mt-2"
+                      alt="Preview"
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Đóng
+        <Modal.Footer className="border-0">
+          <Button variant="light" onClick={handleCloseModal}>
+            Hủy bỏ
           </Button>
-          <Button variant="primary" onClick={handleAgrre}>
-            {loading ? (
-              <Spinner
-                animation="border"
-                variant="light"
-                size="sm"
-                className="mr-2"
-              />
-            ) : (
-              "Thêm"
-            )}
+          <Button variant="primary" onClick={handleAgrre} disabled={loading}>
+            {loading ? <Spinner size="sm" /> : "Lưu dữ liệu"}
           </Button>
         </Modal.Footer>
       </Modal>
 
-      {/* Success Alert */}
-      <Toast
-        onClose={() => setSuccessAlertOpen(false)}
-        show={successAlertOpen}
-        delay={3000}
-        autohide
-        className="position-fixed top-0 end-0 m-3"
+      <Modal
+        show={openModalDelete}
+        onHide={() => setOpenModalDelete(false)}
+        centered
       >
-        <Toast.Body>{alertMessage}</Toast.Body>
-      </Toast>
-
-      {/* Delete Modal */}
-      <Modal show={openModalDelete} onHide={handleCloseModalDelete}>
-        <Modal.Header closeButton>
-          <Modal.Title>Xoá khách hàng</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Bạn có chắc chắn muốn xoá khách hàng này không?</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModalDelete}>
-            Huỷ
-          </Button>
-          <Button variant="danger" onClick={handleAgrreDelete}>
-            Xoá
-          </Button>
-        </Modal.Footer>
+        <div className="p-4 text-center">
+          <CiTrash size={50} color="#dc3545" />
+          <h4 className="mt-3">Xác nhận xóa?</h4>
+          <p className="text-muted">Hành động này không thể hoàn tác.</p>
+          <div className="d-flex gap-2 justify-content-center mt-4">
+            <Button variant="light" onClick={() => setOpenModalDelete(false)}>
+              Hủy
+            </Button>
+            <Button variant="danger" onClick={handleAgrreDelete}>
+              Xác nhận xóa
+            </Button>
+          </div>
+        </div>
       </Modal>
+
+      <ToastContainer position="top-end" className="p-3">
+        <Toast
+          bg="success"
+          show={successAlertOpen}
+          onClose={() => setSuccessAlertOpen(false)}
+          delay={3000}
+          autohide
+        >
+          <Toast.Body className="text-white">{alertMessage}</Toast.Body>
+        </Toast>
+      </ToastContainer>
     </div>
   );
 };
