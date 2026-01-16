@@ -2,6 +2,19 @@ import React, { useState } from "react";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import imageCompression from "browser-image-compression";
 
+// Khởi tạo Client dùng chung để tăng tốc kết nối
+const s3Config = {
+  region: "auto",
+  endpoint: "https://0228e87750d83cdb13f72b6d162a3de4.r2.cloudflarestorage.com",
+  forcePathStyle: true,
+  credentials: {
+    accessKeyId: "0f8cf3cc490d1458bb40d7a428a29571",
+    secretAccessKey:
+      "e8227e51b32b217f3b717d06870851a52bcac969ba7a014d5c8593a6525fd209",
+  },
+};
+const s3Client = new S3Client(s3Config);
+
 const ImageCDNCloud = ({ onUploadSuccess }) => {
   const [loading, setLoading] = useState(false);
 
@@ -13,14 +26,15 @@ const ImageCDNCloud = ({ onUploadSuccess }) => {
     try {
       setLoading(true);
 
-      // Bước 1: Nén ảnh nhưng giữ nguyên định dạng gốc
+      // Tối ưu: Thêm maxWidthOrHeight giúp nén ảnh lớn (nhiều MB) cực nhanh
       const options = {
         maxSizeMB: 1,
+        maxWidthOrHeight: 1920, // Giữ độ nét Full HD nhưng xử lý nhanh hơn
         useWebWorker: true,
+        initialQuality: 0.8,
       };
       const compressedFile = await imageCompression(file, options);
 
-      // Bước 2: Upload file đã nén lên Cloudflare R2
       await uploadToR2(compressedFile);
     } catch (err) {
       console.error("❌ Lỗi upload:", err);
@@ -30,21 +44,7 @@ const ImageCDNCloud = ({ onUploadSuccess }) => {
   };
 
   const uploadToR2 = async (file) => {
-    const s3 = new S3Client({
-      region: "auto",
-      endpoint:
-        "https://0228e87750d83cdb13f72b6d162a3de4.r2.cloudflarestorage.com",
-      forcePathStyle: true,
-      credentials: {
-        accessKeyId: "0f8cf3cc490d1458bb40d7a428a29571",
-        secretAccessKey:
-          "e8227e51b32b217f3b717d06870851a52bcac969ba7a014d5c8593a6525fd209",
-      },
-    });
-
-    const fileKey = `uploads/${file.name}`; // ✅ giữ nguyên tên gốc
-
-    // Đọc file thành array buffer rồi convert sang Uint8Array để SDK nhận đúng
+    const fileKey = `uploads/${file.name}`;
     const arrayBuffer = await file.arrayBuffer();
 
     const command = new PutObjectCommand({
@@ -55,7 +55,7 @@ const ImageCDNCloud = ({ onUploadSuccess }) => {
     });
 
     try {
-      await s3.send(command);
+      await s3Client.send(command);
       const fileUrl = `https://cdn.myvietnamtour.vn/${fileKey}`;
       if (onUploadSuccess) onUploadSuccess(fileUrl);
     } catch (err) {
@@ -71,34 +71,24 @@ const ImageCDNCloud = ({ onUploadSuccess }) => {
         onChange={handleFileChange}
         disabled={loading}
       />
-      {loading && <p>Đang tải ảnh...</p>}
+      {loading && <p>Đang xử lý và tải ảnh lên...</p>}
     </div>
   );
 };
 
 export default ImageCDNCloud;
 
+// Hàm export thứ 2 giữ nguyên cấu trúc cho các mục đích sử dụng khác của bạn
 export async function uploadImageToR2(file, filename = null) {
-  // Nén ảnh giữ định dạng
-  const options = { maxSizeMB: 1, useWebWorker: true };
+  const options = {
+    maxSizeMB: 1,
+    maxWidthOrHeight: 1920, // Tối ưu tốc độ cho ảnh dung lượng lớn
+    useWebWorker: true,
+  };
   const compressedFile = await imageCompression(file, options);
 
-  // Lấy extension từ filename nếu có, hoặc mặc định png
   const ext = filename ? filename.split(".").pop() : "png";
   const fileKey = `uploads/${Date.now()}.${ext}`;
-
-  // Cấu hình S3 client cho Cloudflare R2
-  const s3 = new S3Client({
-    region: "auto", // hoặc "" nếu "auto" lỗi
-    endpoint:
-      "https://0228e87750d83cdb13f72b6d162a3de4.r2.cloudflarestorage.com",
-    forcePathStyle: true,
-    credentials: {
-      accessKeyId: "0f8cf3cc490d1458bb40d7a428a29571",
-      secretAccessKey:
-        "e8227e51b32b217f3b717d06870851a52bcac969ba7a014d5c8593a6525fd209",
-    },
-  });
 
   const arrayBuffer = await compressedFile.arrayBuffer();
 
@@ -109,7 +99,7 @@ export async function uploadImageToR2(file, filename = null) {
     ContentType: compressedFile.type || "image/png",
   });
 
-  await s3.send(command);
+  await s3Client.send(command);
 
   return `https://cdn.myvietnamtour.vn/${fileKey}`;
 }
