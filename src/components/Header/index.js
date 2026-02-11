@@ -1,18 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import "./index.css";
 import { Nav } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import APIToken from "../../config/APIToken";
 
 const Header = () => {
   const [showSubMenu, setShowSubMenu] = useState(false);
+  const [dataInfo, setDataInfo] = useState([]);
   const navigate = useNavigate();
+  let userId = localStorage.getItem("userId");
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/sign-in"); // dùng navigate thay vì reload
   };
+  const getInfo = async () => {
+    try {
+      //setLoading(true);
+      const response = await APIToken.get(`/user/get/${userId}`);
+      setDataInfo(response.data.data || []);
+      //console.log(response.data.data);
+    } catch (err) {
+      //console.error(err);
+    } finally {
+      //setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getInfo();
+  }, []);
 
   return (
     <div>
@@ -30,7 +49,7 @@ const Header = () => {
           <div className="iconAdmin">
             <FaUserCircle style={{ height: 25, width: 25 }} />
           </div>
-          <div>Nguyễn Văn Huy</div>
+          <div>{dataInfo.name}</div>
         </div>
       </header>
 
@@ -135,12 +154,12 @@ const HeaderNavData = [
     name: "NGƯỜI DÙNG",
     link: "#",
     subMenu: [
-      { id: 5.1, name: "Khách hàng", link: "/customer" },
-      { id: 5.2, name: "Người dùng hệ thống", link: "#" },
-      { id: 5.3, name: "Hình ảnh", link: "/image-list" },
+      { id: 5.2, name: "Khách hàng", link: "/customer" },
+      { id: 5.3, name: "Người dùng hệ thống", link: "#" },
+      { id: 5.4, name: "Hình ảnh", link: "/image-list" },
     ],
   },
-  { id: 6, name: "THỐNG KÊ", link: "#" },
+  { id: 6, name: "CHẤM CÔNG", link: "/attendance" },
   {
     id: 7,
     name: "CÀI ĐẶT",

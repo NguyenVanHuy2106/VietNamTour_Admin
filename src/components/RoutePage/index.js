@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Home from "../../app/Home";
-import About from "../../app/About";
+import Attendance from "../../app/Attendance";
 import Users from "../../app/User";
 import MainPage from "../MainPage";
 
@@ -69,7 +69,7 @@ const RoutePage = () => {
       <Route path="sign-in" element={<SignIn />} />
       <Route path="/" element={<MainPage />}>
         <Route index element={<Home />} />
-        <Route path="about" element={<About />} />
+        <Route path="attendance" element={<Attendance />} />
         <Route path="users" element={<Users />} />
         <Route path="banner" element={<Banner />} />
         <Route path="tour-type" element={<TourType />} />

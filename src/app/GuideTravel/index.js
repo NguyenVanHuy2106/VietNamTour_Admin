@@ -115,7 +115,7 @@ const GuideTravel = () => {
     if (!blogData.content || blogData.content.trim() === "") {
       setAlertVariant("danger");
       setAlertMessage(
-        "Bạn CHƯA LƯU nội dung chi tiết. Hãy bấm nút Lưu trong soạn thảo!"
+        "Bạn CHƯA LƯU nội dung chi tiết. Hãy bấm nút Lưu trong soạn thảo!",
       );
       setSuccessAlertOpen(true);
       setKey("detail"); // Tự động chuyển sang tab nội dung để nhắc người dùng
