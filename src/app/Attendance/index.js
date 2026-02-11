@@ -75,11 +75,21 @@ const Attendance = () => {
 
         if (todayRecord) {
           setAttendanceStatus("success");
-          setMessage(
-            `Bạn đã hoàn thành chấm công hôm nay lúc ${new Date(todayRecord.checkIn).toLocaleTimeString("vi-VN")}`,
+
+          // Format lại giờ ngay tại đây để không bị nhảy múi giờ
+          const checkInTime = new Date(todayRecord.checkIn).toLocaleTimeString(
+            "vi-VN",
+            {
+              timeZone: "UTC", // Ép trình duyệt giữ nguyên giờ từ DB
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+            },
           );
+
+          setMessage(`Bạn đã hoàn thành chấm công hôm nay lúc ${checkInTime}`);
         } else {
-          setAttendanceStatus(null); // Chưa chấm thì để null để hiện nút
+          setAttendanceStatus(null);
         }
       }
     } catch (error) {
@@ -227,7 +237,7 @@ const Attendance = () => {
                     </div>
                     <div className="hist-time">
                       {item.checkIn
-                        ? new Date(item.checkIn).toLocaleTimeString("vi-VN")
+                        ? item.checkIn.split("T")[1].substring(0, 8) // Lấy từ vị trí sau chữ T và lấy 8 ký tự (HH:mm:ss)
                         : "--:--"}
                     </div>
                     <div
