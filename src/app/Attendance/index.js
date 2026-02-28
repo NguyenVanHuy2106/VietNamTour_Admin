@@ -25,7 +25,7 @@ import { Navigate } from "react-router-dom";
 
 const Attendance = () => {
   const navigate = useNavigate();
-
+  const userId = JSON.parse(localStorage.getItem("userId"));
   const [currentTime, setCurrentTime] = useState(new Date());
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -56,7 +56,6 @@ const Attendance = () => {
     const model = result.device.model || "";
 
     const vendor = result.device.vendor || "";
-
     const deviceName = model
       ? `${vendor} ${model} (${os})`
       : `${os} - ${browser}`;
@@ -80,9 +79,7 @@ const Attendance = () => {
     setLoadingHistory(true);
 
     try {
-      const user = JSON.parse(localStorage.getItem("user"));
-
-      const userId = user?.user_id || 1001;
+      //const userId = user?.user_id || 1001;
 
       const response = await APIToken.post("/getUserAtendance", {
         userId: userId,
@@ -144,11 +141,10 @@ const Attendance = () => {
 
       const { visitorId } = await fp.get();
 
-      const user = JSON.parse(localStorage.getItem("user"));
+      //const user = JSON.parse(localStorage.getItem("user"));
 
       const response = await APIToken.post("/submitAtendance", {
-        user_id: user?.user_id || 1001,
-
+        user_id: userId,
         deviceId: deviceInfo,
       });
 
@@ -259,8 +255,6 @@ const Attendance = () => {
               </div>
 
               <div>
-                <h3 className="user-name">Nguyễn Huy</h3>
-
                 <span className="badge-working">Đang trực tuyến</span>
               </div>
             </div>
