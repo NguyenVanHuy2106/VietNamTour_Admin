@@ -1,0 +1,138 @@
+/* Container chung */
+.attendance-page-container {
+    padding: 15px;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+/* Header: Responsive cho tiêu đề và bộ lọc */
+.dashboard-header {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+@media (min-width: 992px) {
+    .dashboard-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.header-text h2 {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+    color: #1e293b;
+}
+
+/* Thanh công cụ tìm kiếm */
+.header-actions {
+    display: flex;
+    flex-wrap: wrap; /* Tự xuống dòng trên màn hình nhỏ */
+    gap: 10px;
+    width: 100%;
+}
+
+@media (min-width: 992px) {
+    .header-actions {
+        width: auto;
+    }
+}
+
+.date-filter {
+    flex: 1 1 140px; /* Co giãn linh hoạt, tối thiểu 140px */
+    max-width: 100%;
+}
+
+@media (min-width: 576px) {
+    .date-filter {
+        width: 200px !important;
+    }
+}
+
+/* Nút tìm kiếm trên mobile sẽ dài full màn hình */
+.header-actions button {
+    flex: 1 1 100%;
+}
+
+@media (min-width: 576px) {
+    .header-actions button {
+        flex: 0 0 auto;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+}
+
+/* Tối ưu thẻ Card chứa bảng */
+.content-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+}
+
+/* Làm cho bảng cuộn mượt mà trên điện thoại */
+.table-responsive {
+    border-radius: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Cuộn mượt trên iOS */
+}
+
+.custom-table {
+    width: 100%;
+    min-width: 900px; /* Ép bảng không bị nát khi màn hình quá nhỏ */
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+/* Cố định cột đầu tiên nếu muốn (Tùy chọn) */
+.custom-table th, .custom-table td {
+    white-space: nowrap; /* Tránh xuống dòng làm vỡ hàng */
+    padding: 12px 15px;
+}
+
+/* Phân trang Responsive */
+.pagination-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+@media (min-width: 576px) {
+    .pagination-wrapper {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
+
+.custom-pagination {
+    display: flex;
+    gap: 5px;
+}
+
+.custom-pagination button {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    transition: all 0.2s;
+}
+
+.custom-pagination button:disabled {
+    background: #f1f5f9;
+    color: #94a3b8;
+}
+
+.custom-pagination button:not(:disabled):hover {
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+}

@@ -1,112 +1,182 @@
-.logoClass {
+/* RESET & BASE */
+.header-wrapper {
+    width: 100%;
+    position: relative;
+}
+
+.main-header {
+    padding: 10px 20px;
+    background: white;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-}
-.logoClass h2 {
-    padding-left: 15px;
+    border-bottom: 1px solid #eee;
 }
 
-.admin {
+.logo-text {
+    margin: 0;
+    padding-left: 10px;
+    font-size: 1.2rem;
+    color: #1d61ad;
+    font-weight: bold;
+}
+
+.header-right {
     display: flex;
-  
     align-items: center;
-} 
-
-.admin div {
-    margin-left: 10px;
+    gap: 15px;
 }
 
+.admin-info {
+    display: flex;
+    align-items: center;
+    color: #1d61ad;
+}
 
+.user-icon {
+    font-size: 1.5rem;
+}
+
+.user-name {
+    margin-left: 8px;
+    font-weight: 500;
+    display: none; /* Ẩn tên trên mobile cho gọn */
+}
+
+@media (min-width: 768px) {
+    .user-name { display: inline; }
+}
+
+/* MOBILE MENU BUTTON */
+.mobile-menu-btn {
+    display: block;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #1d61ad;
+    cursor: pointer;
+}
+
+@media (min-width: 1024px) {
+    .mobile-menu-btn { display: none; }
+}
+
+/* MENU CONTAINER */
 .menu-container {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #1d61ad;
-  width: 100%;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  height: 50px;
-  padding: 0 15px;
+    background-color: #1d61ad;
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* Các mục trong menu */
 .menu-items {
-   
-    display: flex;
-  gap: 10px;
-  font-size: 14px;
-  color: #ffffff;
-  font-weight: bold;
-  text-decoration: none;
-  transition: background-color 0.3s ease, color 0.3s ease;
-   position: sticky;
-  top: 0;
-  z-index: 1000;
-  justify-content: center;
-  background-color: #1d61ad;
-  width: 100%;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  height: 50px;
-  padding: 0 15px;
-}
-.menu-items .menu-item {
     display: flex;
     justify-content: center;
-    align-items: center;
-    padding-left:10px;
-    padding-right: 10px;
-    
-}
-.menu-item:hover {
-  background-color: #ffffff;
-  color: #1d61ad !important;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
+/* RESPONSIVE MENU LOGIC */
+@media (max-width: 1023px) {
+    .menu-container {
+        position: fixed;
+        top: 0;
+        right: -100%; /* Giấu menu sang phải */
+        width: 280px;
+        height: 100vh;
+        background: #1d61ad;
+        transition: 0.3s ease;
+        padding-top: 60px;
+        z-index: 9999;
+    }
 
-.menu-items {
-  display: flex;
-  gap: 20px;
+    .menu-container.active {
+        right: 0;
+    }
+
+    .menu-items {
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    .menu-item-wrapper {
+        width: 100%;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .submenu {
+        position: static !important;
+        width: 100% !important;
+        background: rgba(0,0,0,0.1) !important;
+        display: block !important;
+        box-shadow: none !important;
+    }
 }
 
-.menu-item {
-  position: relative;
-  padding: 10px 20px;
-  cursor: pointer;
+/* DESKTOP MENU */
+@media (min-width: 1024px) {
+    .menu-item-wrapper {
+        position: relative;
+        padding: 0 15px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        color: white;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .menu-item-wrapper:hover {
+        background: white;
+        color: #1d61ad;
+    }
+
+    .submenu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: white;
+        min-width: 220px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        display: none;
+        flex-direction: column;
+        z-index: 100;
+    }
+
+    .menu-item-wrapper:hover .submenu {
+        display: flex;
+    }
 }
 
-.submenu {
-  position: absolute;
-  top: 100%; /* Hiển thị ngay bên dưới */
-  left: 0;
-  background-color: white;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  display: none;
-  flex-direction: column;
-  width: 200px;
- 
-  /* border-radius: 5px; */
-  z-index: 10;
+.menu-item-link {
+    font-weight: bold;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    padding: 10px;
 }
 
-.menu-item:hover .submenu {
-  display: flex;
-}
-
-.submenu .submenu-item {
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  color: #1d61ad;
-
-  transition: 0.3s;
-  font-weight: 0;
+.submenu-item {
+    padding: 10px 15px;
+    color: #ffffff;
+    font-size: 0.85rem;
+    border-bottom: 1px solid #f0f0f0;
+    transition: 0.2s;
 }
 
 .submenu-item:hover {
-  background-color: #1d61ad;
-  color: white !important
+    background: #1d61ad;
+    color: white !important;
+}
+
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 9998;
 }

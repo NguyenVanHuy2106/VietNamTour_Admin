@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaUserCircle } from "react-icons/fa";
+import { FaUserCircle, FaBars, FaTimes, FaChevronDown } from "react-icons/fa"; // Thêm icon
 import "./index.css";
 import { Nav } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -8,24 +8,22 @@ import APIToken from "../../config/APIToken";
 
 const Header = () => {
   const [showSubMenu, setShowSubMenu] = useState(false);
-  const [dataInfo, setDataInfo] = useState([]);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // State cho mobile menu
+  const [dataInfo, setDataInfo] = useState({ name: "" });
   const navigate = useNavigate();
   let userId = localStorage.getItem("userId");
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/sign-in"); // dùng navigate thay vì reload
+    navigate("/sign-in");
   };
+
   const getInfo = async () => {
     try {
-      //setLoading(true);
       const response = await APIToken.get(`/user/get/${userId}`);
-      setDataInfo(response.data.data || []);
-      //console.log(response.data.data);
+      setDataInfo(response.data.data || { name: "" });
     } catch (err) {
-      //console.error(err);
-    } finally {
-      //setLoading(false);
+      console.error(err);
     }
   };
 
@@ -33,80 +31,107 @@ const Header = () => {
     getInfo();
   }, []);
 
+  // Hàm điều hướng và đóng menu mobile
+  const handleNavigate = (link) => {
+    if (link !== "#") {
+      navigate(link);
+      setIsMobileMenuOpen(false);
+    }
+  };
+
   return (
-    <div>
-      <header style={styles.header}>
-        <div className="logoClass">
+    <div className="header-wrapper">
+      <header className="main-header">
+        <div
+          className="logoClass d-flex align-items-center"
+          onClick={() => navigate("/")}
+          style={{ cursor: "pointer" }}
+        >
           <img
             src="https://cdn.myvietnamtour.vn/uploads/1.png"
-            alt="React Logo"
-            width="50"
+            alt="Logo"
+            width="40"
           />
-          <h2 style={styles.logo}>VIỆT NAM TOUR</h2>
+          <h2 className="logo-text">VIỆT NAM TOUR</h2>
         </div>
 
-        <div className="admin">
-          <div className="iconAdmin">
-            <FaUserCircle style={{ height: 25, width: 25 }} />
+        <div className="header-right">
+          <div className="admin-info">
+            <FaUserCircle className="user-icon" />
+            <span className="user-name">{dataInfo.name}</span>
           </div>
-          <div>{dataInfo.name}</div>
+
+          {/* Nút Hamburger cho Mobile */}
+          <button
+            className="mobile-menu-btn"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
+          </button>
         </div>
       </header>
 
       {/* Menu chính */}
-      <div className="menu-items">
-        {HeaderNavData.map((item) => (
-          <div
-            key={item.id}
-            className="menu-item"
-            onMouseEnter={() => item.subMenu && setShowSubMenu(item.id)}
-            onMouseLeave={() => item.subMenu && setShowSubMenu(false)}
-          >
-            {/* Nếu item.link là "#" thì không điều hướng */}
-            <Nav.Link
-              as="div"
-              onClick={() => item.link !== "#" && navigate(item.link)}
-              style={{ cursor: item.link !== "#" ? "pointer" : "default" }}
+      <nav className={`menu-container ${isMobileMenuOpen ? "active" : ""}`}>
+        <div className="menu-items">
+          {HeaderNavData.map((item) => (
+            <div
+              key={item.id}
+              className="menu-item-wrapper"
+              onMouseEnter={() =>
+                !isMobileMenuOpen && item.subMenu && setShowSubMenu(item.id)
+              }
+              onMouseLeave={() =>
+                !isMobileMenuOpen && item.subMenu && setShowSubMenu(false)
+              }
+              onClick={() =>
+                isMobileMenuOpen &&
+                item.subMenu &&
+                setShowSubMenu(showSubMenu === item.id ? false : item.id)
+              }
             >
-              {item.name}
-            </Nav.Link>
-
-            {/* Hiển thị submenu */}
-            {item.subMenu && showSubMenu === item.id && (
-              <div className="submenu">
-                {item.subMenu.map((sub) => (
-                  <div
-                    key={sub.id}
-                    onClick={() =>
-                      sub.name === "Thoát" ? handleLogout() : navigate(sub.link)
-                    }
-                    className="submenu-item"
-                    style={{ cursor: "pointer", padding: "5px 10px" }}
-                  >
-                    {sub.name}
-                  </div>
-                ))}
+              <div
+                className="menu-item-link"
+                onClick={() => !item.subMenu && handleNavigate(item.link)}
+              >
+                {item.name}
+                {item.subMenu && <FaChevronDown className="ms-1" size={10} />}
               </div>
-            )}
-          </div>
-        ))}
-      </div>
+
+              {item.subMenu && showSubMenu === item.id && (
+                <div className="submenu">
+                  {item.subMenu.map((sub) => (
+                    <div
+                      key={sub.id}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (sub.name === "Thoát") handleLogout();
+                        else handleNavigate(sub.link);
+                      }}
+                      className="submenu-item"
+                    >
+                      {sub.name}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </nav>
+
+      {/* Lớp phủ mờ khi mở menu mobile */}
+      {isMobileMenuOpen && (
+        <div
+          className="menu-overlay"
+          onClick={() => setIsMobileMenuOpen(false)}
+        ></div>
+      )}
     </div>
   );
 };
 
-const styles = {
-  header: {
-    padding: "10px 20px",
-    color: "#1d61ad",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  logo: {
-    margin: 0,
-  },
-};
+// HeaderNavData giữ nguyên như code của bạn
 
 export default Header;
 
