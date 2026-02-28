@@ -30,6 +30,7 @@ export default function SignIn() {
 
       if (response.data && response.data.token) {
         localStorage.setItem("token", response.data.token);
+        localStorage.setItem("role", response.data.user.role);
         localStorage.setItem("userId", username);
         window.location.href = "/";
       } else {
@@ -39,7 +40,8 @@ export default function SignIn() {
       console.error("Login Error:", err);
       // Hiển thị lỗi cụ thể để người dùng biết tại sao thất bại
       setError(
-        err.response?.data?.message || "Tên đăng nhập hoặc mật khẩu không đúng!"
+        err.response?.data?.message ||
+          "Tên đăng nhập hoặc mật khẩu không đúng!",
       );
     } finally {
       // ĐÂY LÀ DÒNG QUAN TRỌNG: Dù thành công hay thất bại cũng phải tắt loading

@@ -12,6 +12,7 @@ const Header = () => {
   const [dataInfo, setDataInfo] = useState({ name: "" });
   const navigate = useNavigate();
   let userId = localStorage.getItem("userId");
+  let role = localStorage.getItem("role");
 
   const handleLogout = () => {
     localStorage.clear();
@@ -100,19 +101,30 @@ const Header = () => {
 
               {item.subMenu && showSubMenu === item.id && (
                 <div className="submenu">
-                  {item.subMenu.map((sub) => (
-                    <div
-                      key={sub.id}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (sub.name === "Thoát") handleLogout();
-                        else handleNavigate(sub.link);
-                      }}
-                      className="submenu-item"
-                    >
-                      {sub.name}
-                    </div>
-                  ))}
+                  {item.subMenu
+                    // Bước 1: Lọc danh sách trước khi hiển thị
+                    .filter((sub) => {
+                      // Nếu mục này là Báo cáo chấm công thì chỉ cho admin thấy
+                      if (sub.name === "Báo cáo chấm công") {
+                        return role === "admin";
+                      }
+                      // Các mục khác (như Thoát, Thông tin...) thì hiện bình thường
+                      return true;
+                    })
+                    // Bước 2: Map dữ liệu đã lọc
+                    .map((sub) => (
+                      <div
+                        key={sub.id}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (sub.name === "Thoát") handleLogout();
+                          else handleNavigate(sub.link);
+                        }}
+                        className="submenu-item"
+                      >
+                        {sub.name}
+                      </div>
+                    ))}
                 </div>
               )}
             </div>
@@ -187,11 +199,24 @@ const HeaderNavData = [
   { id: 6, name: "CHẤM CÔNG", link: "/attendance" },
   {
     id: 7,
+    name: "BÁO CÁO",
+    link: "#",
+    subMenu: [
+      {
+        id: 7.1,
+        name: "Báo cáo chấm công",
+        link: "/attendance-report",
+        requiredRole: "admin",
+      },
+    ],
+  },
+  {
+    id: 8,
     name: "CÀI ĐẶT",
     link: "#",
     subMenu: [
-      { id: 7.1, name: "Thông tin cá nhân", link: "#" },
-      { id: 7.2, name: "Thoát", link: "#" },
+      { id: 8.1, name: "Thông tin cá nhân", link: "#" },
+      { id: 8.2, name: "Thoát", link: "#" },
     ],
   },
 ];

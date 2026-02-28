@@ -1,0 +1,102 @@
+/* Container chung */
+.admin-report-wrapper {
+    background-color: #f4f7f6;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Tùy chỉnh Card Filter */
+.report-filter-card {
+    border-radius: 12px;
+    background: #ffffff;
+}
+
+.custom-input-group .input-group-text {
+    background-color: #fff;
+    border-right: none;
+    color: #6c757d;
+}
+
+.custom-input-group .form-control, 
+.custom-input-group .form-select {
+    border-left: none;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+/* Button Truy xuất */
+.btn-search-report {
+    background: linear-gradient(135deg, #0d6efd 0%, #004fc5 100%);
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.btn-search-report:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+}
+
+/* Card Table */
+.report-content-card {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.report-content-card thead {
+    background-color: #f8f9fa;
+}
+
+.report-content-card thead th {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #555;
+    letter-spacing: 0.5px;
+    padding: 18px 10px;
+    border-top: none;
+}
+
+.report-content-card tbody tr {
+    transition: background 0.2s ease;
+}
+
+.report-content-card tbody td {
+    padding: 16px 10px;
+}
+
+/* Trạng thái Status */
+.status-badge {
+    padding: 8px 14px;
+    font-size: 0.7rem;
+    min-width: 90px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.device-info .small {
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
+/* Empty State */
+.empty-state {
+    padding: 40px 0;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .btn-search-report {
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    .table-responsive .table {
+        min-width: 850px;
+    }
+    
+    .admin-report-wrapper {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+}

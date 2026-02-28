@@ -26,6 +26,7 @@ import GuideTravelList from "../../app/GuideTravelList";
 import GuideTravelDetail from "../../app/GuideTravelDetail";
 import ImageCategory from "../../app/ImageCategory";
 import AttendanceList from "../../app/AttendanceList";
+import AttendanceReport from "../../app/AttendanceReport";
 
 import Image from "../../app/Image";
 
@@ -93,6 +94,7 @@ const RoutePage = () => {
         <Route path="image-category" element={<ImageCategory />} />
         <Route path="image" element={<Image />} />
         <Route path="attendance-list" element={<AttendanceList />} />
+        <Route path="attendance-report" element={<AttendanceReport />} />
       </Route>
     </Routes>
   );
