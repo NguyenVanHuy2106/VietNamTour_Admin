@@ -97,22 +97,27 @@ const AttendanceList = () => {
           <p>Xem chi tiết thời gian làm việc của bạn</p>
         </div>
         <div className="header-actions">
-          <InputGroup className="date-filter">
-            <InputGroup.Text>Từ ngày</InputGroup.Text>
-            <Form.Control
-              type="date"
-              value={fromDate}
-              onChange={(e) => setFromDate(e.target.value)}
-            />
-          </InputGroup>
-          <InputGroup className="date-filter">
-            <InputGroup.Text>Đến ngày</InputGroup.Text>
-            <Form.Control
-              type="date"
-              value={toDate}
-              onChange={(e) => setToDate(e.target.value)}
-            />
-          </InputGroup>
+          <div className="filter-item-wrapper">
+            <InputGroup className="date-filter">
+              <InputGroup.Text>Từ ngày</InputGroup.Text>
+              <Form.Control
+                type="date"
+                value={fromDate}
+                onChange={(e) => setFromDate(e.target.value)}
+              />
+            </InputGroup>
+          </div>
+
+          <div className="filter-item-wrapper">
+            <InputGroup className="date-filter">
+              <InputGroup.Text>Đến ngày</InputGroup.Text>
+              <Form.Control
+                type="date"
+                value={toDate}
+                onChange={(e) => setToDate(e.target.value)}
+              />
+            </InputGroup>
+          </div>
           <Button variant="primary" onClick={handleSearch} disabled={loading}>
             {loading ? <Spinner size="sm" /> : "Tìm kiếm"}
           </Button>

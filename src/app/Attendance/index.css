@@ -104,8 +104,108 @@
 .hist-status { font-size: 13px; color: var(--success); }
 .status-pending { color: #f39c12; }
 
+.viewAll {
+  font-style: italic;
+  color: blue;
+}
+.viewAll:hover {
+  cursor: pointer;
+  color: #2c3e50;
+}
+
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+/* --- TỐI ƯU HÓA RESPONSIVE CHUẨN ĐẸP --- */
+
 @media (max-width: 992px) {
-  .attendance-layout { grid-template-columns: 1fr; }
+  .attendance-container {
+    padding: 15px; /* Giảm padding container để có thêm không gian */
+  }
+
+  .attendance-layout {
+    grid-template-columns: 1fr; 
+    gap: 15px;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding-bottom: 15px;
+  }
+
+  .time-text {
+    font-size: 18vw; /* Co giãn theo chiều rộng màn hình */
+    margin: 10px 0;
+  }
+
+  .side-section { order: 2; }
+  .main-section { order: 1; }
+}
+
+@media (max-width: 576px) {
+  /* Fix lỗi lồi: Đảm bảo mọi thứ không vượt quá chiều rộng màn hình */
+  .attendance-container {
+    overflow-x: hidden;
+    padding: 10px;
+  }
+
+  .brand-title {
+    font-size: 20px;
+  }
+
+  /* Làm Card gọn gàng hơn */
+  .card {
+    padding: 20px 15px; /* Giảm padding trái phải */
+    border-radius: 16px;
+    margin-bottom: 15px;
+  }
+
+  .clock-card {
+    padding: 30px 10px;
+  }
+
+  /* Đồng hồ không bao giờ lồi */
+  .time-text {
+    font-size: 16vw; 
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+
+  .main-btn {
+    padding: 15px;
+    font-size: 16px;
+    border-radius: 12px;
+  }
+
+  /* Lịch sử: Tối ưu hàng để không bị tràn */
+  .history-row {
+    padding: 10px 0;
+    gap: 5px;
+  }
+
+  .hist-day, .hist-time {
+    font-size: 13px;
+  }
+
+  .hist-status {
+    font-size: 11px;
+    padding: 2px 8px;
+    background: #f8f9fa;
+    border-radius: 10px;
+  }
+
+  /* Device info gọn lại */
+  .info-item {
+    font-size: 13px;
+    word-break: break-all; /* Tránh lồi khi tên thiết bị quá dài */
+  }
+}
+
+/* Hiệu ứng bấm nút trên mobile */
+@media (hover: none) {
+  .main-btn:active {
+    transform: scale(0.96);
+    opacity: 0.8;
+  }
 }
