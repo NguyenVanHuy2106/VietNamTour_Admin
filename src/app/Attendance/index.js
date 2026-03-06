@@ -27,7 +27,7 @@ const Attendance = () => {
   const navigate = useNavigate();
   const userId = JSON.parse(localStorage.getItem("userId"));
   const [currentTime, setCurrentTime] = useState(new Date());
-
+  const [isCheckedOut, setIsCheckedOut] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [attendanceStatus, setAttendanceStatus] = useState(null); // null, 'success', 'error'
@@ -39,6 +39,11 @@ const Attendance = () => {
   const [message, setMessage] = useState("");
 
   const [loadingHistory, setLoadingHistory] = useState(true);
+
+  const [hasCheckedIn, setHasCheckedIn] = useState(false);
+  const [hasCheckedOut, setHasCheckedOut] = useState(false);
+  const [checkInTime, setCheckInTime] = useState("");
+  const [checkOutTime, setCheckOutTime] = useState("");
 
   // 1. Khởi tạo dữ liệu khi vào trang
 
@@ -77,53 +82,44 @@ const Attendance = () => {
 
   const fetchHistory = async () => {
     setLoadingHistory(true);
-
     try {
-      //const userId = user?.user_id || 1001;
-
       const response = await APIToken.post("/getUserAtendance", {
         userId: userId,
       });
-
       if (response.data.success) {
         const data = response.data.data;
-
         setHistoryList(data);
 
-        // LOGIC KIỂM TRA NGÀY HÔM NAY
-
-        const todayStr = new Date().toLocaleDateString("en-CA"); // Định dạng YYYY-MM-DD chuẩn
-
-        const todayRecord = data.find((item) => {
-          const recordDate = new Date(item.workDate).toLocaleDateString(
-            "en-CA",
-          );
-
-          return recordDate === todayStr;
-        });
+        const todayStr = new Date().toLocaleDateString("en-CA");
+        const todayRecord = data.find(
+          (item) =>
+            new Date(item.workDate).toLocaleDateString("en-CA") === todayStr,
+        );
 
         if (todayRecord) {
-          setAttendanceStatus("success");
+          // Xử lý Check-in
+          setHasCheckedIn(true);
+          setCheckInTime(
+            todayRecord.checkIn
+              ? todayRecord.checkIn.includes("T")
+                ? todayRecord.checkIn.split("T")[1].substring(0, 5)
+                : todayRecord.checkIn.split(" ")[1]?.substring(0, 5)
+              : "",
+          );
 
-          // LẤY GIỜ CHUẨN TỪ CHUỖI VĂN BẢN (KHÔNG DÙNG NEW DATE)
-          let timePart = "đã ghi nhận";
-
-          if (todayRecord.checkIn) {
-            // Nếu chuỗi có dạng "2026-02-28 10:31:14" (có khoảng trắng)
-            if (todayRecord.checkIn.includes(" ")) {
-              timePart = todayRecord.checkIn.split(" ")[1].substring(0, 8);
-            }
-            // Nếu chuỗi có dạng ISO "2026-02-28T10:31:14" (có chữ T)
-            else if (todayRecord.checkIn.includes("T")) {
-              timePart = todayRecord.checkIn.split("T")[1].substring(0, 8);
-            }
+          // Xử lý Check-out
+          if (todayRecord.checkOut) {
+            setHasCheckedOut(true);
+            setCheckOutTime(
+              todayRecord.checkOut.includes("T")
+                ? todayRecord.checkOut.split("T")[1].substring(0, 5)
+                : todayRecord.checkOut.split(" ")[1]?.substring(0, 5),
+            );
           }
-
-          setMessage(`Bạn đã hoàn thành chấm công hôm nay lúc ${timePart}`);
         }
       }
     } catch (error) {
-      console.error("Lỗi lấy lịch sử:", error);
+      console.error("Lỗi:", error);
     } finally {
       setLoadingHistory(false);
     }
@@ -161,6 +157,26 @@ const Attendance = () => {
       setAttendanceStatus("error");
 
       setMessage(error.response?.data?.message || "Lỗi hệ thống.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  const handleCheckOut = async () => {
+    setIsSubmitting(true);
+    try {
+      const response = await APIToken.post("/submitCheckOut", {
+        // Đổi endpoint tương ứng
+        user_id: userId,
+        deviceId: deviceInfo,
+      });
+
+      if (response.data.success) {
+        setIsCheckedOut(true);
+        setMessage(response.data.message);
+        fetchHistory(); // Load lại để cập nhật giao diện
+      }
+    } catch (error) {
+      alert(error.response?.data?.message || "Lỗi khi Check-out");
     } finally {
       setIsSubmitting(false);
     }
@@ -211,35 +227,88 @@ const Attendance = () => {
           <div className="card action-card">
             {loadingHistory ? (
               <p>Đang kiểm tra dữ liệu...</p>
-            ) : attendanceStatus === "success" ? (
-              <div className="success-ui fade-in">
-                <CheckCircle2 size={70} color="#28a745" />
-
-                <h2 className="success-title" style={{ color: "#28a745" }}>
-                  Đã chấm công
-                </h2>
-
-                <p className="success-desc">{message}</p>
-              </div>
             ) : (
-              <div className="action-ui">
-                {attendanceStatus === "error" && (
-                  <div className="error-box">
-                    <AlertCircle size={18} /> {message}
+              <div className="attendance-display-wrapper">
+                {/* KHỐI 1: HIỂN THỊ KẾT QUẢ CHECK-IN */}
+                {hasCheckedIn ? (
+                  <div
+                    className="success-ui fade-in"
+                    style={{ marginBottom: hasCheckedOut ? "20px" : "0" }}
+                  >
+                    <CheckCircle2 size={60} color="#28a745" />
+                    <h2
+                      className="success-title"
+                      style={{
+                        color: "#28a745",
+                        fontSize: "24px",
+                        marginTop: "10px",
+                      }}
+                    >
+                      Đã chấm công
+                    </h2>
+                    <p className="success-desc">
+                      Bạn đã hoàn thành chấm công lúc {checkInTime}
+                    </p>
+                  </div>
+                ) : (
+                  /* Nút bấm Check-in nếu chưa có dữ liệu */
+                  <div className="action-ui">
+                    <p className="action-hint">
+                      Đảm bảo bạn đang ở văn phòng Việt Nam Tour
+                    </p>
+                    <button
+                      onClick={handlePressAttendance}
+                      disabled={isSubmitting}
+                      className={`main-btn ${isSubmitting ? "btn-disabled" : ""}`}
+                    >
+                      {isSubmitting ? "ĐANG XÁC THỰC..." : "XÁC NHẬN CHẤM CÔNG"}
+                    </button>
                   </div>
                 )}
 
-                <p className="action-hint">
-                  Đảm bảo bạn đang ở văn phòng Việt Nam Tour
-                </p>
+                {/* Đường kẻ ngăn cách nhẹ nếu đang ở trạng thái chờ Check-out */}
+                {hasCheckedIn && !hasCheckedOut && (
+                  <div className="divider-dashed"></div>
+                )}
 
-                <button
-                  onClick={handlePressAttendance}
-                  disabled={isSubmitting}
-                  className={`main-btn ${isSubmitting ? "btn-disabled" : ""}`}
-                >
-                  {isSubmitting ? "ĐANG XÁC THỰC..." : "XÁC NHẬN CHẤM CÔNG"}
-                </button>
+                {/* KHỐI 2: HIỂN THỊ NÚT CHECK-OUT HOẶC KẾT QUẢ CHECK-OUT */}
+                {hasCheckedIn &&
+                  (hasCheckedOut ? (
+                    /* Khối kết quả Check-out (Y hệt hình bạn gửi) */
+                    <div
+                      className="success-ui fade-in"
+                      style={{ borderTop: "1px solid #eee", pt: "20px" }}
+                    >
+                      <CheckCircle2 size={60} color="#007bff" />
+                      <h2
+                        className="success-title"
+                        style={{
+                          color: "#007bff",
+                          fontSize: "24px",
+                          marginTop: "10px",
+                        }}
+                      >
+                        Hẹn gặp lại!
+                      </h2>
+                      <p className="success-desc">
+                        Bạn đã hoàn thành công việc hôm nay (Check-out lúc:{" "}
+                        {checkOutTime})
+                      </p>
+                    </div>
+                  ) : (
+                    /* Nút Check-out nếu đã In nhưng chưa Out */
+                    <div className="action-ui fade-in">
+                      <button
+                        onClick={handleCheckOut}
+                        disabled={isSubmitting}
+                        className={`main-btn btn-checkout ${isSubmitting ? "btn-disabled" : ""}`}
+                      >
+                        {isSubmitting
+                          ? "ĐANG XỬ LÝ..."
+                          : "XÁC NHẬN RA VỀ (CHECK OUT)"}
+                      </button>
+                    </div>
+                  ))}
               </div>
             )}
           </div>

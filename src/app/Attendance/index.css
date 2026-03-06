@@ -209,3 +209,57 @@
     opacity: 0.8;
   }
 }
+
+
+.status-box {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: #f6ffed;
+  border: 1px solid #b7eb8f;
+  border-radius: 12px;
+  text-align: left;
+}
+
+.status-info h4 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.btn-checkout {
+  background: linear-gradient(135deg, #ff7a18 0%, #af002d 100%) !important;
+  margin-top: 10px;
+}
+
+.success-fade {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.attendance-display-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.divider-dashed {
+  border-top: 1px dashed #ddd;
+  margin: 10px 0;
+}
+
+.btn-checkout {
+  background: linear-gradient(135deg, #ff9800 0%, #e65100 100%) !important;
+  margin-top: 10px;
+}
+
+/* Đảm bảo chữ success-desc giống hệt ảnh bạn gửi */
+.success-desc {
+  color: #333;
+  font-size: 16px;
+  margin-top: 8px;
+}

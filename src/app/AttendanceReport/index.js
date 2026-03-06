@@ -295,18 +295,19 @@ const AttendanceReport = () => {
                         style={{ fontSize: "0.85rem" }}
                       >
                         {(() => {
-                          if (!item.checkIn) return "0.00 h";
+                          // 1. Nếu thiếu checkIn hoặc thiếu checkOut thì không tính toán
+                          if (!item.checkIn || !item.checkOut)
+                            return "0.00 giờ";
+
                           const start = new Date(item.checkIn);
-                          const end = item.checkOut
-                            ? new Date(item.checkOut)
-                            : new Date(
-                                new Date(item.checkIn).setHours(16, 0, 0, 0),
-                              );
-                          const diff = Math.max(
-                            0,
-                            (end - start) / (1000 * 60 * 60),
-                          );
-                          return `${diff.toFixed(2)} giờ`;
+                          const end = new Date(item.checkOut);
+
+                          // 2. Tính toán hiệu số giờ
+                          const diffInMs = end - start;
+                          const diffHours = diffInMs / (1000 * 60 * 60);
+
+                          // 3. Đảm bảo kết quả không âm và hiển thị 2 số thập phân
+                          return `${Math.max(0, diffHours).toFixed(2)} giờ`;
                         })()}
                       </Badge>
                     </td>

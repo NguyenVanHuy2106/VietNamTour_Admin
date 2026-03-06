@@ -161,40 +161,37 @@ const AttendanceList = () => {
                     </td>
                     <td>
                       <FaClock className="me-2 text-danger" />
-                      {/* {new Date(item.checkOut).toLocaleString("vi-VN", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        second: "2-digit",
-                      })} */}{" "}
-                      -/-
+                      {item.checkOut
+                        ? new Date(item.checkOut).toLocaleString("vi-VN", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            second: "2-digit",
+                          })
+                        : "-:-"}
                     </td>
                     <td>
                       <Badge bg="info" className="p-2">
                         {(() => {
-                          // Nếu không có checkIn thì không thể tính toán
-                          if (!item.checkIn) return "---";
-
-                          const start = new Date(item.checkIn);
-                          let end;
-
-                          if (item.checkOut) {
-                            // Trường hợp 1: Có dữ liệu checkOut thực tế
-                            end = new Date(item.checkOut);
-                          } else {
-                            // Trường hợp 2: Không có checkOut, mặc định lấy 16:00:00 cùng ngày với checkIn
-                            end = new Date(start);
-                            end.setHours(16, 0, 0, 0);
+                          // 1. Kiểm tra: Phải có cả checkIn và checkOut mới tính toán
+                          if (!item.checkIn || !item.checkOut) {
+                            return "---";
                           }
 
-                          // Tính toán độ lệch giờ
+                          const start = new Date(item.checkIn);
+                          const end = new Date(item.checkOut);
+
+                          // 2. Tính toán độ lệch giờ (miliseconds)
                           const diffInMs = end - start;
 
-                          // Nếu đi làm sau 16h (âm giờ) thì hiển thị 0.00
-                          if (diffInMs <= 0) return "0.00 giờ";
+                          // 3. Xử lý trường hợp thời gian ra nhỏ hơn thời gian vào (lỗi dữ liệu)
+                          if (diffInMs <= 0) {
+                            return "0.00 giờ";
+                          }
 
+                          // 4. Đổi từ miliseconds sang giờ (1 giờ = 3,600,000 ms)
                           const diffHours = diffInMs / (1000 * 60 * 60);
 
-                          // Trả về định dạng y hệt cũ: ví dụ "6.97 giờ"
+                          // 5. Trả về định dạng: "6.97 giờ"
                           return `${diffHours.toFixed(2)} giờ`;
                         })()}
                       </Badge>
