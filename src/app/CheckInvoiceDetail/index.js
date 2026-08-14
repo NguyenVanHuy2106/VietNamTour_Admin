@@ -21,6 +21,7 @@ import {
   FaCheckCircle,
   FaExclamationTriangle,
   FaTrash,
+  FaEdit,
 } from "react-icons/fa";
 
 import { MdOutlinePendingActions } from "react-icons/md";
@@ -47,6 +48,30 @@ const CheckInvoiceDetail = () => {
   const [showServiceForm, setShowServiceForm] = useState(false);
 
   const [serviceForm, setServiceForm] = useState({
+    service_type: "",
+    service_name: "",
+    supplier_name: "",
+    description: "",
+    service_amount: "",
+    required_invoice_amount: "",
+    note: "",
+  });
+
+  const [editTour, setEditTour] = useState(false);
+
+  const [tourEditForm, setTourEditForm] = useState({
+    tour_code: "",
+    tour_name: "",
+    customer_name: "",
+    departure_date: "",
+    return_date: "",
+    output_amount: "",
+    note: "",
+  });
+
+  const [editingServiceId, setEditingServiceId] = useState(null);
+
+  const [serviceEditForm, setServiceEditForm] = useState({
     service_type: "",
     service_name: "",
     supplier_name: "",
@@ -181,6 +206,52 @@ const CheckInvoiceDetail = () => {
     });
   };
 
+  const handleOpenEditService = (service) => {
+    setEditingServiceId(service.service_id);
+
+    setServiceEditForm({
+      service_type: service.service_type || "",
+      service_name: service.service_name || "",
+      supplier_name: service.supplier_name || "",
+      description: service.description || "",
+      service_amount: service.service_amount || "",
+      required_invoice_amount: service.required_invoice_amount || "",
+      note: service.note || "",
+    });
+  };
+
+  const handleUpdateService = async (serviceId) => {
+    if (!serviceEditForm.service_name.trim()) {
+      alert("Vui lòng nhập tên dịch vụ");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      await APIToken.put(`/invoice-tour-services/${serviceId}`, {
+        ...serviceEditForm,
+        service_amount: Number(serviceEditForm.service_amount || 0),
+        required_invoice_amount: Number(
+          serviceEditForm.required_invoice_amount || 0,
+        ),
+      });
+
+      setToastMessage("Cập nhật dịch vụ thành công");
+      setToastOpen(true);
+
+      setEditingServiceId(null);
+
+      await getTourDetail();
+    } catch (error) {
+      console.error("handleUpdateService:", error);
+
+      alert(error.response?.data?.message || "Không thể cập nhật dịch vụ");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // =====================================================
   // THÊM DỊCH VỤ
   // =====================================================
@@ -262,6 +333,57 @@ const CheckInvoiceDetail = () => {
     }
   };
 
+  const handleOpenEditTour = () => {
+    setTourEditForm({
+      tour_code: tour.tour_code || "",
+      tour_name: tour.tour_name || "",
+      customer_name: tour.customer_name || "",
+      departure_date: tour.departure_date
+        ? String(tour.departure_date).substring(0, 10)
+        : "",
+      return_date: tour.return_date
+        ? String(tour.return_date).substring(0, 10)
+        : "",
+      output_amount: tour.output_amount || "",
+      note: tour.note || "",
+    });
+
+    setEditTour(true);
+  };
+
+  const handleUpdateTour = async () => {
+    if (!tourEditForm.tour_code.trim()) {
+      alert("Vui lòng nhập mã tour");
+      return;
+    }
+
+    if (!tourEditForm.tour_name.trim()) {
+      alert("Vui lòng nhập tên tour");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      await APIToken.put(`/invoice-tours/${tourId}`, {
+        ...tourEditForm,
+        output_amount: Number(tourEditForm.output_amount || 0),
+      });
+
+      setToastMessage("Cập nhật tour thành công");
+      setToastOpen(true);
+
+      setEditTour(false);
+
+      await getTourDetail();
+    } catch (error) {
+      console.error("handleUpdateTour:", error);
+
+      alert(error.response?.data?.message || "Không thể cập nhật tour");
+    } finally {
+      setLoading(false);
+    }
+  };
   // =====================================================
   // MỞ / ĐÓNG FORM THÊM HÓA ĐƠN
   // =====================================================
@@ -427,21 +549,37 @@ const CheckInvoiceDetail = () => {
       ================================================= */}
 
       <div className="cid-top">
+        {/* NÚT QUAY LẠI */}
+
         <Button
           variant="light"
           className="cid-back"
           onClick={() => navigate("/check-invoices")}
         >
           <BsArrowLeft />
-
           <span>Danh sách tour</span>
         </Button>
 
-        <Button onClick={handleOpenServiceForm}>
-          <FaPlus />
+        {/* ACTION BÊN PHẢI */}
 
-          <span>Thêm dịch vụ</span>
-        </Button>
+        <div className="cid-top-actions">
+          <Button
+            variant="outline-primary"
+            className="cid-btn-edit-tour"
+            onClick={handleOpenEditTour}
+          >
+            <FaEdit />
+            <span>Sửa tour</span>
+          </Button>
+
+          <Button
+            className="cid-btn-add-service"
+            onClick={handleOpenServiceForm}
+          >
+            <FaPlus />
+            <span>Thêm dịch vụ</span>
+          </Button>
+        </div>
       </div>
 
       {/* =================================================
@@ -501,6 +639,129 @@ const CheckInvoiceDetail = () => {
           type="danger"
         />
       </div>
+
+      {editTour && (
+        <div className="cid-form-card">
+          <div className="cid-form-header">
+            <div>
+              <h4>Điều chỉnh thông tin tour</h4>
+              <p>Cập nhật thông tin cơ bản của tour</p>
+            </div>
+
+            <button type="button" onClick={() => setEditTour(false)}>
+              ×
+            </button>
+          </div>
+
+          <div className="cid-form-grid">
+            <Form.Group>
+              <Form.Label>Mã tour</Form.Label>
+              <Form.Control
+                value={tourEditForm.tour_code}
+                onChange={(e) =>
+                  setTourEditForm({
+                    ...tourEditForm,
+                    tour_code: e.target.value,
+                  })
+                }
+              />
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label>Tên tour</Form.Label>
+              <Form.Control
+                value={tourEditForm.tour_name}
+                onChange={(e) =>
+                  setTourEditForm({
+                    ...tourEditForm,
+                    tour_name: e.target.value,
+                  })
+                }
+              />
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label>Khách hàng</Form.Label>
+              <Form.Control
+                value={tourEditForm.customer_name}
+                onChange={(e) =>
+                  setTourEditForm({
+                    ...tourEditForm,
+                    customer_name: e.target.value,
+                  })
+                }
+              />
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label>Số xuất khách</Form.Label>
+              <Form.Control
+                type="number"
+                value={tourEditForm.output_amount}
+                onChange={(e) =>
+                  setTourEditForm({
+                    ...tourEditForm,
+                    output_amount: e.target.value,
+                  })
+                }
+              />
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label>Ngày đi</Form.Label>
+              <Form.Control
+                type="date"
+                value={tourEditForm.departure_date}
+                onChange={(e) =>
+                  setTourEditForm({
+                    ...tourEditForm,
+                    departure_date: e.target.value,
+                  })
+                }
+              />
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label>Ngày về</Form.Label>
+              <Form.Control
+                type="date"
+                value={tourEditForm.return_date}
+                onChange={(e) =>
+                  setTourEditForm({
+                    ...tourEditForm,
+                    return_date: e.target.value,
+                  })
+                }
+              />
+            </Form.Group>
+
+            <Form.Group className="cid-full">
+              <Form.Label>Ghi chú</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={2}
+                value={tourEditForm.note}
+                onChange={(e) =>
+                  setTourEditForm({
+                    ...tourEditForm,
+                    note: e.target.value,
+                  })
+                }
+              />
+            </Form.Group>
+          </div>
+
+          <div className="cid-form-actions">
+            <Button variant="light" onClick={() => setEditTour(false)}>
+              Hủy
+            </Button>
+
+            <Button onClick={handleUpdateTour} disabled={loading}>
+              {loading ? <Spinner size="sm" /> : "Lưu thay đổi"}
+            </Button>
+          </div>
+        </div>
+      )}
 
       {/* =================================================
           FORM THÊM DỊCH VỤ
@@ -784,6 +1045,19 @@ const CheckInvoiceDetail = () => {
                   >
                     <FaTrash />
                   </button>
+                  <button
+                    type="button"
+                    className="cid-btn-edit-service"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+
+                      handleOpenEditService(service);
+                    }}
+                    title="Sửa dịch vụ"
+                  >
+                    <FaEdit />
+                  </button>
                 </div>
               </div>
 
@@ -818,6 +1092,129 @@ const CheckInvoiceDetail = () => {
                   }
                 />
               </div>
+
+              {Number(editingServiceId) === Number(service.service_id) && (
+                <div className="cid-inline-edit-service">
+                  <div className="cid-inline-title">
+                    <strong>Sửa dịch vụ</strong>
+                  </div>
+
+                  <div className="cid-invoice-form-grid">
+                    <Form.Group>
+                      <Form.Label>Loại dịch vụ</Form.Label>
+
+                      <Form.Select
+                        value={serviceEditForm.service_type}
+                        onChange={(e) =>
+                          setServiceEditForm({
+                            ...serviceEditForm,
+                            service_type: e.target.value,
+                          })
+                        }
+                      >
+                        <option value="HOTEL">Khách sạn</option>
+                        <option value="TRANSPORT">Xe vận chuyển</option>
+                        <option value="RESTAURANT">Nhà hàng</option>
+                        <option value="TICKET">Vé tham quan</option>
+                        <option value="GALA">Gala Dinner</option>
+                        <option value="TEAMBUILDING">Team Building</option>
+                        <option value="GUIDE">Hướng dẫn viên</option>
+                        <option value="OTHER">Khác</option>
+                      </Form.Select>
+                    </Form.Group>
+
+                    <Form.Group>
+                      <Form.Label>Tên dịch vụ</Form.Label>
+
+                      <Form.Control
+                        value={serviceEditForm.service_name}
+                        onChange={(e) =>
+                          setServiceEditForm({
+                            ...serviceEditForm,
+                            service_name: e.target.value,
+                          })
+                        }
+                      />
+                    </Form.Group>
+
+                    <Form.Group>
+                      <Form.Label>Nhà cung cấp</Form.Label>
+
+                      <Form.Control
+                        value={serviceEditForm.supplier_name}
+                        onChange={(e) =>
+                          setServiceEditForm({
+                            ...serviceEditForm,
+                            supplier_name: e.target.value,
+                          })
+                        }
+                      />
+                    </Form.Group>
+
+                    <Form.Group>
+                      <Form.Label>Chi phí</Form.Label>
+
+                      <Form.Control
+                        type="number"
+                        value={serviceEditForm.service_amount}
+                        onChange={(e) =>
+                          setServiceEditForm({
+                            ...serviceEditForm,
+                            service_amount: e.target.value,
+                          })
+                        }
+                      />
+                    </Form.Group>
+
+                    <Form.Group>
+                      <Form.Label>Cần lấy HĐ</Form.Label>
+
+                      <Form.Control
+                        type="number"
+                        value={serviceEditForm.required_invoice_amount}
+                        onChange={(e) =>
+                          setServiceEditForm({
+                            ...serviceEditForm,
+                            required_invoice_amount: e.target.value,
+                          })
+                        }
+                      />
+                    </Form.Group>
+
+                    <Form.Group className="cid-full">
+                      <Form.Label>Ghi chú</Form.Label>
+
+                      <Form.Control
+                        as="textarea"
+                        rows={2}
+                        value={serviceEditForm.note}
+                        onChange={(e) =>
+                          setServiceEditForm({
+                            ...serviceEditForm,
+                            note: e.target.value,
+                          })
+                        }
+                      />
+                    </Form.Group>
+                  </div>
+
+                  <div className="cid-inline-actions">
+                    <Button
+                      variant="light"
+                      onClick={() => setEditingServiceId(null)}
+                    >
+                      Hủy
+                    </Button>
+
+                    <Button
+                      onClick={() => handleUpdateService(service.service_id)}
+                      disabled={loading}
+                    >
+                      {loading ? <Spinner size="sm" /> : "Lưu thay đổi"}
+                    </Button>
+                  </div>
+                </div>
+              )}
 
               {/* =========================================
                   DANH SÁCH HÓA ĐƠN ĐÃ NHẬN
