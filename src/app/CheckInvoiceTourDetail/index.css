@@ -1,10 +1,18 @@
 /* =====================================================
+   CHECK INVOICE TOUR DETAIL
+===================================================== */
+
+
+/* =====================================================
    PAGE
 ===================================================== */
 
 .cit-page {
   min-height: 100vh;
-  padding: 25px 40px 80px;
+
+  padding:
+    24px 40px 80px;
+
   background: #f5f7fb;
 }
 
@@ -15,22 +23,33 @@
 
 .cit-topbar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+
   gap: 10px;
 
   margin-bottom: 16px;
 }
 
 .cit-topbar button {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+
   gap: 6px;
 }
 
 .cit-back-btn {
-  border: 1px solid #e4e7ec !important;
+  border:
+    1px solid #e4e7ec !important;
+}
+
+.cit-top-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 7px;
 }
 
 
@@ -40,20 +59,31 @@
 
 .cit-tour-header {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
+  justify-content: space-between;
+
   gap: 20px;
 
-  padding: 22px;
+  padding: 20px;
+
   margin-bottom: 14px;
 
   background: #ffffff;
 
-  border: 1px solid #e7eaf0;
+  border:
+    1px solid #e7eaf0;
+
   border-radius: 14px;
 
   box-shadow:
-    0 3px 12px rgba(16, 24, 40, 0.03);
+    0 2px 8px
+    rgba(16, 24, 40, 0.025);
+}
+
+.cit-tour-main-info {
+  min-width: 0;
+
+  flex: 1;
 }
 
 .cit-tour-code {
@@ -72,19 +102,23 @@
 
   font-size: 24px;
   font-weight: 750;
+
+  word-break: break-word;
 }
 
 .cit-tour-meta {
   display: flex;
   flex-wrap: wrap;
+
   gap: 18px;
 
-  margin-top: 11px;
+  margin-top: 10px;
 }
 
 .cit-tour-meta > div {
   display: flex;
   align-items: center;
+
   gap: 6px;
 
   color: #667085;
@@ -92,13 +126,9 @@
   font-size: 12px;
 }
 
-.cit-tour-meta svg {
-  flex-shrink: 0;
-}
-
 
 /* =====================================================
-   TOUR STATUS
+   MAIN STATUS
 ===================================================== */
 
 .cit-main-status {
@@ -106,11 +136,12 @@
   align-items: center;
   justify-content: center;
 
-  padding: 7px 12px;
+  padding:
+    6px 11px;
 
   border-radius: 30px;
 
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
 
   white-space: nowrap;
@@ -145,7 +176,10 @@
   display: grid;
 
   grid-template-columns:
-    repeat(6, minmax(0, 1fr));
+    repeat(
+      6,
+      minmax(0, 1fr)
+    );
 
   gap: 10px;
 
@@ -153,36 +187,46 @@
 }
 
 .cit-summary-card {
-  padding: 14px;
+  min-width: 0;
+
+  padding: 13px;
 
   background: #ffffff;
 
-  border: 1px solid #e7eaf0;
+  border:
+    1px solid #e7eaf0;
+
   border-radius: 11px;
 }
 
-.cit-summary-card span {
+.cit-summary-card > span {
   display: block;
 
   margin-bottom: 5px;
 
   color: #667085;
 
-  font-size: 11px;
+  font-size: 10px;
 }
 
-.cit-summary-card strong {
+.cit-summary-card > strong {
+  display: block;
+
   color: #1f2937;
 
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 750;
+
+  overflow-wrap: anywhere;
 }
 
-.cit-summary-card.success strong {
+.cit-summary-card.success
+> strong {
   color: #198754;
 }
 
-.cit-summary-card.danger strong {
+.cit-summary-card.danger
+> strong {
   color: #dc3545;
 }
 
@@ -192,21 +236,24 @@
 ===================================================== */
 
 .cit-progress-card {
-  padding: 17px;
+  padding: 16px;
 
   background: #ffffff;
 
-  border: 1px solid #e7eaf0;
+  border:
+    1px solid #e7eaf0;
+
   border-radius: 13px;
 }
 
 .cit-progress-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+
   gap: 15px;
 
-  margin-bottom: 12px;
+  margin-bottom: 11px;
 }
 
 .cit-progress-header h3 {
@@ -223,14 +270,14 @@
 
   color: #98a2b3;
 
-  font-size: 11px;
+  font-size: 10px;
 }
 
-.cit-progress-header > strong {
+.cit-progress-header
+> strong {
   color: #2563eb;
 
   font-size: 16px;
-  font-weight: 750;
 }
 
 .cit-progress-track {
@@ -250,32 +297,216 @@
 
   border-radius: 20px;
 
-  transition: width 0.3s ease;
+  transition:
+    width 0.25s ease;
 }
 
 .cit-progress-money {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 
-  margin-top: 8px;
+  margin-top: 7px;
+
+  color: #667085;
+
+  font-size: 10px;
+}
+
+.cit-progress-money
+strong {
+  color: #198754;
+}
+
+
+/* =====================================================
+   COMMON FORM CARD
+===================================================== */
+
+.cit-edit-card,
+.cit-add-service-card {
+  padding: 18px;
+
+  margin-bottom: 16px;
+
+  background: #ffffff;
+
+  border-radius: 13px;
+
+  box-shadow:
+    0 3px 12px
+    rgba(16, 24, 40, 0.035);
+}
+
+.cit-edit-card {
+  border:
+    1px solid #bfdbfe;
+}
+
+.cit-add-service-card {
+  margin-top: 15px;
+
+  border:
+    1px solid #cfe2ff;
+}
+
+.cit-form-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 16px;
+}
+
+.cit-form-header h3 {
+  margin: 0;
+
+  color: #1f2937;
+
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.cit-form-header p {
+  margin: 3px 0 0;
 
   color: #667085;
 
   font-size: 11px;
 }
 
-.cit-progress-money strong {
-  color: #198754;
+.cit-close-form-btn {
+  width: 30px;
+  height: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  padding: 0;
+
+  background: #ffffff;
+
+  border:
+    1px solid #e4e7ec;
+
+  border-radius: 7px;
+
+  color: #667085;
+
+  cursor: pointer;
+}
+
+.cit-close-form-btn:hover {
+  color: #dc3545;
+
+  border-color: #fecaca;
+
+  background: #fff5f5;
 }
 
 
 /* =====================================================
-   SECTION HEADER
+   FORM GRID
+===================================================== */
+
+.cit-form-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 13px;
+}
+
+.cit-full {
+  grid-column:
+    1 / -1;
+}
+
+.cit-form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 8px;
+
+  margin-top: 16px;
+}
+
+.cit-form-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+}
+
+.cit-money-preview {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #2563eb !important;
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
+
+/* =====================================================
+   BOOTSTRAP FORM
+===================================================== */
+
+.cit-page .form-label {
+  margin-bottom: 5px;
+
+  color: #344054;
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.cit-page .form-control,
+.cit-page .form-select {
+  min-height: 40px;
+
+  border-color: #d0d5dd;
+
+  font-size: 13px;
+}
+
+.cit-page
+.form-control:focus,
+.cit-page
+.form-select:focus {
+  border-color: #86b7fe;
+
+  box-shadow:
+    0 0 0 0.2rem
+    rgba(13, 110, 253, 0.07);
+}
+
+.cit-page
+textarea.form-control {
+  min-height: unset;
+}
+
+
+/* =====================================================
+   SECTION
 ===================================================== */
 
 .cit-section-header {
-  margin: 25px 0 10px;
+  margin:
+    24px 0 10px;
 }
 
 .cit-section-header h2 {
@@ -292,7 +523,7 @@
 
   color: #98a2b3;
 
-  font-size: 11px;
+  font-size: 10px;
 }
 
 
@@ -305,7 +536,9 @@
 
   background: #ffffff;
 
-  border: 1px solid #e7eaf0;
+  border:
+    1px solid #e7eaf0;
+
   border-radius: 13px;
 }
 
@@ -316,24 +549,28 @@
 }
 
 .cit-table th {
-  padding: 12px;
+  padding:
+    11px 12px;
 
   background: #f9fafb;
 
-  border-bottom: 1px solid #eaecf0;
+  border-bottom:
+    1px solid #eaecf0;
 
   color: #667085;
 
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 650;
 
   white-space: nowrap;
 }
 
 .cit-table td {
-  padding: 13px 12px;
+  padding:
+    12px;
 
-  border-bottom: 1px solid #f0f1f3;
+  border-bottom:
+    1px solid #f0f1f3;
 
   color: #344054;
 
@@ -342,21 +579,15 @@
   vertical-align: middle;
 }
 
-.cit-table tbody tr:last-child td {
+.cit-table tbody
+tr:last-child td {
   border-bottom: 0;
-}
-
-.cit-table tbody tr {
-  transition: background-color 0.15s ease;
-}
-
-.cit-table tbody tr:hover {
-  background: #fafcff;
 }
 
 .cit-service-name {
   color: #1f2937;
 
+  font-size: 12px;
   font-weight: 700;
 }
 
@@ -365,7 +596,7 @@
 
   color: #98a2b3;
 
-  font-size: 10px;
+  font-size: 9px;
 }
 
 
@@ -374,32 +605,37 @@
 ===================================================== */
 
 .cit-money-success {
-  color: #198754 !important;
+  color:
+    #198754 !important;
 
   font-weight: 700;
 }
 
 .cit-money-danger {
-  color: #dc3545 !important;
+  color:
+    #dc3545 !important;
 
   font-weight: 700;
 }
 
 
 /* =====================================================
-   SERVICE STATUS
+   STATUS
 ===================================================== */
 
 .cit-status {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+
   gap: 4px;
 
-  padding: 5px 8px;
+  padding:
+    4px 7px;
 
   border-radius: 30px;
 
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 650;
 
   white-space: nowrap;
@@ -427,10 +663,18 @@
 
 
 /* =====================================================
-   ROW BUTTON
+   SERVICE ACTION
 ===================================================== */
 
-.cit-row-btn {
+.cit-service-actions {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+}
+
+.cit-edit-service-btn,
+.cit-delete-service-btn {
   width: 28px;
   height: 28px;
 
@@ -438,44 +682,97 @@
   align-items: center;
   justify-content: center;
 
+  flex-shrink: 0;
+
   padding: 0;
 
   background: #ffffff;
 
-  border: 1px solid #d0d5dd;
   border-radius: 7px;
 
-  color: #667085;
+  font-size: 10px;
 
   cursor: pointer;
 
-  transition: all 0.15s ease;
+  transition:
+    all 0.15s ease;
 }
 
-.cit-row-btn:hover {
-  color: #2563eb;
+.cit-edit-service-btn {
+  color: #f59e0b;
 
-  border-color: #2563eb;
+  border:
+    1px solid #f59e0b;
+}
 
-  background: #eff6ff;
+.cit-edit-service-btn:hover {
+  color: #ffffff;
+
+  background: #f59e0b;
+}
+
+.cit-delete-service-btn {
+  color: #dc3545;
+
+  border:
+    1px solid #dc3545;
+}
+
+.cit-delete-service-btn:hover {
+  color: #ffffff;
+
+  background: #dc3545;
 }
 
 
 /* =====================================================
-   EMPTY
+   EDIT SERVICE
 ===================================================== */
 
-.cit-empty {
-  padding: 40px !important;
+.cit-edit-service-row td {
+  padding: 0 !important;
 
-  color: #98a2b3 !important;
+  background: #fffcf4;
+}
 
-  text-align: center;
+.cit-edit-service-form {
+  padding: 16px;
+
+  background: #fffcf4;
+
+  border-top:
+    1px solid #fde68a;
+}
+
+.cit-edit-service-header {
+  margin-bottom: 13px;
+}
+
+.cit-edit-service-header
+> div {
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.cit-edit-service-header
+strong {
+  color: #1f2937;
+
+  font-size: 13px;
+}
+
+.cit-edit-service-header
+span {
+  color: #667085;
+
+  font-size: 10px;
 }
 
 
 /* =====================================================
-   MOBILE SERVICES
+   MOBILE SERVICE
 ===================================================== */
 
 .cit-mobile-services {
@@ -483,25 +780,34 @@
 }
 
 .cit-mobile-service {
-  padding: 14px;
+  padding: 13px;
 
   background: #ffffff;
 
-  border: 1px solid #e7eaf0;
+  border:
+    1px solid #e7eaf0;
+
   border-radius: 13px;
 
   box-shadow:
-    0 2px 8px rgba(16, 24, 40, 0.03);
+    0 2px 7px
+    rgba(16, 24, 40, 0.025);
 }
 
 .cit-mobile-service-head {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
+  justify-content: space-between;
 
-  gap: 10px;
+  gap: 8px;
 
-  margin-bottom: 11px;
+  margin-bottom: 10px;
+}
+
+.cit-mobile-service-info {
+  flex: 1;
+
+  min-width: 0;
 }
 
 .cit-mobile-service-head h4 {
@@ -511,6 +817,8 @@
 
   font-size: 14px;
   font-weight: 700;
+
+  word-break: break-word;
 }
 
 .cit-mobile-service-head p {
@@ -518,21 +826,26 @@
 
   color: #667085;
 
-  font-size: 11px;
+  font-size: 10px;
 }
 
 .cit-mobile-service-grid {
   display: grid;
 
   grid-template-columns:
-    1fr 1fr;
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
 
-  gap: 7px;
+  gap: 6px;
 
-  margin-bottom: 11px;
+  margin-bottom: 9px;
 }
 
 .cit-mobile-money {
+  min-width: 0;
+
   padding: 8px;
 
   background: #f8fafc;
@@ -543,36 +856,82 @@
 .cit-mobile-money span {
   display: block;
 
-  margin-bottom: 3px;
+  margin-bottom: 2px;
 
   color: #7b8493;
 
-  font-size: 10px;
+  font-size: 9px;
 }
 
 .cit-mobile-money strong {
+  display: block;
+
   color: #1f2937;
 
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
+
+  overflow-wrap: anywhere;
 }
 
-.cit-mobile-reconcile {
-  width: 100%;
-
-  min-height: 39px;
-
-  display: flex !important;
+.cit-mobile-service-actions {
+  display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
 
   gap: 6px;
+
+  padding-top: 8px;
+
+  border-top:
+    1px solid #f2f4f7;
+}
+
+.cit-mobile-empty {
+  padding:
+    50px 20px;
+
+  background: #ffffff;
+
+  border:
+    1px dashed #d0d5dd;
+
+  border-radius: 13px;
+
+  text-align: center;
+
+  color: #98a2b3;
+}
+
+.cit-mobile-empty h4 {
+  margin:
+    10px 0 4px;
+
+  color: #344054;
+
+  font-size: 15px;
+}
+
+.cit-mobile-empty p {
+  margin-bottom: 13px;
+
+  font-size: 11px;
 }
 
 
 /* =====================================================
-   LOADING
+   EMPTY / LOADING
 ===================================================== */
+
+.cit-empty {
+  padding:
+    40px !important;
+
+  color:
+    #98a2b3 !important;
+
+  text-align: center;
+}
 
 .cit-loading {
   min-height: 70vh;
@@ -593,21 +952,24 @@
 ===================================================== */
 
 @media (max-width: 1200px) {
+
   .cit-summary-grid {
     grid-template-columns:
-      repeat(3, 1fr);
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
   }
+
 }
 
 @media (max-width: 992px) {
+
   .cit-page {
-    padding: 20px;
+    padding:
+      20px 20px 70px;
   }
 
-  .cit-summary-grid {
-    grid-template-columns:
-      repeat(3, 1fr);
-  }
 }
 
 
@@ -616,10 +978,14 @@
 ===================================================== */
 
 @media (max-width: 767px) {
+
+  /* PAGE */
+
   .cit-page {
     padding:
       10px 9px 80px;
   }
+
 
   /* TOP BAR */
 
@@ -628,116 +994,202 @@
 
     top: 0;
 
-    z-index: 10;
+    z-index: 30;
 
-    padding: 7px 0;
+    padding:
+      7px 0;
 
     background: #f5f7fb;
   }
 
-  .cit-topbar button {
-    min-height: 40px;
+  .cit-back-btn {
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+
+    padding: 0 !important;
   }
 
-  .cit-topbar button span {
+  .cit-back-btn span {
     display: none;
   }
 
-  /* TOUR HEADER */
+  .cit-top-actions {
+    margin-left: auto;
+
+    gap: 6px;
+  }
+
+  /*
+   * MOBILE:
+   * SỬA TOUR + THÊM DV + ĐỐI SOÁT
+   * CHỈ HIỆN ICON
+   */
+
+  .cit-btn-edit-tour,
+  .cit-btn-add-service,
+  .cit-btn-reconcile {
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+
+    padding: 0 !important;
+
+    border-radius: 8px;
+  }
+
+  .cit-btn-edit-tour span,
+  .cit-btn-add-service span,
+  .cit-btn-reconcile span {
+    display: none;
+  }
+
+  .cit-btn-edit-tour svg,
+  .cit-btn-add-service svg,
+  .cit-btn-reconcile svg {
+    margin: 0;
+
+    font-size: 14px;
+  }
+
+
+  /* TOUR */
 
   .cit-tour-header {
     display: block;
 
-    padding: 15px;
+    padding: 14px;
   }
 
   .cit-tour-header h1 {
-    font-size: 19px;
+    font-size: 18px;
   }
 
   .cit-main-status {
-    display: inline-flex;
+    margin-top: 11px;
 
-    margin-top: 13px;
+    font-size: 10px;
   }
 
   .cit-tour-meta {
     display: block;
 
-    margin-top: 10px;
+    margin-top: 8px;
   }
 
   .cit-tour-meta > div {
-    margin-top: 7px;
+    margin-top: 6px;
+
+    font-size: 11px;
   }
+
 
   /* SUMMARY */
 
   .cit-summary-grid {
     grid-template-columns:
-      1fr 1fr;
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
 
-    gap: 7px;
+    gap: 6px;
   }
 
   .cit-summary-card {
     padding: 10px;
   }
 
-  .cit-summary-card span {
-    font-size: 10px;
+  .cit-summary-card
+  > span {
+    font-size: 9px;
   }
 
-  .cit-summary-card strong {
-    font-size: 13px;
+  .cit-summary-card
+  > strong {
+    font-size: 12px;
   }
+
 
   /* PROGRESS */
 
   .cit-progress-card {
+    padding: 12px;
+  }
+
+  .cit-progress-header
+  h3 {
+    font-size: 13px;
+  }
+
+
+  /* FORMS */
+
+  .cit-edit-card,
+  .cit-add-service-card {
     padding: 13px;
   }
 
-  .cit-progress-header h3 {
-    font-size: 14px;
+  .cit-form-grid {
+    grid-template-columns:
+      1fr;
+
+    gap: 10px;
   }
 
-  .cit-progress-header p {
-    font-size: 10px;
+  .cit-full {
+    grid-column: auto;
   }
 
-  /* TABLE */
+  .cit-form-actions {
+    display: grid;
+
+    grid-template-columns:
+      1fr 1fr;
+
+    gap: 7px;
+  }
+
+  .cit-form-actions button {
+    width: 100%;
+
+    min-height: 41px;
+  }
+
+
+  /* HIDE TABLE */
 
   .cit-service-table-wrap {
     display: none;
   }
 
-  /* MOBILE CARD */
+
+  /* SHOW MOBILE */
 
   .cit-mobile-services {
     display: flex;
     flex-direction: column;
 
-    gap: 9px;
+    gap: 8px;
   }
 
-  .cit-mobile-service {
-    padding: 13px;
+  .cit-edit-service-form {
+    margin-top: 10px;
+
+    padding: 12px;
+
+    border:
+      1px solid #fde68a;
+
+    border-radius: 9px;
   }
 
-  .cit-mobile-service-head {
-    margin-bottom: 10px;
+  .cit-edit-service-btn,
+  .cit-delete-service-btn {
+    width: 30px;
+    height: 30px;
   }
 
-  .cit-status {
-    padding: 4px 7px;
-
-    font-size: 9px;
-  }
-
-  .cit-mobile-reconcile {
-    min-height: 42px;
-  }
 }
 
 
@@ -746,28 +1198,28 @@
 ===================================================== */
 
 @media (max-width: 390px) {
+
   .cit-page {
-    padding-left: 8px;
-    padding-right: 8px;
+    padding-left: 7px;
+    padding-right: 7px;
   }
 
-  .cit-summary-card strong {
-    font-size: 12px;
+  .cit-back-btn,
+  .cit-btn-edit-tour,
+  .cit-btn-add-service,
+  .cit-btn-reconcile {
+    width: 37px;
+    min-width: 37px;
+    height: 37px;
+  }
+
+  .cit-summary-card
+  > strong {
+    font-size: 11px;
   }
 
   .cit-mobile-service {
-    padding: 12px;
+    padding: 11px;
   }
 
-  .cit-mobile-service-head h4 {
-    font-size: 13px;
-  }
-
-  .cit-mobile-money strong {
-    font-size: 11px;
-  }
-
-  .cit-main-status {
-    font-size: 11px;
-  }
 }
