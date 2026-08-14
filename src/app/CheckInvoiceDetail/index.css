@@ -1,0 +1,1198 @@
+/* =====================================================
+   CHECK INVOICE DETAIL
+===================================================== */
+
+
+/* =====================================================
+   PAGE
+===================================================== */
+
+.cid-page {
+  min-height: 100vh;
+  padding: 25px 40px 80px;
+
+  background: #f5f7fb;
+}
+
+
+/* =====================================================
+   TOP
+===================================================== */
+
+.cid-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  margin-bottom: 18px;
+}
+
+.cid-top button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+}
+
+.cid-back {
+  border: 1px solid #e5e7eb !important;
+}
+
+
+/* =====================================================
+   TOUR INFO
+===================================================== */
+
+.cid-tour-card {
+  padding: 22px;
+  margin-bottom: 16px;
+
+  background: #ffffff;
+
+  border: 1px solid #e7eaf0;
+  border-radius: 14px;
+
+  box-shadow:
+    0 2px 8px
+    rgba(16, 24, 40, 0.025);
+}
+
+.cid-tour-code {
+  margin-bottom: 5px;
+
+  color: #2563eb;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.cid-tour-card h2 {
+  margin: 0 0 12px;
+
+  color: #1f2937;
+
+  font-size: 25px;
+  font-weight: 750;
+}
+
+.cid-tour-meta {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 20px;
+}
+
+.cid-tour-meta > div {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  color: #667085;
+
+  font-size: 13px;
+}
+
+.cid-tour-meta svg {
+  flex-shrink: 0;
+}
+
+
+/* =====================================================
+   SUMMARY
+===================================================== */
+
+.cid-summary {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 12px;
+
+  margin-bottom: 20px;
+}
+
+.cid-summary-box {
+  padding: 16px;
+
+  background: #ffffff;
+
+  border: 1px solid #e7eaf0;
+  border-radius: 12px;
+
+  box-shadow:
+    0 2px 7px
+    rgba(16, 24, 40, 0.02);
+}
+
+.cid-summary-label {
+  margin-bottom: 5px;
+
+  color: #667085;
+
+  font-size: 12px;
+}
+
+.cid-summary-value {
+  color: #1f2937;
+
+  font-size: 19px;
+  font-weight: 750;
+}
+
+.cid-summary-box.success
+.cid-summary-value {
+  color: #198754;
+}
+
+.cid-summary-box.danger
+.cid-summary-value {
+  color: #dc3545;
+}
+
+
+/* =====================================================
+   FORM THÊM DỊCH VỤ
+===================================================== */
+
+.cid-form-card {
+  padding: 20px;
+  margin-bottom: 20px;
+
+  background: #ffffff;
+
+  border: 1px solid #cfe2ff;
+  border-radius: 14px;
+
+  box-shadow:
+    0 4px 15px
+    rgba(0, 0, 0, 0.035);
+}
+
+.cid-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 15px;
+
+  margin-bottom: 17px;
+}
+
+.cid-form-header h4 {
+  margin: 0;
+
+  color: #1f2937;
+
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.cid-form-header p {
+  margin: 3px 0 0;
+
+  color: #667085;
+
+  font-size: 12px;
+}
+
+.cid-form-header button {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  background: transparent;
+
+  border: 0;
+
+  color: #667085;
+
+  font-size: 25px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.cid-form-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 14px;
+}
+
+.cid-full {
+  grid-column: 1 / -1;
+}
+
+.cid-form-actions {
+  display: flex;
+  justify-content: flex-end;
+
+  gap: 8px;
+
+  margin-top: 18px;
+}
+
+
+/* =====================================================
+   SECTION
+===================================================== */
+
+.cid-section-header {
+  margin: 25px 0 12px;
+}
+
+.cid-section-header h3 {
+  margin: 0;
+
+  color: #1f2937;
+
+  font-size: 19px;
+  font-weight: 750;
+}
+
+.cid-section-header p {
+  margin: 3px 0 0;
+
+  color: #98a2b3;
+
+  font-size: 12px;
+}
+
+
+/* =====================================================
+   SERVICE LIST
+===================================================== */
+
+.cid-services {
+  display: flex;
+  flex-direction: column;
+
+  gap: 13px;
+}
+
+.cid-service-card {
+  padding: 17px;
+
+  background: #ffffff;
+
+  border: 1px solid #e7eaf0;
+  border-radius: 14px;
+
+  box-shadow:
+    0 2px 8px
+    rgba(16, 24, 40, 0.025);
+}
+
+
+/* =====================================================
+   SERVICE HEADER
+===================================================== */
+
+.cid-service-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 12px;
+
+  margin-bottom: 14px;
+}
+
+.cid-service-info {
+  flex: 1;
+
+  min-width: 0;
+}
+
+.cid-service-name {
+  color: #1f2937;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  line-height: 1.4;
+
+  word-break: break-word;
+}
+
+.cid-service-supplier {
+  margin-top: 4px;
+
+  color: #667085;
+
+  font-size: 12px;
+
+  word-break: break-word;
+}
+
+.cid-service-head-right {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  flex-shrink: 0;
+
+  position: relative;
+
+  z-index: 2;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.cid-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 5px;
+
+  padding: 5px 9px;
+
+  border-radius: 30px;
+
+  font-size: 12px;
+  font-weight: 650;
+
+  white-space: nowrap;
+}
+
+.cid-status-success {
+  color: #198754;
+
+  background: #e8f8ef;
+}
+
+.cid-status-warning {
+  color: #a86600;
+
+  background: #fff5dd;
+}
+
+.cid-status-danger {
+  color: #dc3545;
+
+  background: #fdecec;
+}
+
+
+/* =====================================================
+   SMALL ACTION BUTTONS
+===================================================== */
+
+.cid-btn-add-invoice-small,
+.cid-btn-delete-service,
+.cid-btn-delete-invoice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  padding: 0;
+
+  background: #ffffff;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.1s ease;
+}
+
+
+/* ADD INVOICE */
+
+.cid-btn-add-invoice-small {
+  width: 28px;
+  height: 28px;
+
+  color: #0d6efd;
+
+  border: 1px solid #0d6efd;
+  border-radius: 7px;
+
+  font-size: 11px;
+
+  position: relative;
+
+  z-index: 3;
+
+  pointer-events: auto;
+}
+
+.cid-btn-add-invoice-small:hover,
+.cid-btn-add-invoice-small.active {
+  color: #ffffff;
+
+  background: #0d6efd;
+}
+
+.cid-btn-add-invoice-small:active {
+  transform: scale(0.94);
+}
+
+
+/* DELETE SERVICE */
+
+.cid-btn-delete-service {
+  width: 28px;
+  height: 28px;
+
+  color: #dc3545;
+
+  border: 1px solid #dc3545;
+  border-radius: 7px;
+
+  font-size: 11px;
+}
+
+.cid-btn-delete-service:hover {
+  color: #ffffff;
+
+  background: #dc3545;
+}
+
+.cid-btn-delete-service:active {
+  transform: scale(0.94);
+}
+
+
+/* =====================================================
+   SERVICE MONEY
+===================================================== */
+
+.cid-service-summary {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 8px;
+
+  margin-bottom: 13px;
+}
+
+.cid-service-money {
+  min-width: 0;
+
+  padding: 10px;
+
+  background: #f8fafc;
+
+  border-radius: 9px;
+}
+
+.cid-service-money > div {
+  margin-bottom: 3px;
+
+  color: #7b8493;
+
+  font-size: 11px;
+}
+
+.cid-service-money strong {
+  display: block;
+
+  color: #1f2937;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  overflow-wrap: anywhere;
+}
+
+.cid-service-money strong.success {
+  color: #198754;
+}
+
+.cid-service-money strong.danger {
+  color: #dc3545;
+}
+
+
+/* =====================================================
+   INVOICE LIST
+===================================================== */
+
+.cid-invoices {
+  margin-top: 12px;
+  padding-top: 12px;
+
+  border-top: 1px dashed #d0d5dd;
+}
+
+.cid-invoices-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  margin-bottom: 5px;
+
+  color: #667085;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cid-invoices-title span:last-child {
+  color: #98a2b3;
+
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.cid-invoice {
+  display: grid;
+
+  grid-template-columns:
+    auto minmax(0, 1fr) auto auto;
+
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 9px 0;
+
+  border-bottom:
+    1px solid #f2f4f7;
+}
+
+.cid-invoice:last-child {
+  border-bottom: 0;
+}
+
+.cid-invoice-icon {
+  width: 31px;
+  height: 31px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #2563eb;
+
+  background: #eff6ff;
+
+  border-radius: 8px;
+
+  flex-shrink: 0;
+}
+
+.cid-invoice-info {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.cid-invoice-info strong {
+  color: #344054;
+
+  font-size: 12px;
+  font-weight: 650;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+.cid-invoice-info > span {
+  margin-top: 2px;
+
+  color: #98a2b3;
+
+  font-size: 11px;
+}
+
+.cid-invoice-meta {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 2px 10px;
+
+  margin-top: 2px;
+}
+
+.cid-invoice-meta span {
+  color: #98a2b3;
+
+  font-size: 10px;
+}
+
+.cid-invoice-value {
+  color: #198754;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+
+/* DELETE INVOICE */
+
+.cid-btn-delete-invoice {
+  width: 27px;
+  height: 27px;
+
+  color: #dc3545;
+
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+
+  font-size: 10px;
+}
+
+.cid-btn-delete-invoice:hover {
+  color: #ffffff;
+
+  background: #dc3545;
+
+  border-color: #dc3545;
+}
+
+.cid-btn-delete-invoice:active {
+  transform: scale(0.94);
+}
+
+
+/* =====================================================
+   INLINE INVOICE FORM
+===================================================== */
+
+.cid-inline-invoice-form {
+  width: 100%;
+
+  margin-top: 14px;
+  padding: 16px;
+
+  background: #f8fafc;
+
+  border: 1px solid #dbe3ed;
+  border-radius: 11px;
+}
+
+.cid-inline-title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 15px;
+}
+
+.cid-inline-title > div:first-child {
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.cid-inline-title > div:first-child strong {
+  color: #1f2937;
+
+  font-size: 14px;
+}
+
+.cid-inline-title > div:first-child span {
+  color: #667085;
+
+  font-size: 11px;
+}
+
+.cid-inline-missing {
+  display: flex;
+  flex-direction: column;
+
+  align-items: flex-end;
+
+  gap: 2px;
+}
+
+.cid-inline-missing span {
+  color: #667085;
+
+  font-size: 10px;
+}
+
+.cid-inline-missing strong {
+  color: #dc3545;
+
+  font-size: 13px;
+}
+
+.cid-invoice-form-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 12px;
+}
+
+.cid-invoice-form-grid
+.cid-full {
+  grid-column: 1 / -1;
+}
+
+.cid-money-preview {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #2563eb !important;
+
+  font-weight: 600;
+}
+
+.cid-inline-actions {
+  display: flex;
+  justify-content: flex-end;
+
+  gap: 8px;
+
+  margin-top: 15px;
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.cid-empty {
+  padding: 60px 20px;
+
+  background: #ffffff;
+
+  border: 1px dashed #d0d5dd;
+  border-radius: 14px;
+
+  color: #98a2b3;
+
+  text-align: center;
+}
+
+.cid-empty h4 {
+  margin: 12px 0 5px;
+
+  color: #344054;
+
+  font-size: 17px;
+}
+
+.cid-empty p {
+  margin-bottom: 16px;
+
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+.cid-loading,
+.cid-not-found {
+  min-height: 70vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  color: #667085;
+}
+
+
+/* =====================================================
+   BOOTSTRAP FORM TINH CHỈNH
+===================================================== */
+
+.cid-page .form-label {
+  margin-bottom: 5px;
+
+  color: #344054;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cid-page .form-control,
+.cid-page .form-select {
+  min-height: 40px;
+
+  border-color: #d0d5dd;
+
+  font-size: 13px;
+}
+
+.cid-page .form-control:focus,
+.cid-page .form-select:focus {
+  border-color: #86b7fe;
+
+  box-shadow:
+    0 0 0 0.2rem
+    rgba(13, 110, 253, 0.08);
+}
+
+.cid-page textarea.form-control {
+  min-height: unset;
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 992px) {
+
+  .cid-page {
+    padding:
+      20px 20px 70px;
+  }
+
+  .cid-summary {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 767px) {
+
+  /* PAGE */
+
+  .cid-page {
+    padding:
+      12px 10px 80px;
+  }
+
+
+  /* TOP */
+
+  .cid-top {
+    position: sticky;
+
+    top: 0;
+
+    z-index: 20;
+
+    padding: 8px 0;
+
+    background: #f5f7fb;
+  }
+
+  .cid-top button {
+    min-height: 40px;
+  }
+
+  .cid-top button span {
+    display: none;
+  }
+
+
+  /* TOUR */
+
+  .cid-tour-card {
+    padding: 15px;
+  }
+
+  .cid-tour-card h2 {
+    margin-bottom: 8px;
+
+    font-size: 19px;
+  }
+
+  .cid-tour-code {
+    font-size: 11px;
+  }
+
+  .cid-tour-meta {
+    display: block;
+  }
+
+  .cid-tour-meta > div {
+    margin-top: 7px;
+
+    font-size: 12px;
+  }
+
+
+  /* SUMMARY */
+
+  .cid-summary {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 7px;
+  }
+
+  .cid-summary-box {
+    padding: 11px;
+  }
+
+  .cid-summary-label {
+    font-size: 10px;
+  }
+
+  .cid-summary-value {
+    font-size: 14px;
+  }
+
+
+  /* ADD SERVICE FORM */
+
+  .cid-form-card {
+    padding: 14px;
+  }
+
+  .cid-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cid-full {
+    grid-column: auto;
+  }
+
+  .cid-form-actions {
+    display: grid;
+
+    grid-template-columns:
+      1fr 1fr;
+
+    gap: 7px;
+  }
+
+  .cid-form-actions button {
+    width: 100%;
+
+    min-height: 42px;
+  }
+
+
+  /* SERVICE */
+
+  .cid-service-card {
+    padding: 13px;
+  }
+
+  .cid-service-head {
+    gap: 7px;
+
+    margin-bottom: 11px;
+  }
+
+  .cid-service-name {
+    font-size: 14px;
+  }
+
+  .cid-service-supplier {
+    font-size: 11px;
+  }
+
+  .cid-service-head-right {
+    gap: 5px;
+  }
+
+  .cid-status {
+    padding: 4px 7px;
+
+    font-size: 10px;
+  }
+
+  .cid-btn-add-invoice-small,
+  .cid-btn-delete-service {
+    width: 27px;
+    height: 27px;
+
+    border-radius: 6px;
+  }
+
+
+  /* SERVICE MONEY */
+
+  .cid-service-summary {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 6px;
+  }
+
+  .cid-service-money {
+    padding: 8px;
+  }
+
+  .cid-service-money > div {
+    font-size: 10px;
+  }
+
+  .cid-service-money strong {
+    font-size: 12px;
+  }
+
+
+  /* INVOICE */
+
+  .cid-invoice {
+    grid-template-columns:
+      auto minmax(0, 1fr) auto;
+
+    gap: 8px;
+
+    position: relative;
+
+    padding: 10px 0;
+  }
+
+  .cid-invoice-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .cid-invoice-info strong {
+    font-size: 11px;
+  }
+
+  .cid-invoice-value {
+    font-size: 11px;
+  }
+
+  .cid-invoice-meta {
+    display: block;
+  }
+
+  .cid-invoice-meta span {
+    display: block;
+  }
+
+  .cid-btn-delete-invoice {
+    grid-column: 3;
+
+    width: 25px;
+    height: 25px;
+
+    justify-self: end;
+  }
+
+
+  /* INLINE INVOICE */
+
+  .cid-inline-invoice-form {
+    margin-top: 12px;
+    padding: 12px;
+  }
+
+  .cid-inline-title {
+    display: block;
+
+    margin-bottom: 12px;
+  }
+
+  .cid-inline-missing {
+    align-items: flex-start;
+
+    margin-top: 8px;
+  }
+
+  .cid-invoice-form-grid {
+    grid-template-columns: 1fr;
+
+    gap: 10px;
+  }
+
+  .cid-invoice-form-grid
+  .cid-full {
+    grid-column: auto;
+  }
+
+  .cid-inline-actions {
+    display: grid;
+
+    grid-template-columns:
+      1fr 1fr;
+
+    gap: 7px;
+  }
+
+  .cid-inline-actions button {
+    width: 100%;
+
+    min-height: 42px;
+  }
+
+}
+
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media (max-width: 390px) {
+
+  .cid-page {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .cid-summary-value {
+    font-size: 13px;
+  }
+
+  .cid-service-card {
+    padding: 11px;
+  }
+
+  .cid-service-name {
+    font-size: 13px;
+  }
+
+  .cid-service-head {
+    gap: 5px;
+  }
+
+  .cid-status {
+    padding: 4px 6px;
+
+    font-size: 9px;
+  }
+
+  .cid-btn-add-invoice-small,
+  .cid-btn-delete-service {
+    width: 26px;
+    height: 26px;
+  }
+
+  .cid-service-money strong {
+    font-size: 11px;
+  }
+
+}

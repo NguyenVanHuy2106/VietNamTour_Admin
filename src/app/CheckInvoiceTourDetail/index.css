@@ -1,0 +1,773 @@
+/* =====================================================
+   PAGE
+===================================================== */
+
+.cit-page {
+  min-height: 100vh;
+  padding: 25px 40px 80px;
+  background: #f5f7fb;
+}
+
+
+/* =====================================================
+   TOP BAR
+===================================================== */
+
+.cit-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+
+  margin-bottom: 16px;
+}
+
+.cit-topbar button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.cit-back-btn {
+  border: 1px solid #e4e7ec !important;
+}
+
+
+/* =====================================================
+   TOUR HEADER
+===================================================== */
+
+.cit-tour-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+
+  padding: 22px;
+  margin-bottom: 14px;
+
+  background: #ffffff;
+
+  border: 1px solid #e7eaf0;
+  border-radius: 14px;
+
+  box-shadow:
+    0 3px 12px rgba(16, 24, 40, 0.03);
+}
+
+.cit-tour-code {
+  margin-bottom: 4px;
+
+  color: #2563eb;
+
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.cit-tour-header h1 {
+  margin: 0;
+
+  color: #1f2937;
+
+  font-size: 24px;
+  font-weight: 750;
+}
+
+.cit-tour-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+
+  margin-top: 11px;
+}
+
+.cit-tour-meta > div {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  color: #667085;
+
+  font-size: 12px;
+}
+
+.cit-tour-meta svg {
+  flex-shrink: 0;
+}
+
+
+/* =====================================================
+   TOUR STATUS
+===================================================== */
+
+.cit-main-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 7px 12px;
+
+  border-radius: 30px;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+.cit-main-status-success {
+  color: #198754;
+  background: #e8f8ef;
+}
+
+.cit-main-status-warning {
+  color: #a86600;
+  background: #fff4da;
+}
+
+.cit-main-status-danger {
+  color: #dc3545;
+  background: #fdecec;
+}
+
+.cit-main-status-neutral {
+  color: #667085;
+  background: #f2f4f7;
+}
+
+
+/* =====================================================
+   SUMMARY
+===================================================== */
+
+.cit-summary-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(6, minmax(0, 1fr));
+
+  gap: 10px;
+
+  margin-bottom: 14px;
+}
+
+.cit-summary-card {
+  padding: 14px;
+
+  background: #ffffff;
+
+  border: 1px solid #e7eaf0;
+  border-radius: 11px;
+}
+
+.cit-summary-card span {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #667085;
+
+  font-size: 11px;
+}
+
+.cit-summary-card strong {
+  color: #1f2937;
+
+  font-size: 15px;
+  font-weight: 750;
+}
+
+.cit-summary-card.success strong {
+  color: #198754;
+}
+
+.cit-summary-card.danger strong {
+  color: #dc3545;
+}
+
+
+/* =====================================================
+   PROGRESS
+===================================================== */
+
+.cit-progress-card {
+  padding: 17px;
+
+  background: #ffffff;
+
+  border: 1px solid #e7eaf0;
+  border-radius: 13px;
+}
+
+.cit-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+
+  margin-bottom: 12px;
+}
+
+.cit-progress-header h3 {
+  margin: 0;
+
+  color: #1f2937;
+
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.cit-progress-header p {
+  margin: 2px 0 0;
+
+  color: #98a2b3;
+
+  font-size: 11px;
+}
+
+.cit-progress-header > strong {
+  color: #2563eb;
+
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.cit-progress-track {
+  height: 8px;
+
+  overflow: hidden;
+
+  background: #e9eef5;
+
+  border-radius: 20px;
+}
+
+.cit-progress-value {
+  height: 100%;
+
+  background: #2563eb;
+
+  border-radius: 20px;
+
+  transition: width 0.3s ease;
+}
+
+.cit-progress-money {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-top: 8px;
+
+  color: #667085;
+
+  font-size: 11px;
+}
+
+.cit-progress-money strong {
+  color: #198754;
+}
+
+
+/* =====================================================
+   SECTION HEADER
+===================================================== */
+
+.cit-section-header {
+  margin: 25px 0 10px;
+}
+
+.cit-section-header h2 {
+  margin: 0;
+
+  color: #1f2937;
+
+  font-size: 18px;
+  font-weight: 750;
+}
+
+.cit-section-header p {
+  margin: 3px 0 0;
+
+  color: #98a2b3;
+
+  font-size: 11px;
+}
+
+
+/* =====================================================
+   DESKTOP TABLE
+===================================================== */
+
+.cit-service-table-wrap {
+  overflow: hidden;
+
+  background: #ffffff;
+
+  border: 1px solid #e7eaf0;
+  border-radius: 13px;
+}
+
+.cit-table {
+  width: 100%;
+
+  border-collapse: collapse;
+}
+
+.cit-table th {
+  padding: 12px;
+
+  background: #f9fafb;
+
+  border-bottom: 1px solid #eaecf0;
+
+  color: #667085;
+
+  font-size: 11px;
+  font-weight: 650;
+
+  white-space: nowrap;
+}
+
+.cit-table td {
+  padding: 13px 12px;
+
+  border-bottom: 1px solid #f0f1f3;
+
+  color: #344054;
+
+  font-size: 12px;
+
+  vertical-align: middle;
+}
+
+.cit-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.cit-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.cit-table tbody tr:hover {
+  background: #fafcff;
+}
+
+.cit-service-name {
+  color: #1f2937;
+
+  font-weight: 700;
+}
+
+.cit-service-type {
+  margin-top: 2px;
+
+  color: #98a2b3;
+
+  font-size: 10px;
+}
+
+
+/* =====================================================
+   MONEY
+===================================================== */
+
+.cit-money-success {
+  color: #198754 !important;
+
+  font-weight: 700;
+}
+
+.cit-money-danger {
+  color: #dc3545 !important;
+
+  font-weight: 700;
+}
+
+
+/* =====================================================
+   SERVICE STATUS
+===================================================== */
+
+.cit-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  padding: 5px 8px;
+
+  border-radius: 30px;
+
+  font-size: 10px;
+  font-weight: 650;
+
+  white-space: nowrap;
+}
+
+.cit-status-success {
+  color: #198754;
+  background: #e8f8ef;
+}
+
+.cit-status-warning {
+  color: #a86600;
+  background: #fff4da;
+}
+
+.cit-status-danger {
+  color: #dc3545;
+  background: #fdecec;
+}
+
+.cit-status-neutral {
+  color: #667085;
+  background: #f2f4f7;
+}
+
+
+/* =====================================================
+   ROW BUTTON
+===================================================== */
+
+.cit-row-btn {
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  background: #ffffff;
+
+  border: 1px solid #d0d5dd;
+  border-radius: 7px;
+
+  color: #667085;
+
+  cursor: pointer;
+
+  transition: all 0.15s ease;
+}
+
+.cit-row-btn:hover {
+  color: #2563eb;
+
+  border-color: #2563eb;
+
+  background: #eff6ff;
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.cit-empty {
+  padding: 40px !important;
+
+  color: #98a2b3 !important;
+
+  text-align: center;
+}
+
+
+/* =====================================================
+   MOBILE SERVICES
+===================================================== */
+
+.cit-mobile-services {
+  display: none;
+}
+
+.cit-mobile-service {
+  padding: 14px;
+
+  background: #ffffff;
+
+  border: 1px solid #e7eaf0;
+  border-radius: 13px;
+
+  box-shadow:
+    0 2px 8px rgba(16, 24, 40, 0.03);
+}
+
+.cit-mobile-service-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 10px;
+
+  margin-bottom: 11px;
+}
+
+.cit-mobile-service-head h4 {
+  margin: 0;
+
+  color: #1f2937;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.cit-mobile-service-head p {
+  margin: 3px 0 0;
+
+  color: #667085;
+
+  font-size: 11px;
+}
+
+.cit-mobile-service-grid {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 7px;
+
+  margin-bottom: 11px;
+}
+
+.cit-mobile-money {
+  padding: 8px;
+
+  background: #f8fafc;
+
+  border-radius: 8px;
+}
+
+.cit-mobile-money span {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color: #7b8493;
+
+  font-size: 10px;
+}
+
+.cit-mobile-money strong {
+  color: #1f2937;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.cit-mobile-reconcile {
+  width: 100%;
+
+  min-height: 39px;
+
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+}
+
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+.cit-loading {
+  min-height: 70vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  color: #667085;
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 1200px) {
+  .cit-summary-grid {
+    grid-template-columns:
+      repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .cit-page {
+    padding: 20px;
+  }
+
+  .cit-summary-grid {
+    grid-template-columns:
+      repeat(3, 1fr);
+  }
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 767px) {
+  .cit-page {
+    padding:
+      10px 9px 80px;
+  }
+
+  /* TOP BAR */
+
+  .cit-topbar {
+    position: sticky;
+
+    top: 0;
+
+    z-index: 10;
+
+    padding: 7px 0;
+
+    background: #f5f7fb;
+  }
+
+  .cit-topbar button {
+    min-height: 40px;
+  }
+
+  .cit-topbar button span {
+    display: none;
+  }
+
+  /* TOUR HEADER */
+
+  .cit-tour-header {
+    display: block;
+
+    padding: 15px;
+  }
+
+  .cit-tour-header h1 {
+    font-size: 19px;
+  }
+
+  .cit-main-status {
+    display: inline-flex;
+
+    margin-top: 13px;
+  }
+
+  .cit-tour-meta {
+    display: block;
+
+    margin-top: 10px;
+  }
+
+  .cit-tour-meta > div {
+    margin-top: 7px;
+  }
+
+  /* SUMMARY */
+
+  .cit-summary-grid {
+    grid-template-columns:
+      1fr 1fr;
+
+    gap: 7px;
+  }
+
+  .cit-summary-card {
+    padding: 10px;
+  }
+
+  .cit-summary-card span {
+    font-size: 10px;
+  }
+
+  .cit-summary-card strong {
+    font-size: 13px;
+  }
+
+  /* PROGRESS */
+
+  .cit-progress-card {
+    padding: 13px;
+  }
+
+  .cit-progress-header h3 {
+    font-size: 14px;
+  }
+
+  .cit-progress-header p {
+    font-size: 10px;
+  }
+
+  /* TABLE */
+
+  .cit-service-table-wrap {
+    display: none;
+  }
+
+  /* MOBILE CARD */
+
+  .cit-mobile-services {
+    display: flex;
+    flex-direction: column;
+
+    gap: 9px;
+  }
+
+  .cit-mobile-service {
+    padding: 13px;
+  }
+
+  .cit-mobile-service-head {
+    margin-bottom: 10px;
+  }
+
+  .cit-status {
+    padding: 4px 7px;
+
+    font-size: 9px;
+  }
+
+  .cit-mobile-reconcile {
+    min-height: 42px;
+  }
+}
+
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media (max-width: 390px) {
+  .cit-page {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .cit-summary-card strong {
+    font-size: 12px;
+  }
+
+  .cit-mobile-service {
+    padding: 12px;
+  }
+
+  .cit-mobile-service-head h4 {
+    font-size: 13px;
+  }
+
+  .cit-mobile-money strong {
+    font-size: 11px;
+  }
+
+  .cit-main-status {
+    font-size: 11px;
+  }
+}

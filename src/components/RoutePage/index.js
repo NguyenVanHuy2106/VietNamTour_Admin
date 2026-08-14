@@ -27,6 +27,12 @@ import GuideTravelDetail from "../../app/GuideTravelDetail";
 import ImageCategory from "../../app/ImageCategory";
 import AttendanceList from "../../app/AttendanceList";
 import AttendanceReport from "../../app/AttendanceReport";
+import Contract from "../../app/Contract";
+import ContractAdd from "../../app/ContractAdd";
+
+import CheckInvoice from "../../app/CheckInvoices";
+import CheckInvoiceDetail from "../../app/CheckInvoiceDetail";
+import CheckInvoiceTourDetail from "../../app/CheckInvoiceTourDetail";
 
 import Image from "../../app/Image";
 
@@ -95,6 +101,14 @@ const RoutePage = () => {
         <Route path="image" element={<Image />} />
         <Route path="attendance-list" element={<AttendanceList />} />
         <Route path="attendance-report" element={<AttendanceReport />} />
+        <Route path="contract" element={<Contract />} />
+        <Route path="contract-add" element={<ContractAdd />} />
+        <Route path="check-invoices" element={<CheckInvoice />} />
+        <Route path="/check-invoice/:tourId" element={<CheckInvoiceDetail />} />
+        <Route
+          path="/check-invoice/tours/:tourId"
+          element={<CheckInvoiceTourDetail />}
+        />
       </Route>
     </Routes>
   );

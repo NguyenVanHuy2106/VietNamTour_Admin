@@ -185,7 +185,7 @@ const HeaderNavData = [
       { id: 3.5, name: "Hình ảnh", link: "/image" },
     ],
   },
-  { id: 4, name: "KHUYẾN MÃI", link: "#" },
+  { id: 4, name: "HỢP ĐỒNG", link: "/contract" },
   {
     id: 5,
     name: "NGƯỜI DÙNG",
@@ -196,9 +196,15 @@ const HeaderNavData = [
       { id: 5.4, name: "Hình ảnh", link: "/image-list" },
     ],
   },
-  { id: 6, name: "CHẤM CÔNG", link: "/attendance" },
   {
-    id: 7,
+    id: 6,
+    name: "HOÁ ĐƠN",
+    link: "#",
+    subMenu: [{ id: 6.1, name: "Đối soát hoá đơn", link: "/check-invoices" }],
+  },
+  { id: 7, name: "CHẤM CÔNG", link: "/attendance" },
+  {
+    id: 8,
     name: "BÁO CÁO",
     link: "#",
     subMenu: [
@@ -211,7 +217,7 @@ const HeaderNavData = [
     ],
   },
   {
-    id: 8,
+    id: 9,
     name: "CÀI ĐẶT",
     link: "#",
     subMenu: [
