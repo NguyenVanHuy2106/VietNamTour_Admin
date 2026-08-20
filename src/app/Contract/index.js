@@ -1,5 +1,7 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
+
 import { Button, Form, InputGroup, Spinner } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
 
 import {
   BsCaretLeftFill,
@@ -12,120 +14,23 @@ import {
   BsPlusLg,
   BsSearch,
   BsThreeDotsVertical,
+  BsTrash,
 } from "react-icons/bs";
 
 import API from "../../config/APINoToken";
+import APIToken from "../../config/APIToken";
+
 import "./index.css";
+
+// ============================================================
+// CONFIG
+// ============================================================
 
 const ITEMS_PER_PAGE = 10;
 
-const FALLBACK_CONTRACTS = [
-  {
-    contract_id: 1,
-    contract_code: "2655/HĐVC2026",
-    contract_name:
-      "Tổ chức gói thầu tham quan nghỉ dưỡng cho viên chức, người lao động BVĐK Khánh Hội 2026",
-    customer_id: 1,
-    customer_name: "Bệnh viện Đa khoa Khánh Hội",
-    contract_type: "travel",
-    total_amount: 179000000,
-    signed_date: "2026-07-30",
-    status: "signed",
-    created_by_name: "Nguyễn Văn Huy",
-  },
-  {
-    contract_id: 2,
-    contract_code: "2188/HDDL2026",
-    contract_name: "Tour du lịch hè 2026 - Công ty TNHH Thương mại Minh Phát",
-    customer_id: 2,
-    customer_name: "Công ty TNHH Thương mại Minh Phát",
-    contract_type: "travel",
-    total_amount: 256780000,
-    signed_date: "2026-07-28",
-    status: "processing",
-    created_by_name: "Trần Thị Mai",
-  },
-  {
-    contract_id: 3,
-    contract_code: "1987/HDSK2026",
-    contract_name: "Tổ chức chương trình Team Building Công ty CP Đầu tư ABC",
-    customer_id: 3,
-    customer_name: "Công ty CP Đầu tư ABC",
-    contract_type: "event",
-    total_amount: 98500000,
-    signed_date: "2026-07-25",
-    status: "signed",
-    created_by_name: "Lê Hoàng Nam",
-  },
-  {
-    contract_id: 4,
-    contract_code: "1723/HĐVC2026",
-    contract_name: "Tham quan nghỉ dưỡng cho CBCNV Công ty CP Xây dựng 123",
-    customer_id: 4,
-    customer_name: "Công ty CP Xây dựng 123",
-    contract_type: "travel",
-    total_amount: 145600000,
-    signed_date: "2026-07-20",
-    status: "processing",
-    created_by_name: "Nguyễn Văn Huy",
-  },
-  {
-    contract_id: 5,
-    contract_code: "1532/HDSK2026",
-    contract_name:
-      "Tổ chức sự kiện ra mắt sản phẩm mới Công ty TNHH Công nghệ XYZ",
-    customer_id: 5,
-    customer_name: "Công ty TNHH Công nghệ XYZ",
-    contract_type: "event",
-    total_amount: 320000000,
-    signed_date: "2026-07-18",
-    status: "signed",
-    created_by_name: "Trần Thị Mai",
-  },
-  {
-    contract_id: 6,
-    contract_code: "1399/HĐVC2026",
-    contract_name: "Tour nghỉ dưỡng Phú Quốc 2026",
-    customer_id: 6,
-    customer_name: "Công ty CP Dược phẩm DEF",
-    contract_type: "travel",
-    total_amount: 210450000,
-    signed_date: "2026-07-15",
-    status: "liquidated",
-    created_by_name: "Lê Hoàng Nam",
-  },
-  {
-    contract_id: 7,
-    contract_code: "1288/HDDL2026",
-    contract_name: "Tour xuyên Việt 2026",
-    customer_id: 7,
-    customer_name: "Công ty TNHH Thương mại GHI",
-    contract_type: "travel",
-    total_amount: 185300000,
-    signed_date: "2026-07-12",
-    status: "processing",
-    created_by_name: "Nguyễn Văn Huy",
-  },
-];
-
-const FALLBACK_CUSTOMERS = [
-  {
-    customer_id: 1,
-    customer_name: "Bệnh viện Đa khoa Khánh Hội",
-  },
-  {
-    customer_id: 2,
-    customer_name: "Công ty TNHH Thương mại Minh Phát",
-  },
-  {
-    customer_id: 3,
-    customer_name: "Công ty CP Đầu tư ABC",
-  },
-  {
-    customer_id: 4,
-    customer_name: "Công ty CP Xây dựng 123",
-  },
-];
+// ============================================================
+// STATUS
+// ============================================================
 
 const STATUS_OPTIONS = [
   {
@@ -154,6 +59,10 @@ const STATUS_OPTIONS = [
   },
 ];
 
+// ============================================================
+// CONTRACT TYPE
+// ============================================================
+
 const CONTRACT_TYPES = [
   {
     value: "",
@@ -173,16 +82,26 @@ const CONTRACT_TYPES = [
   },
 ];
 
+// ============================================================
+// FORMAT MONEY
+// ============================================================
+
 const formatMoney = (value) => {
-  return `${new Intl.NumberFormat("vi-VN").format(Number(value || 0))} đ`;
+  const amount = Number(value) || 0;
+
+  return `${new Intl.NumberFormat("vi-VN").format(amount)} đ`;
 };
+
+// ============================================================
+// FORMAT DATE
+// ============================================================
 
 const formatDate = (value) => {
   if (!value) {
     return "---";
   }
 
-  const date = new Date(value);
+  const date = new Date(`${value}T00:00:00`);
 
   if (Number.isNaN(date.getTime())) {
     return value;
@@ -191,24 +110,32 @@ const formatDate = (value) => {
   return new Intl.DateTimeFormat("vi-VN").format(date);
 };
 
+// ============================================================
+// STATUS META
+// ============================================================
+
 const getStatusMeta = (status) => {
   const statusMap = {
     draft: {
       label: "Nháp",
       className: "draft",
     },
+
     signed: {
       label: "Đã ký kết",
       className: "signed",
     },
+
     processing: {
       label: "Đang thực hiện",
       className: "processing",
     },
+
     liquidated: {
       label: "Đã thanh lý",
       className: "liquidated",
     },
+
     cancelled: {
       label: "Đã hủy",
       className: "cancelled",
@@ -223,112 +150,111 @@ const getStatusMeta = (status) => {
   );
 };
 
+// ============================================================
+// TYPE LABEL
+// ============================================================
+
 const getTypeLabel = (type) => {
-  const typeMap = {
+  const map = {
     travel: "Hợp đồng dịch vụ du lịch",
+
     event: "Hợp đồng dịch vụ sự kiện",
+
     transport: "Hợp đồng vận chuyển",
   };
 
-  return typeMap[type] || "---";
+  return map[type] || "Không xác định";
 };
 
+// ============================================================
+// CONTRACT LIST
+// ============================================================
+
 const ContractList = () => {
+  // ==========================================================
+  // DATA
+  // ==========================================================
+
   const [contracts, setContracts] = useState([]);
+
   const [customers, setCustomers] = useState([]);
 
   const [loading, setLoading] = useState(false);
 
+  // ==========================================================
+  // FILTER
+  // ==========================================================
+
+  const navigate = useNavigate();
+
   const [searchTerm, setSearchTerm] = useState("");
+
   const [status, setStatus] = useState("");
+
   const [contractType, setContractType] = useState("");
+
   const [customerId, setCustomerId] = useState("");
+
   const [fromDate, setFromDate] = useState("");
+
   const [toDate, setToDate] = useState("");
+
+  // ==========================================================
+  // PAGINATION
+  // ==========================================================
 
   const [currentPage, setCurrentPage] = useState(1);
 
+  const [pagination, setPagination] = useState({
+    page: 1,
+
+    limit: ITEMS_PER_PAGE,
+
+    total: 0,
+
+    total_pages: 1,
+  });
+
+  // ==========================================================
+  // STATISTICS
+  // ==========================================================
+
+  const [stats, setStats] = useState({
+    total: 0,
+
+    draft: 0,
+
+    signed: 0,
+
+    processing: 0,
+
+    liquidated: 0,
+
+    cancelled: 0,
+  });
+
+  // ==========================================================
+  // LOAD INIT
+  // ==========================================================
+
   useEffect(() => {
-    getContracts();
-    getCustomers();
+    //getCustomers();
+
+    getContractStatistics();
   }, []);
 
-  const getContracts = async () => {
-    try {
-      setLoading(true);
+  // ==========================================================
+  // LOAD CONTRACT
+  // ==========================================================
 
-      const response = await API.get("/contracts/get");
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      getContracts();
+    }, 300);
 
-      const responseData = response?.data?.data || [];
-
-      if (responseData.length > 0) {
-        setContracts(responseData);
-      } else {
-        setContracts(FALLBACK_CONTRACTS);
-      }
-    } catch (error) {
-      console.error("Không tải được danh sách hợp đồng:", error);
-
-      setContracts(FALLBACK_CONTRACTS);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getCustomers = async () => {
-    try {
-      const response = await API.get("/customers/get");
-
-      const responseData = response?.data?.data || [];
-
-      if (responseData.length > 0) {
-        setCustomers(responseData);
-      } else {
-        setCustomers(FALLBACK_CUSTOMERS);
-      }
-    } catch (error) {
-      console.error("Không tải được danh sách khách hàng:", error);
-
-      setCustomers(FALLBACK_CUSTOMERS);
-    }
-  };
-
-  const filteredContracts = useMemo(() => {
-    const keyword = searchTerm.trim().toLowerCase();
-
-    return contracts.filter((item) => {
-      const matchesKeyword =
-        !keyword ||
-        item.contract_code?.toLowerCase().includes(keyword) ||
-        item.contract_name?.toLowerCase().includes(keyword) ||
-        item.customer_name?.toLowerCase().includes(keyword);
-
-      const matchesStatus = !status || item.status === status;
-
-      const matchesType = !contractType || item.contract_type === contractType;
-
-      const matchesCustomer =
-        !customerId || String(item.customer_id) === String(customerId);
-
-      const signedDate = item.signed_date ? new Date(item.signed_date) : null;
-
-      const matchesFromDate =
-        !fromDate || (signedDate && signedDate >= new Date(fromDate));
-
-      const matchesToDate =
-        !toDate || (signedDate && signedDate <= new Date(`${toDate}T23:59:59`));
-
-      return (
-        matchesKeyword &&
-        matchesStatus &&
-        matchesType &&
-        matchesCustomer &&
-        matchesFromDate &&
-        matchesToDate
-      );
-    });
+    return () => clearTimeout(timer);
   }, [
-    contracts,
+    currentPage,
     searchTerm,
     status,
     contractType,
@@ -337,50 +263,217 @@ const ContractList = () => {
     toDate,
   ]);
 
-  const totalPages = Math.max(
-    1,
-    Math.ceil(filteredContracts.length / ITEMS_PER_PAGE),
-  );
+  // ==========================================================
+  // GET CONTRACTS
+  // ==========================================================
 
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const getContracts = async () => {
+    try {
+      setLoading(true);
 
-  const endIndex = currentPage * ITEMS_PER_PAGE;
+      const params = {
+        page: currentPage,
 
-  const currentItems = filteredContracts.slice(startIndex, endIndex);
+        limit: ITEMS_PER_PAGE,
+      };
 
-  useEffect(() => {
-    if (currentPage > totalPages) {
-      setCurrentPage(totalPages);
+      // ================================================
+      // SEARCH
+      // ================================================
+
+      if (searchTerm.trim()) {
+        params.search = searchTerm.trim();
+      }
+
+      // ================================================
+      // STATUS
+      // ================================================
+
+      if (status) {
+        params.status = status;
+      }
+
+      // ================================================
+      // TYPE
+      // ================================================
+
+      if (contractType) {
+        params.contract_type = contractType;
+      }
+
+      // ================================================
+      // CUSTOMER
+      // ================================================
+
+      if (customerId) {
+        params.customer_id = customerId;
+      }
+
+      // ================================================
+      // DATE
+      // ================================================
+
+      if (fromDate) {
+        params.from_date = fromDate;
+      }
+
+      if (toDate) {
+        params.to_date = toDate;
+      }
+
+      // ================================================
+      // CALL API
+      // ================================================
+
+      const response = await API.get("/contracts/get", {
+        params,
+      });
+
+      const contractData = response?.data?.data || [];
+
+      setContracts(contractData);
+
+      setPagination(
+        response?.data?.pagination || {
+          page: currentPage,
+
+          limit: ITEMS_PER_PAGE,
+
+          total: contractData.length,
+
+          total_pages: 1,
+        },
+      );
+    } catch (error) {
+      console.error("Lỗi lấy danh sách hợp đồng:", error);
+
+      console.error("Backend:", error?.response?.data);
+
+      setContracts([]);
+
+      setPagination({
+        page: 1,
+
+        limit: ITEMS_PER_PAGE,
+
+        total: 0,
+
+        total_pages: 1,
+      });
+    } finally {
+      setLoading(false);
     }
-  }, [currentPage, totalPages]);
+  };
 
-  const stats = useMemo(() => {
-    return {
-      total: contracts.length,
+  // ==========================================================
+  // GET CUSTOMERS
+  // ==========================================================
 
-      signed: contracts.filter((item) => item.status === "signed").length,
+  // const getCustomers = async () => {
+  //   try {
+  //     const response = await API.get("/customers/get");
 
-      processing: contracts.filter((item) => item.status === "processing")
-        .length,
+  //     setCustomers(response?.data?.data || []);
+  //   } catch (error) {
+  //     console.error("Lỗi lấy khách hàng:", error);
 
-      liquidated: contracts.filter((item) => item.status === "liquidated")
-        .length,
-    };
-  }, [contracts]);
+  //     setCustomers([]);
+  //   }
+  // };
+
+  // ==========================================================
+  // GET STATISTICS
+  // ==========================================================
+
+  const getContractStatistics = async () => {
+    try {
+      const response = await API.get("/contracts/statistics");
+
+      const data = response?.data?.data || {};
+
+      setStats({
+        total: Number(data.total) || 0,
+
+        draft: Number(data.draft) || 0,
+
+        signed: Number(data.signed) || 0,
+
+        processing: Number(data.processing) || 0,
+
+        liquidated: Number(data.liquidated) || 0,
+
+        cancelled: Number(data.cancelled) || 0,
+      });
+    } catch (error) {
+      console.error("Lỗi thống kê hợp đồng:", error);
+    }
+  };
+
+  // ==========================================================
+  // RESET FILTER
+  // ==========================================================
 
   const resetFilters = () => {
     setSearchTerm("");
+
     setStatus("");
+
     setContractType("");
+
     setCustomerId("");
+
     setFromDate("");
+
     setToDate("");
+
     setCurrentPage(1);
   };
+
+  // ==========================================================
+  // NAVIGATION
+  // ==========================================================
 
   const goTo = (path) => {
     window.location.href = path;
   };
+
+  // ==========================================================
+  // DELETE CONTRACT
+  // ==========================================================
+
+  const handleDeleteContract = async (contractId, contractCode) => {
+    const confirmDelete = window.confirm(
+      `Bạn có chắc chắn muốn xóa hợp đồng ${contractCode || ""}?`,
+    );
+
+    if (!confirmDelete) {
+      return;
+    }
+
+    try {
+      await APIToken.delete(`/contracts/delete/${contractId}`);
+
+      alert("Xóa hợp đồng thành công");
+
+      // ================================================
+      // LOAD LẠI DATA
+      // ================================================
+
+      await getContracts();
+
+      await getContractStatistics();
+    } catch (error) {
+      console.error("Lỗi xóa hợp đồng:", error);
+
+      console.error("Backend:", error?.response?.data);
+
+      alert(error?.response?.data?.message || "Không thể xóa hợp đồng");
+    }
+  };
+
+  // ==========================================================
+  // EXPORT
+  // ==========================================================
 
   const handleExportExcel = () => {
     console.log("Xuất Excel");
@@ -390,13 +483,82 @@ const ContractList = () => {
     console.log("Xuất PDF");
   };
 
+  // ==========================================================
+  // PAGINATION
+  // ==========================================================
+
+  const totalPages = Math.max(
+    Number(pagination.total_pages) || 1,
+
+    1,
+  );
+
+  const totalResults = Number(pagination.total) || 0;
+
+  const startIndex =
+    totalResults > 0 ? (currentPage - 1) * ITEMS_PER_PAGE + 1 : 0;
+
+  const endIndex = Math.min(
+    currentPage * ITEMS_PER_PAGE,
+
+    totalResults,
+  );
+
+  // ==========================================================
+  // PAGE NUMBER
+  // ==========================================================
+
+  const getPageNumbers = () => {
+    if (totalPages <= 5) {
+      return Array.from(
+        {
+          length: totalPages,
+        },
+
+        (_, index) => index + 1,
+      );
+    }
+
+    let startPage = Math.max(currentPage - 2, 1);
+
+    let endPage = startPage + 4;
+
+    if (endPage > totalPages) {
+      endPage = totalPages;
+
+      startPage = totalPages - 4;
+    }
+
+    return Array.from(
+      {
+        length: endPage - startPage + 1,
+      },
+
+      (_, index) => startPage + index,
+    );
+  };
+
+  // ==========================================================
+  // RENDER
+  // ==========================================================
+
   return (
     <div className="ct-container">
+      {/* =====================================================
+          BREADCRUMB
+      ===================================================== */}
+
       <div className="ct-breadcrumb">
         <span>Hợp đồng</span>
+
         <span>/</span>
+
         <strong>Danh sách hợp đồng</strong>
       </div>
+
+      {/* =====================================================
+          HEADER
+      ===================================================== */}
 
       <div className="ct-header">
         <div className="ct-header-info">
@@ -406,6 +568,10 @@ const ContractList = () => {
         </div>
 
         <div className="ct-header-actions">
+          {/* =================================================
+              EXPORT EXCEL
+          ================================================= */}
+
           <Button
             variant="light"
             className="ct-outline-btn"
@@ -415,6 +581,10 @@ const ContractList = () => {
 
             <span>Xuất Excel</span>
           </Button>
+
+          {/* =================================================
+              EXPORT PDF
+          ================================================= */}
 
           <Button
             variant="light"
@@ -426,11 +596,19 @@ const ContractList = () => {
             <span>Xuất PDF</span>
           </Button>
 
+          {/* =================================================
+              FILTER
+          ================================================= */}
+
           <Button variant="light" className="ct-outline-btn">
             <BsFunnel />
 
             <span>Bộ lọc</span>
           </Button>
+
+          {/* =================================================
+              ADD
+          ================================================= */}
 
           <Button className="ct-add-btn" onClick={() => goTo("/contract-add")}>
             <BsPlusLg />
@@ -440,14 +618,23 @@ const ContractList = () => {
         </div>
       </div>
 
+      {/* =====================================================
+          FILTER CARD
+      ===================================================== */}
+
       <div className="ct-filter-card">
         <div className="ct-filter-grid">
+          {/* =================================================
+              SEARCH
+          ================================================= */}
+
           <InputGroup className="ct-search">
             <Form.Control
               value={searchTerm}
               placeholder="Nhập số hợp đồng, tên hợp đồng..."
               onChange={(event) => {
                 setSearchTerm(event.target.value);
+
                 setCurrentPage(1);
               }}
             />
@@ -457,26 +644,36 @@ const ContractList = () => {
             </InputGroup.Text>
           </InputGroup>
 
-          <Form.Select
+          {/* =================================================
+              CUSTOMER
+          ================================================= */}
+
+          {/* <Form.Select
             value={customerId}
             onChange={(event) => {
               setCustomerId(event.target.value);
+
               setCurrentPage(1);
             }}
           >
             <option value="">Chọn khách hàng</option>
 
-            {customers.map((item) => (
-              <option key={item.customer_id} value={item.customer_id}>
-                {item.customer_name}
+            {customers.map((customer) => (
+              <option key={customer.customer_id} value={customer.customer_id}>
+                {customer.customer_name}
               </option>
             ))}
-          </Form.Select>
+          </Form.Select> */}
+
+          {/* =================================================
+              TYPE
+          ================================================= */}
 
           <Form.Select
             value={contractType}
             onChange={(event) => {
               setContractType(event.target.value);
+
               setCurrentPage(1);
             }}
           >
@@ -487,10 +684,15 @@ const ContractList = () => {
             ))}
           </Form.Select>
 
+          {/* =================================================
+              STATUS
+          ================================================= */}
+
           <Form.Select
             value={status}
             onChange={(event) => {
               setStatus(event.target.value);
+
               setCurrentPage(1);
             }}
           >
@@ -501,12 +703,17 @@ const ContractList = () => {
             ))}
           </Form.Select>
 
+          {/* =================================================
+              DATE
+          ================================================= */}
+
           <div className="ct-date-range">
             <Form.Control
               type="date"
               value={fromDate}
               onChange={(event) => {
                 setFromDate(event.target.value);
+
                 setCurrentPage(1);
               }}
             />
@@ -518,22 +725,27 @@ const ContractList = () => {
               value={toDate}
               onChange={(event) => {
                 setToDate(event.target.value);
+
                 setCurrentPage(1);
               }}
             />
           </div>
 
-          <Button
-            variant="light"
-            className="ct-reset-btn"
-            onClick={resetFilters}
-          >
-            Làm mới
-          </Button>
+          {/* =================================================
+              RESET
+          ================================================= */}
         </div>
       </div>
 
+      {/* =====================================================
+          STATISTICS
+      ===================================================== */}
+
       <div className="ct-stat-grid">
+        {/* ===================================================
+            TOTAL
+        =================================================== */}
+
         <div className="ct-stat-card blue">
           <div className="ct-stat-icon">📄</div>
 
@@ -545,6 +757,10 @@ const ContractList = () => {
             <small>Quản lý toàn bộ hợp đồng</small>
           </div>
         </div>
+
+        {/* ===================================================
+            SIGNED
+        =================================================== */}
 
         <div className="ct-stat-card green">
           <div className="ct-stat-icon">✓</div>
@@ -558,6 +774,10 @@ const ContractList = () => {
           </div>
         </div>
 
+        {/* ===================================================
+            PROCESSING
+        =================================================== */}
+
         <div className="ct-stat-card yellow">
           <div className="ct-stat-icon">◷</div>
 
@@ -569,6 +789,10 @@ const ContractList = () => {
             <small>Hợp đồng đang triển khai</small>
           </div>
         </div>
+
+        {/* ===================================================
+            LIQUIDATED
+        =================================================== */}
 
         <div className="ct-stat-card red">
           <div className="ct-stat-icon">×</div>
@@ -583,16 +807,28 @@ const ContractList = () => {
         </div>
       </div>
 
+      {/* =====================================================
+          TABLE CARD
+      ===================================================== */}
+
       <div className="ct-content-card">
+        {/* ===================================================
+            TABLE TOP
+        =================================================== */}
+
         <div className="ct-table-top">
           <span>
             Hiển thị <strong>{ITEMS_PER_PAGE}</strong> kết quả
           </span>
 
           <span>
-            Tổng cộng <strong>{filteredContracts.length}</strong> hợp đồng
+            Tổng cộng <strong>{totalResults}</strong> hợp đồng
           </span>
         </div>
+
+        {/* ===================================================
+            TABLE
+        =================================================== */}
 
         <div className="table-responsive">
           <table className="ct-table">
@@ -623,6 +859,10 @@ const ContractList = () => {
             </thead>
 
             <tbody>
+              {/* =================================================
+                  LOADING
+              ================================================= */}
+
               {loading ? (
                 <tr>
                   <td colSpan="10" className="ct-empty">
@@ -631,17 +871,17 @@ const ContractList = () => {
                     <span className="ms-2">Đang tải dữ liệu...</span>
                   </td>
                 </tr>
-              ) : currentItems.length > 0 ? (
-                currentItems.map((item) => {
+              ) : contracts.length > 0 ? (
+                contracts.map((item) => {
                   const statusMeta = getStatusMeta(item.status);
 
                   return (
                     <tr key={item.contract_id}>
-                      <td>
+                      <td data-label="">
                         <Form.Check />
                       </td>
 
-                      <td>
+                      <td data-label="Số hợp đồng">
                         <button
                           type="button"
                           className="ct-code-link"
@@ -653,37 +893,54 @@ const ContractList = () => {
                         </button>
                       </td>
 
-                      <td className="ct-contract-name">{item.contract_name}</td>
+                      <td
+                        data-label="Tên hợp đồng"
+                        className="ct-contract-name"
+                      >
+                        {item.contract_name}
+                      </td>
 
-                      <td>{item.customer_name || "---"}</td>
+                      <td data-label="Khách hàng">
+                        {item.customer_name || "---"}
+                      </td>
 
-                      <td>
-                        <span className={`ct-type-badge ${item.contract_type}`}>
+                      <td data-label="Loại hợp đồng">
+                        <span
+                          className={`ct-type-badge ${
+                            item.contract_type || ""
+                          }`}
+                        >
                           {getTypeLabel(item.contract_type)}
                         </span>
                       </td>
 
-                      <td className="text-end ct-money">
+                      <td
+                        data-label="Tổng giá trị"
+                        className="text-end ct-money"
+                      >
                         {formatMoney(item.total_amount)}
                       </td>
 
-                      <td>{formatDate(item.signed_date)}</td>
+                      <td data-label="Ngày ký">
+                        {formatDate(item.signed_date)}
+                      </td>
 
-                      <td>
+                      <td data-label="Trạng thái">
                         <span className={`ct-status ${statusMeta.className}`}>
                           {statusMeta.label}
                         </span>
                       </td>
 
-                      <td>
-                        {item.created_by_name || item.created_by || "Admin"}
+                      <td data-label="Người tạo">
+                        {item.created_by_name || item.created_by || "---"}
                       </td>
 
-                      <td>
+                      <td data-label="Thao tác" className="ct-action-cell">
                         <div className="ct-actions">
                           <button
                             type="button"
                             title="Xem hợp đồng"
+                            aria-label="Xem hợp đồng"
                             onClick={() =>
                               goTo(`/contracts/detail/${item.contract_id}`)
                             }
@@ -694,14 +951,33 @@ const ContractList = () => {
                           <button
                             type="button"
                             title="Sửa hợp đồng"
+                            aria-label="Sửa hợp đồng"
                             onClick={() =>
-                              goTo(`/contracts/edit/${item.contract_id}`)
+                              navigate(`/contracts/edit/${item.contract_id}`)
                             }
                           >
                             <BsPencil />
                           </button>
 
-                          <button type="button" title="Thao tác khác">
+                          <button
+                            type="button"
+                            title="Xóa hợp đồng"
+                            aria-label="Xóa hợp đồng"
+                            onClick={() =>
+                              handleDeleteContract(
+                                item.contract_id,
+                                item.contract_code,
+                              )
+                            }
+                          >
+                            <BsTrash />
+                          </button>
+
+                          <button
+                            type="button"
+                            title="Thao tác khác"
+                            aria-label="Thao tác khác"
+                          >
                             <BsThreeDotsVertical />
                           </button>
                         </div>
@@ -710,6 +986,10 @@ const ContractList = () => {
                   );
                 })
               ) : (
+                // =============================================
+                // EMPTY
+                // =============================================
+
                 <tr>
                   <td colSpan="10" className="ct-empty">
                     Không tìm thấy hợp đồng phù hợp
@@ -720,28 +1000,41 @@ const ContractList = () => {
           </table>
         </div>
 
+        {/* ===================================================
+            PAGINATION
+        =================================================== */}
+
         <div className="ct-pagination">
           <span>
-            Hiển thị {filteredContracts.length ? startIndex + 1 : 0} đến{" "}
-            {Math.min(endIndex, filteredContracts.length)} của{" "}
-            {filteredContracts.length} kết quả
+            Hiển thị {startIndex} đến {endIndex} của {totalResults} kết quả
           </span>
 
           <div className="ct-page-btns">
+            {/* =================================================
+                PREVIOUS
+            ================================================= */}
+
             <button
               type="button"
-              disabled={currentPage === 1}
-              onClick={() => setCurrentPage((value) => value - 1)}
+              disabled={currentPage === 1 || loading}
+              onClick={() =>
+                setCurrentPage((value) =>
+                  Math.max(
+                    value - 1,
+
+                    1,
+                  ),
+                )
+              }
             >
               <BsCaretLeftFill />
             </button>
 
-            {Array.from(
-              {
-                length: Math.min(totalPages, 5),
-              },
-              (_, index) => index + 1,
-            ).map((page) => (
+            {/* =================================================
+                PAGE
+            ================================================= */}
+
+            {getPageNumbers().map((page) => (
               <button
                 type="button"
                 key={page}
@@ -752,10 +1045,22 @@ const ContractList = () => {
               </button>
             ))}
 
+            {/* =================================================
+                NEXT
+            ================================================= */}
+
             <button
               type="button"
-              disabled={currentPage === totalPages}
-              onClick={() => setCurrentPage((value) => value + 1)}
+              disabled={currentPage >= totalPages || loading}
+              onClick={() =>
+                setCurrentPage((value) =>
+                  Math.min(
+                    value + 1,
+
+                    totalPages,
+                  ),
+                )
+              }
             >
               <BsCaretRightFill />
             </button>

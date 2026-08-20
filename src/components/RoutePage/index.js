@@ -34,6 +34,9 @@ import CheckInvoice from "../../app/CheckInvoices";
 import CheckInvoiceDetail from "../../app/CheckInvoiceDetail";
 import CheckInvoiceTourDetail from "../../app/CheckInvoiceTourDetail";
 
+import ContractDetail from "../../app/ContractDetail";
+import ContractEdit from "../../app/ContractEdit";
+
 import Image from "../../app/Image";
 
 import SignIn from "../SignIn";
@@ -109,6 +112,11 @@ const RoutePage = () => {
           path="/check-invoice/tours/:tourId"
           element={<CheckInvoiceTourDetail />}
         />
+        <Route
+          path="/contracts/detail/:contractId"
+          element={<ContractDetail />}
+        />
+        <Route path="/contracts/edit/:contractId" element={<ContractEdit />} />
       </Route>
     </Routes>
   );
