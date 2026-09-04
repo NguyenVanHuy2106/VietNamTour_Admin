@@ -129,7 +129,9 @@ const ContractCreate = () => {
     company_name: "CÔNG TY TNHH THƯƠNG MẠI DU LỊCH VÀ SỰ KIỆN VIỆT NAM",
 
     company_address:
-      "57 Đường N12, Khu nhà ở thấp tầng Ba Son, Khu phố 11, Phường Long Phước, Thành phố Hồ Chí Minh",
+      "57 Đường N12, Khu nhà ở thấp tầng Ba Son, Khu phố 11, Phường Long Phước, Thành phố Hồ Chí Minh, Việt Nam",
+    company_contact_address:
+      "153 Đường N5, khu nhà ở thấp tầng Thủ Thiêm, Khu phố 11, Phường Long Phước, Thành phố Hồ Chí Minh, Việt Nam",
 
     company_phone: "0373.954.963",
 
@@ -884,6 +886,7 @@ const ContractCreate = () => {
         budget_code: null,
 
         address: formData.company_address || null,
+        company_contact_address: formData.company_contact_address || null,
 
         phone: formData.company_phone || null,
 
@@ -1479,6 +1482,14 @@ const ContractCreate = () => {
                 name="company_address"
                 value={formData.company_address}
                 onChange={handleChange}
+              />
+            </ContractInput>
+            <ContractInput label="Liên hệ">
+              <Form.Control
+                name="company_contact_address"
+                value={formData.company_contact_address || ""}
+                onChange={handleChange}
+                placeholder="Nhập địa chỉ liên hệ..."
               />
             </ContractInput>
 
@@ -2571,6 +2582,16 @@ const ContractPreview = ({
 
             <span>{formData.company_address}</span>
           </div>
+
+          {formData.company_contact_address && (
+            <div className="preview-info-row">
+              <span className="preview-info-label">Liên hệ</span>
+
+              <span>:</span>
+
+              <span>{formData.company_contact_address}</span>
+            </div>
+          )}
 
           <div className="preview-info-row">
             <span className="preview-info-label">Điện thoại</span>

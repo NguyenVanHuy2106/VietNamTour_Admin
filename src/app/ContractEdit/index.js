@@ -106,6 +106,7 @@ const ContractEdit = () => {
     company_name: "",
 
     company_address: "",
+    company_contact_address: "",
 
     company_phone: "",
 
@@ -402,6 +403,7 @@ const ContractEdit = () => {
         company_name: company?.company_name || "",
 
         company_address: company?.address || "",
+        company_contact_address: company?.contact_address || "",
 
         company_phone: company?.phone || "",
 
@@ -999,6 +1001,7 @@ const ContractEdit = () => {
         budget_code: "",
 
         address: formData.company_address,
+        company_contact_address: formData.company_contact_address || null,
 
         phone: formData.company_phone,
 
@@ -1564,6 +1567,14 @@ const ContractEdit = () => {
                 name="company_address"
                 value={formData.company_address}
                 onChange={handleChange}
+              />
+            </ContractInput>
+            <ContractInput label="Địa chỉ liên hệ">
+              <Form.Control
+                name="company_contact_address"
+                value={formData.company_contact_address || ""}
+                onChange={handleChange}
+                placeholder="Nhập địa chỉ liên hệ..."
               />
             </ContractInput>
 
