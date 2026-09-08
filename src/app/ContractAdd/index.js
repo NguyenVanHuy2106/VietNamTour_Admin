@@ -153,7 +153,7 @@ const ContractCreate = () => {
       "Bên A giao và Bên B nhận thực hiện dịch vụ tổ chức chương trình tham quan, du lịch cho người lao động {{customer_name}} tại Vũng Tàu theo các nội dung, điều kiện và thỏa thuận được quy định trong Hợp đồng này và các tài liệu kèm theo (nếu có).",
 
     service_content:
-      "Bên B có trách nhiệm cung cấp đầy đủ các dịch vụ theo yêu cầu của gói thầu, bao gồm nhưng không giới hạn: vận chuyển, lưu trú, ăn uống, tham quan, bảo hiểm du lịch, hướng dẫn viên, tổ chức chương trình tập thể và các dịch vụ khác theo nội dung đã cam kết.",
+      "Bên B có trách nhiệm cung cấp đầy đủ các dịch vụ theo yêu cầu của Bên A, bao gồm nhưng không giới hạn: vận chuyển, lưu trú, ăn uống, tham quan, bảo hiểm du lịch, hướng dẫn viên, tổ chức chương trình tập thể và các dịch vụ khác theo nội dung đã cam kết.",
 
     tour_program:
       "Chương trình tham quan do Bên B xây dựng và được Bên A chấp thuận bằng văn bản là một bộ phận không tách rời của Hợp đồng này. Trường hợp cần điều chỉnh chương trình, lịch trình hoặc tiêu chuẩn dịch vụ, hai bên phải thống nhất bằng văn bản hoặc phụ lục hợp đồng trước khi thực hiện, trừ trường hợp bất khả kháng hoặc nhằm bảo đảm an toàn cho đoàn khách.",

@@ -38,7 +38,8 @@ d) Mua bảo hiểm du lịch cho toàn bộ người tham gia theo đúng nội
 e) Chịu trách nhiệm về chất lượng dịch vụ do mình hoặc các đơn vị cung cấp dịch vụ phụ thực hiện.
 g) Bồi thường thiệt hại cho Bên A và khách tham gia trong trường hợp thiệt hại phát sinh do lỗi của Bên B hoặc các đơn vị do Bên B thuê, hợp tác cung cấp dịch vụ.
 h) Thực hiện chế độ báo cáo, nghiệm thu, thanh quyết toán và các nghĩa vụ khác theo quy định của Hợp đồng.
-Bên B có trách nhiệm bảo đảm tiêu chuẩn dịch vụ đối với phần khối lượng phát sinh tăng thêm không thấp hơn tiêu chuẩn đã cam kết trong Hợp đồng hoặc theo tiêu chuẩn được hai bên thống nhất bằng phụ lục hợp đồng.
+i) Bảo đảm an toàn về tính mạng, sức khỏe và tài sản của người tham gia trong phạm vi trách nhiệm của Bên B; bảo đảm an toàn đối với phương tiện, cơ sở lưu trú và các hoạt động do Bên B tổ chức hoặc bố trí; chủ động phòng ngừa, xử lý kịp thời các sự cố phát sinh và thông báo ngay cho Bên A.
+j) Bên B có trách nhiệm bảo đảm tiêu chuẩn dịch vụ đối với phần khối lượng phát sinh tăng thêm không thấp hơn tiêu chuẩn đã cam kết trong Hợp đồng hoặc theo tiêu chuẩn được hai bên thống nhất bằng phụ lục hợp đồng.
 
 5.3. Các trường hợp miễn trừ trách nhiệm của Bên B
 Bên B không chịu trách nhiệm đối với các thiệt hại phát sinh trong các trường hợp sau:
@@ -120,7 +121,7 @@ b) Các chi phí phát sinh chung chỉ được thanh toán trên cơ sở ch�
 c) Không bên nào phải chịu phạt vi phạm hợp đồng hoặc bồi thường thiệt hại cho bên còn lại đối với phần nghĩa vụ không thực hiện được do sự kiện bất khả kháng.`,
 
   article_8: `8.1. Đối với Bên B
-a) Trường hợp Bên B từ chối thực hiện hợp đồng hoặc đơn phương chấm dứt hợp đồng trái quy định của hợp đồng và pháp luật thì Bên B bị thu toàn bộ giá trị bảo đảm thực hiện hợp đồng và phải bồi thường thiệt hại thực tế phát sinh cho Bên A.
+a) Trường hợp Bên B từ chối thực hiện hợp đồng hoặc đơn phương chấm dứt hợp đồng trái quy định của hợp đồng và pháp luật thì Bên B phải hoàn trả toàn bộ số tiền Bên A đã tạm ứng, chịu phạt vi phạm bằng 8% tổng giá trị hợp đồng và phải bồi thường thiệt hại thực tế phát sinh cho Bên A..
 b) Trường hợp Bên B thực hiện không đúng hoặc không đầy đủ các nội dung dịch vụ đã cam kết, Bên A có quyền:
 - Yêu cầu khắc phục;
 - Giảm trừ giá trị thanh toán;

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import {
   Accordion,
@@ -23,6 +23,7 @@ import {
   BsFolder2Open,
 } from "react-icons/bs";
 
+import ContractForm08a from "../../components/ContractForm08a";
 import { useNavigate, useParams } from "react-router-dom";
 
 import API from "../../config/APINoToken";
@@ -321,8 +322,9 @@ const calculateAcceptanceValues = (
 
 const ContractDetail = () => {
   const navigate = useNavigate();
-
+  const form08aRef = useRef(null);
   const { contractId } = useParams();
+  const userId = localStorage.getItem("userId");
 
   // ==========================================================
   // STATE
@@ -358,8 +360,6 @@ const ContractDetail = () => {
 
   const [showAcceptanceLiquidationModal, setShowAcceptanceLiquidationModal] =
     useState(false);
-
-  const [showForm08aModal, setShowForm08aModal] = useState(false);
 
   const [activeTab, setActiveTab] = useState("DETAIL");
   const [selectedSettlement, setSelectedSettlement] = useState(null);
@@ -513,7 +513,7 @@ const ContractDetail = () => {
 
     note: "",
 
-    created_by: 1,
+    created_by: userId,
 
     // Có phát sinh hay không
     has_extra: false,
@@ -545,7 +545,7 @@ const ContractDetail = () => {
 
     note: "",
 
-    created_by: 1,
+    created_by: userId,
   });
 
   // ==========================================================
@@ -968,7 +968,7 @@ const ContractDetail = () => {
 
         note: data.note || "",
 
-        created_by: data.created_by || 1,
+        created_by: data.created_by || userId,
 
         // =========================================================
         // CÓ PHÁT SINH
@@ -1215,7 +1215,7 @@ const ContractDetail = () => {
 
         note: data.note || "",
 
-        created_by: data.created_by || 1,
+        created_by: data.created_by || userId,
       });
 
       setShowLiquidationModal(true);
@@ -2234,7 +2234,7 @@ const ContractDetail = () => {
           {
             ...payload,
 
-            created_by: 1,
+            created_by: userId,
           },
         );
 
@@ -2302,7 +2302,7 @@ const ContractDetail = () => {
 
         note: liquidationForm.note || "",
 
-        created_by: 1,
+        created_by: userId,
 
         items: (liquidationForm.items || []).map((item, index) => ({
           contract_item_id: item.contract_item_id || null,
@@ -2600,7 +2600,7 @@ const ContractDetail = () => {
 
         note: "",
 
-        created_by: 1,
+        created_by: userId,
 
         has_extra: false,
         items: acceptanceItems,
@@ -2678,7 +2678,7 @@ const ContractDetail = () => {
 
           note: "",
 
-          created_by: 1,
+          created_by: userId,
         });
 
         setShowLiquidationModal(true);
@@ -2704,7 +2704,11 @@ const ContractDetail = () => {
     }
 
     if (type === "FORM_08A") {
-      setShowForm08aModal(true);
+      setShowDocumentModal(false);
+
+      form08aRef.current?.openCreate();
+
+      return;
     }
   };
 
@@ -2919,6 +2923,99 @@ const ContractDetail = () => {
       console.error("Export settlement Word error:", error);
 
       alert("Không thể xuất Word biên bản");
+    }
+  };
+  // ==========================================================
+  // EXPORT PDF MẪU 08A
+  // ==========================================================
+
+  const handleExportForm08aPDF = async (form08aId) => {
+    try {
+      const form08a = (contractDocuments?.form08as || []).find(
+        (item) => Number(item.form_08a_id) === Number(form08aId),
+      );
+
+      const response = await APIToken.get(
+        `/contracts/${contractId}/form-08a/${form08aId}/export/pdf`,
+        {
+          responseType: "blob",
+        },
+      );
+
+      const blob = new Blob([response.data], {
+        type: "application/pdf",
+      });
+
+      const url = window.URL.createObjectURL(blob);
+
+      const documentNo = form08a?.document_no || `Mau-08A-${form08aId}`;
+
+      const fileName = `${String(documentNo)
+        .replace(/[\/\\:*?"<>|]/g, "-")
+        .replace(/\s+/g, "_")}.pdf`;
+
+      const link = document.createElement("a");
+
+      link.href = url;
+      link.download = fileName;
+
+      document.body.appendChild(link);
+
+      link.click();
+      link.remove();
+
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Export Form 08A PDF error:", error);
+
+      alert("Không thể xuất PDF Mẫu 08A");
+    }
+  };
+
+  // ==========================================================
+  // EXPORT WORD MẪU 08A
+  // ==========================================================
+
+  const handleExportForm08aWord = async (form08aId) => {
+    try {
+      const form08a = (contractDocuments?.form08as || []).find(
+        (item) => Number(item.form_08a_id) === Number(form08aId),
+      );
+
+      const response = await APIToken.get(
+        `/contracts/${contractId}/form-08a/${form08aId}/export/word`,
+        {
+          responseType: "blob",
+        },
+      );
+
+      const blob = new Blob([response.data], {
+        type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      });
+
+      const url = window.URL.createObjectURL(blob);
+
+      const documentNo = form08a?.document_no || `Mau-08A-${form08aId}`;
+
+      const fileName = `${String(documentNo)
+        .replace(/[\/\\:*?"<>|]/g, "-")
+        .replace(/\s+/g, "_")}.docx`;
+
+      const link = document.createElement("a");
+
+      link.href = url;
+      link.download = fileName;
+
+      document.body.appendChild(link);
+
+      link.click();
+      link.remove();
+
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Export Form 08A Word error:", error);
+
+      alert("Không thể xuất Word Mẫu 08A");
     }
   };
 
@@ -3773,6 +3870,7 @@ const ContractDetail = () => {
                       <th>Ngày lập</th>
                       <th>Đợt</th>
                       <th>Giá trị</th>
+                      <th>Người tạo</th>
                       <th>Thao tác</th>
                     </tr>
                   </thead>
@@ -3805,6 +3903,7 @@ const ContractDetail = () => {
                         <td className="cd-document-money">
                           {formatCurrency(getSettlementDisplayValue(item))} đ
                         </td>
+                        <td>{item.created_by + " - " + item.fullname}</td>
 
                         <td>
                           <div className="cd-document-actions">
@@ -3899,12 +3998,17 @@ const ContractDetail = () => {
                         <td className="cd-document-money">
                           {formatCurrency(item.current_requested_payment)} đ
                         </td>
-
+                        <td>{item.created_by + " - " + item.fullname}</td>
                         <td>
                           <div className="cd-document-actions">
                             <button
                               type="button"
                               className="cd-doc-action view"
+                              onClick={() =>
+                                form08aRef.current?.openPreview(
+                                  item.form_08a_id,
+                                )
+                              }
                             >
                               <BsEye />
                             </button>
@@ -3912,12 +4016,33 @@ const ContractDetail = () => {
                             <button
                               type="button"
                               className="cd-doc-action edit"
+                              onClick={() =>
+                                form08aRef.current?.openEdit(item.form_08a_id)
+                              }
                             >
                               <BsPencil />
                             </button>
 
-                            <button type="button" className="cd-doc-action pdf">
+                            <button
+                              type="button"
+                              className="cd-doc-action pdf"
+                              title="Xuất PDF"
+                              onClick={() =>
+                                handleExportForm08aPDF(item.form_08a_id)
+                              }
+                            >
                               <BsFileEarmarkPdf />
+                            </button>
+
+                            <button
+                              type="button"
+                              className="cd-doc-action word"
+                              title="Xuất Word"
+                              onClick={() =>
+                                handleExportForm08aWord(item.form_08a_id)
+                              }
+                            >
+                              <BsFileEarmarkWord />
                             </button>
 
                             <button
@@ -5169,6 +5294,19 @@ const ContractDetail = () => {
         </Modal.Footer>
       </Modal>
 
+      <ContractForm08a
+        ref={form08aRef}
+        contractId={contractId}
+        contract={contract}
+        formData={formData}
+        settlements={contractDocuments.settlements || []}
+        form08as={contractDocuments.form_08a || []}
+        payments={contractDocuments.payments || []}
+        contractValue={contractAmount.totalAmount}
+        onChanged={getContractDocuments}
+        showToast={showToast}
+      />
+
       <ToastContainer
         position="top-end"
         className="p-3"
@@ -6227,7 +6365,7 @@ const SettlementActualValueTable = ({ items = [], formData }) => {
               <td colSpan={summaryColSpan} className="settlement-total-label">
                 TỔNG CỘNG THANH TOÁN:
                 <div className="settlement-preview-included-note">
-                  (Đơn giá đã bao gồm VAT)
+                  (Đã bao gồm VAT)
                 </div>
               </td>
 
@@ -7249,7 +7387,7 @@ const SettlementPreview = ({
                   >
                     TỔNG CỘNG THANH TOÁN:
                     <div className="settlement-preview-included-note">
-                      (Đơn giá đã bao gồm VAT)
+                      (Đã bao gồm VAT)
                     </div>
                   </td>
 

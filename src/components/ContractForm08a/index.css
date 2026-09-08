@@ -1,0 +1,620 @@
+/* =========================================================
+   FORM 08A
+========================================================= */
+
+.form08a-modal .modal-content,
+.form08a-preview-modal .modal-content {
+  border: 0;
+  border-radius: 12px;
+}
+
+.form08a-form-section {
+  padding: 18px;
+  margin-bottom: 16px;
+  background: #ffffff;
+  border: 1px solid #e6ebf1;
+  border-radius: 9px;
+}
+
+.form08a-section-title {
+  margin-bottom: 15px;
+  color: #244766;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.form08a-readonly-money {
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  padding: 7px 12px;
+  border: 1px solid #e1e6ec;
+  border-radius: 6px;
+  background: #f8fafc;
+  color: #294766;
+  font-weight: 600;
+}
+
+.form08a-readonly-money.primary {
+  color: #1466d9;
+}
+
+.form08a-loading {
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  color: #718198;
+}
+
+.form08a-field-loading {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  color: #74869a;
+  font-size: 12px;
+}
+
+.form08a-field-loading .spinner-border {
+  width: 12px;
+  height: 12px;
+}
+
+.form08a-empty-items {
+  padding: 30px;
+  border: 1px dashed #d7dfe8;
+  border-radius: 7px;
+  background: #fafcff;
+  color: #8795a5;
+  text-align: center;
+}
+
+/* =========================================================
+   EDIT TABLE
+========================================================= */
+
+.form08a-edit-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.form08a-edit-table th {
+  padding: 9px 8px;
+  border: 1px solid #dde3ea;
+  background: #f5f8fb;
+  color: #48637d;
+  font-size: 12px;
+  text-align: center;
+}
+
+.form08a-edit-table td {
+  padding: 6px;
+  border: 1px solid #e1e6ec;
+  vertical-align: middle;
+}
+
+.form08a-edit-table .form-control {
+  min-width: 70px;
+  font-size: 12px;
+}
+
+.form08a-edit-money {
+  color: #294766;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.form08a-total-row td {
+  padding: 10px !important;
+  background: #f8fafc;
+  font-weight: 700;
+  text-align: right;
+}
+
+/* =========================================================
+   PREVIEW
+========================================================= */
+/* =========================================================
+   PREVIEW MẪU 08A
+========================================================= */
+
+.form08a-preview-background {
+  padding: 28px;
+  background: #e9edf2;
+  overflow: auto;
+}
+
+/* =========================================================
+   KHỔ GIẤY A4
+========================================================= */
+
+.form08a-paper {
+  width: 210mm;
+  min-height: 297mm;
+
+  margin: 0 auto;
+
+  padding:
+    12mm
+    14mm
+    15mm
+    20mm;
+
+  background: #ffffff;
+
+  color: #000000;
+
+  font-family:
+    "Times New Roman",
+    Times,
+    serif;
+
+  font-size: 15px;
+
+  line-height: 1.35;
+
+  box-sizing: border-box;
+
+  box-shadow:
+    0 2px 15px
+    rgba(25, 45, 65, 0.12);
+}
+
+/* =========================================================
+   MẪU SỐ 08A - GÓC PHẢI
+========================================================= */
+
+.form08a-template-code {
+  width: 190px;
+
+  margin-left: auto;
+
+  margin-bottom: 10px;
+
+  font-size: 15px;
+
+  line-height: 1.35;
+
+  text-align: center;
+}
+
+.form08a-template-name {
+  font-weight: 700;
+}
+
+.form08a-template-code > div {
+  margin: 1px 0;
+}
+
+/* =========================================================
+   TIÊU ĐỀ
+========================================================= */
+
+.form08a-main-title {
+  margin-top: 6px;
+
+  font-size: 17px;
+
+  font-weight: 700;
+
+  line-height: 1.25;
+
+  text-align: center;
+
+  white-space: nowrap;
+}
+
+.form08a-title-line {
+  margin:
+    3px 0
+    18px;
+
+  text-align: center;
+}
+
+/* =========================================================
+   DÒNG ĐÁNH SỐ 1 - 9
+
+   QUAN TRỌNG:
+   số nằm trong cột cố định.
+   nội dung xuống dòng không chạy vào dưới số.
+========================================================= */
+
+.form08a-numbered-line {
+  display: grid;
+
+  grid-template-columns:
+    25px
+    minmax(0, 1fr);
+
+  align-items: start;
+
+  width: 100%;
+
+  margin:
+    8px 0;
+
+  padding: 0;
+
+  font-size: 15px;
+
+  line-height: 1.42;
+
+  text-align: justify;
+}
+
+.form08a-number {
+  width: 25px;
+
+  padding: 0;
+
+  margin: 0;
+
+  text-align: right;
+
+  padding-right: 5px;
+
+  white-space: nowrap;
+}
+
+.form08a-numbered-content {
+  min-width: 0;
+
+  margin: 0;
+
+  padding: 0;
+
+  text-indent: 0;
+
+  text-align: justify;
+}
+
+/* Tuyệt đối không thụt đầu dòng */
+
+.form08a-numbered-content p,
+.form08a-numbered-content div {
+  margin-top: 0;
+}
+
+.form08a-words-line {
+  margin-top: 2px !important;
+
+  text-indent: 0 !important;
+}
+
+/* =========================================================
+   MỤC 2 - MÃ ĐƠN VỊ / MÃ NGUỒN
+========================================================= */
+
+.form08a-code-row {
+  display: grid;
+
+  grid-template-columns:
+    300px
+    1fr;
+
+  width: 100%;
+
+  column-gap: 12px;
+}
+
+/* =========================================================
+   ĐƠN VỊ: ĐỒNG
+========================================================= */
+
+.form08a-unit {
+  margin:
+    6px 5px
+    3px 0;
+
+  text-align: right;
+
+  font-size: 14px;
+}
+
+/* =========================================================
+   BẢNG
+========================================================= */
+
+.form08a-preview-table {
+  width: 100%;
+
+  margin:
+    4px 0
+    14px;
+
+  border-collapse: collapse;
+
+  table-layout: fixed;
+
+  font-size: 14px;
+
+  line-height: 1.28;
+}
+
+.form08a-preview-table th,
+.form08a-preview-table td {
+  border:
+    1px solid #000;
+
+  padding:
+    5px 6px;
+
+  vertical-align: middle;
+}
+
+.form08a-preview-table th {
+  font-weight: 700;
+
+  text-align: center;
+}
+
+/* =========================================================
+   WIDTH CHÍNH XÁC CÁC CỘT
+========================================================= */
+
+.form08a-preview-table .col-stt {
+  width: 7%;
+}
+
+.form08a-preview-table .col-content {
+  width: 41%;
+}
+
+.form08a-preview-table .col-unit {
+  width: 10%;
+}
+
+.form08a-preview-table .col-quantity {
+  width: 10%;
+}
+
+.form08a-preview-table .col-price {
+  width: 15%;
+}
+
+.form08a-preview-table .col-amount {
+  width: 17%;
+}
+
+/* =========================================================
+   DÒNG (1) (2) ...
+========================================================= */
+
+.form08a-column-number td {
+  padding:
+    2px 4px;
+
+  font-style: italic;
+
+  text-align: center;
+}
+
+/* =========================================================
+   BODY TABLE
+========================================================= */
+
+.form08a-center {
+  text-align: center;
+}
+
+.form08a-money {
+  text-align: right;
+
+  white-space: nowrap;
+}
+
+.form08a-item-name {
+  text-align: left;
+
+  line-height: 1.35;
+}
+
+.form08a-preview-total td {
+  padding-top: 5px;
+
+  padding-bottom: 5px;
+
+  font-weight: 700;
+}
+
+.form08a-preview-total td:first-child {
+  text-align: center;
+}
+
+/* =========================================================
+   MỤC 7 SAU BẢNG
+========================================================= */
+
+.form08a-after-table {
+  margin-top: 13px;
+}
+
+/* =========================================================
+   DÒNG THANH TOÁN CON
+
+   Thụt vào đúng sau cột số.
+========================================================= */
+
+.form08a-payment-sub-line {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1.15fr;
+
+  column-gap: 10px;
+
+  margin:
+    4px 0
+    9px
+    25px;
+
+  padding: 0;
+
+  font-size: 15px;
+
+  line-height: 1.4;
+}
+
+.form08a-payment-sub-line > div {
+  white-space: nowrap;
+}
+
+/* =========================================================
+   NGÀY KÝ
+========================================================= */
+
+.form08a-signature-date {
+  width: 50%;
+
+  margin:
+    24px 0
+    2px
+    auto;
+
+  font-size: 15px;
+
+  text-align: center;
+}
+
+/* =========================================================
+   CHỮ KÝ
+========================================================= */
+/* =========================================================
+   CHỮ KÝ MẪU 08A
+========================================================= */
+
+.form08a-signature-block {
+  display: grid !important;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr) !important;
+
+  column-gap: 45px;
+
+  width: 100% !important;
+  max-width: none !important;
+
+  margin: 22px 0 0 0 !important;
+  padding: 0 !important;
+
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   MỖI BÊN
+========================================================= */
+
+.form08a-sign-side {
+  position: relative;
+
+  width: 100% !important;
+  min-width: 0;
+
+  height: 205px;
+
+  margin: 0;
+  padding: 0;
+
+  font-family: "Times New Roman", Times, serif;
+  font-size: 15px;
+  line-height: 1.25;
+
+  text-align: center;
+}
+
+/* =========================================================
+   NGÀY KÝ
+========================================================= */
+
+.form08a-sign-date {
+  height: 22px;
+
+  margin: 0 0 2px 0;
+  padding: 0;
+
+  font-weight: 400;
+  line-height: 1.25;
+
+  text-align: center;
+}
+
+/*
+ * Bên trái không có ngày.
+ * Ta vẫn chừa đúng chiều cao tương ứng bằng padding-top.
+ */
+.form08a-sign-side:first-child {
+  padding-top: 24px;
+}
+
+/* =========================================================
+   TIÊU ĐỀ
+========================================================= */
+
+.form08a-sign-heading {
+  width: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  font-weight: 700;
+  line-height: 1.25;
+
+  text-align: center;
+
+  white-space: normal;
+}
+
+/* Bên phải cố gắng giữ tiêu đề trên 1 dòng */
+.form08a-sign-side:nth-child(2)
+.form08a-sign-heading {
+  white-space: nowrap;
+}
+
+/* =========================================================
+   CHỨC VỤ
+   SÁT NGAY DƯỚI TIÊU ĐỀ
+========================================================= */
+
+.form08a-sign-position {
+  margin: 2px 0 0 0;
+  padding: 0;
+
+  font-weight: 700;
+  line-height: 1.25;
+
+  text-align: center;
+}
+
+/* =========================================================
+   TÊN NGƯỜI KÝ
+
+   CẢ HAI ĐỀU BOTTOM: 0
+   => LUÔN NGANG HÀNG
+========================================================= */
+
+.form08a-sign-person {
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  width: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  font-weight: 700;
+  line-height: 1.25;
+
+  text-align: center;
+
+  white-space: nowrap;
+}

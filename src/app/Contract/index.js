@@ -932,7 +932,7 @@ const ContractList = () => {
                       </td>
 
                       <td data-label="Người tạo">
-                        {item.created_by_name || item.created_by || "---"}
+                        {`${item.created_by} - ${item.fullname || "Không xác định"}`}
                       </td>
 
                       <td data-label="Thao tác" className="ct-action-cell">
