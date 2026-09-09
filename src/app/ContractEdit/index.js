@@ -403,7 +403,7 @@ const ContractEdit = () => {
         company_name: company?.company_name || "",
 
         company_address: company?.address || "",
-        company_contact_address: company?.contact_address || "",
+        company_contact_address: company?.company_contact_address || "",
 
         company_phone: company?.phone || "",
 

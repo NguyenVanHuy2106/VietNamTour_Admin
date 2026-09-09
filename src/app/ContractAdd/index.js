@@ -2094,6 +2094,29 @@ const ContractCreate = () => {
                     Bên B hoàn thành dịch vụ và cung cấp đầy đủ hồ sơ thanh toán
                     hợp lệ.
                   </p>
+                  <p className="preview-paragraph">
+                    <strong>c) Hồ sơ thanh toán gồm:</strong>
+                  </p>
+
+                  <p className="preview-paragraph preview-indent">
+                    – Văn bản đề nghị thanh toán của Bên B;
+                  </p>
+
+                  <p className="preview-paragraph preview-indent">
+                    – Hóa đơn giá trị gia tăng hợp pháp;
+                  </p>
+
+                  <p className="preview-paragraph preview-indent">
+                    – Biên bản nghiệm thu và thanh lý hợp đồng;
+                  </p>
+
+                  <p className="preview-paragraph preview-indent">
+                    – Biên bản xác nhận khối lượng phát sinh, nếu có;
+                  </p>
+
+                  <p className="preview-paragraph preview-indent">
+                    – Các tài liệu khác theo thỏa thuận của hai bên.
+                  </p>
                 </div>
               </Form.Group>
               <ContractClause title="3.4. Chậm thanh toán">
@@ -2839,9 +2862,7 @@ const ContractPreview = ({
               <p className="preview-paragraph">
                 <strong>a) Tạm ứng hợp đồng:</strong> Bên A tạm ứng cho Bên B{" "}
                 {formData.advance_calc_type === "PERCENT"
-                  ? `${Number(
-                      formData.advance_percent || 0,
-                    )}% giá trị hợp đồng, `
+                  ? `${Number(formData.advance_percent || 0)}% giá trị hợp đồng, `
                   : ""}
                 tương đương số tiền{" "}
                 <strong>{formatCurrency(calculatedAdvanceAmount)} đồng</strong>{" "}
