@@ -1,0 +1,967 @@
+/* =====================================================
+
+   PAGE
+
+===================================================== */
+
+.post-edit-container {
+  min-height: 100vh;
+
+  padding: 28px;
+
+  background: #f5f7fa;
+
+  color: #1f2937;
+}
+
+
+/* =====================================================
+
+   PAGE HEADER
+
+===================================================== */
+
+.post-edit-page-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 24px;
+}
+
+.post-edit-header-left {
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+}
+
+.post-edit-back-btn {
+  width: 42px;
+
+  height: 42px;
+
+  flex: 0 0 42px;
+
+  border: 1px solid #dfe4ea;
+
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #344054;
+
+  font-size: 18px;
+
+  cursor: pointer;
+
+  transition: all 0.15s ease;
+}
+
+.post-edit-back-btn:hover {
+  border-color: #1d61ad;
+
+  background: #f4f8fd;
+
+  color: #1d61ad;
+}
+
+.post-edit-title-row {
+  display: flex;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 9px;
+}
+
+.post-edit-page-header h2 {
+  margin: 0;
+
+  font-size: 26px;
+
+  font-weight: 750;
+
+  color: #15263c;
+}
+
+.post-edit-page-header p {
+  margin: 6px 0 0;
+
+  color: #6b7280;
+
+  font-size: 13px;
+}
+
+.post-edit-id-badge {
+  padding: 6px 9px;
+
+  border: 1px solid #e4e7ec;
+
+  font-size: 10px;
+}
+
+.post-edit-completion-badge {
+  padding: 6px 9px;
+
+  border-radius: 20px;
+
+  font-size: 10px;
+}
+
+
+/* =====================================================
+
+   CARD
+
+===================================================== */
+
+.post-edit-card {
+  background: #ffffff;
+
+  border: 1px solid #e7ebf0;
+
+  border-radius: 12px;
+
+  margin-bottom: 20px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 1px 2px rgba(16, 24, 40, 0.02),
+    0 2px 8px rgba(16, 24, 40, 0.03);
+}
+
+.post-edit-card-header {
+  min-height: 65px;
+
+  padding: 15px 20px;
+
+  border-bottom: 1px solid #eef1f4;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+
+  background: #ffffff;
+}
+
+.post-edit-card-header-icon {
+  width: 36px;
+
+  height: 36px;
+
+  flex: 0 0 36px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: #edf5ff;
+
+  color: #1d61ad;
+
+  font-size: 17px;
+}
+
+.post-edit-card-header h5 {
+  font-size: 16px;
+
+  font-weight: 700;
+
+  margin: 0 0 3px;
+
+  color: #1f2937;
+}
+
+.post-edit-card-header span {
+  display: block;
+
+  font-size: 12px;
+
+  color: #8a94a3;
+}
+
+.post-edit-card-body {
+  padding: 20px;
+}
+
+
+/* =====================================================
+
+   FORM
+
+===================================================== */
+
+.post-edit-form-group {
+  margin-bottom: 22px;
+}
+
+.post-edit-form-group:last-child {
+  margin-bottom: 0;
+}
+
+.post-edit-label-row {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+}
+
+.post-edit-label {
+  margin-bottom: 8px;
+
+  font-size: 13px;
+
+  font-weight: 650;
+
+  color: #344054;
+}
+
+.post-edit-input {
+  min-height: 43px;
+
+  padding: 9px 12px;
+
+  border: 1px solid #dce1e7;
+
+  border-radius: 8px;
+
+  font-size: 14px;
+
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.post-edit-input:hover {
+  border-color: #b9c3ce;
+}
+
+.post-edit-input:focus {
+  border-color: #1d61ad;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(29, 97, 173, 0.1);
+}
+
+.post-edit-title-input {
+  height: 48px;
+
+  font-size: 17px;
+
+  font-weight: 600;
+}
+
+.post-edit-field-help {
+  margin-top: 6px;
+
+  color: #98a2b3;
+
+  font-size: 11px;
+}
+
+
+/* =====================================================
+
+   SLUG
+
+===================================================== */
+
+.post-edit-slug-wrapper {
+  display: flex;
+
+  align-items: stretch;
+
+  border: 1px solid #dce1e7;
+
+  border-radius: 8px;
+
+  overflow: hidden;
+
+  transition: 0.15s;
+}
+
+.post-edit-slug-wrapper:focus-within {
+  border-color: #1d61ad;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(29, 97, 173, 0.1);
+}
+
+.post-edit-slug-wrapper > span {
+  display: flex;
+
+  align-items: center;
+
+  padding: 0 12px;
+
+  background: #f7f8fa;
+
+  border-right:
+    1px solid #e4e7ec;
+
+  font-size: 13px;
+
+  color: #667085;
+}
+
+.post-edit-slug-input {
+  border: 0 !important;
+
+  border-radius: 0 !important;
+
+  box-shadow: none !important;
+}
+
+
+/* =====================================================
+
+   CHAR COUNT
+
+===================================================== */
+
+.post-edit-char-count {
+  color: #98a2b3;
+
+  font-size: 11px;
+}
+
+.post-edit-char-count.danger {
+  color: #dc3545;
+
+  font-weight: 600;
+}
+
+
+/* =====================================================
+
+   EDITOR
+
+===================================================== */
+
+.post-edit-editor-card {
+  overflow: visible;
+}
+
+.post-edit-word-wrapper {
+  padding: 0;
+}
+
+.post-edit-word-wrapper > * {
+  border-radius:
+    0 0 12px 12px;
+}
+
+.post-edit-autosave-status {
+  margin-left: auto;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  font-size: 11px !important;
+
+  color: #16803c !important;
+}
+
+.post-edit-status-dot {
+  width: 7px;
+
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #22c55e;
+}
+
+
+/* =====================================================
+
+   SIDEBAR
+
+===================================================== */
+
+.post-edit-sidebar {
+  position: sticky;
+
+  top: 20px;
+}
+
+
+/* =====================================================
+
+   PUBLISH
+
+===================================================== */
+
+.post-edit-publish-card {
+  border-top:
+    3px solid #1d61ad;
+}
+
+.post-edit-progress-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom: 8px;
+
+  color: #667085;
+
+  font-size: 11px;
+}
+
+.post-edit-progress-header strong {
+  color: #1d61ad;
+}
+
+.post-edit-progress {
+  height: 7px;
+
+  margin-bottom: 18px;
+
+  overflow: hidden;
+
+  border-radius: 20px;
+
+  background: #edf0f3;
+}
+
+.post-edit-progress > div {
+  height: 100%;
+
+  border-radius: inherit;
+
+  background: #1d61ad;
+
+  transition:
+    width 0.3s ease;
+}
+
+
+/* =====================================================
+
+   CHECK LIST
+
+===================================================== */
+
+.post-edit-check-list {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+
+  margin-bottom: 20px;
+}
+
+.post-edit-check-item {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  color: #667085;
+
+  font-size: 12px;
+}
+
+.post-edit-check-icon {
+  width: 23px;
+
+  height: 23px;
+
+  flex: 0 0 23px;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border:
+    1px solid #d0d5dd;
+
+  background: #ffffff;
+
+  font-size: 10px;
+
+  font-weight: 700;
+}
+
+.post-edit-check-item.completed {
+  color: #15803d;
+}
+
+.post-edit-check-item.completed
+.post-edit-check-icon {
+  background: #ecfdf3;
+
+  border-color: #86efac;
+
+  color: #15803d;
+}
+
+
+/* =====================================================
+
+   BUTTON
+
+===================================================== */
+
+.post-edit-btn-submit {
+  width: 100%;
+
+  min-height: 46px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  border: 0 !important;
+
+  border-radius: 8px;
+
+  background:
+    #1d61ad !important;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.2px;
+
+  transition: 0.2s;
+}
+
+.post-edit-btn-submit:hover {
+  background:
+    #174f8e !important;
+
+  transform:
+    translateY(-1px);
+
+  box-shadow:
+    0 5px 15px
+    rgba(29, 97, 173, 0.2);
+}
+
+.post-edit-btn-submit:disabled {
+  transform: none;
+
+  box-shadow: none;
+
+  opacity: 0.65;
+}
+
+.post-edit-cancel-btn {
+  width: 100%;
+
+  margin-top: 8px;
+
+  padding: 8px;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #667085;
+
+  font-size: 11px;
+
+  cursor: pointer;
+}
+
+.post-edit-cancel-btn:hover {
+  color: #1d61ad;
+}
+
+
+/* =====================================================
+
+   IMAGE
+
+===================================================== */
+
+.post-edit-image-preview {
+  position: relative;
+
+  width: 100%;
+
+  aspect-ratio: 16 / 9;
+
+  border-radius: 8px;
+
+  border:
+    1.5px dashed #d0d5dd;
+
+  background: #f9fafb;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  overflow: hidden;
+}
+
+.post-edit-image-preview.has-image {
+  border-style: solid;
+}
+
+.post-edit-image-preview img {
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+}
+
+.post-edit-image-empty {
+  padding: 20px;
+
+  text-align: center;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+}
+
+.post-edit-image-icon {
+  width: 42px;
+
+  height: 42px;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  margin-bottom: 9px;
+
+  border-radius: 50%;
+
+  background: #eef4fb;
+
+  color: #1d61ad;
+
+  font-size: 20px;
+}
+
+.post-edit-image-empty strong {
+  margin-bottom: 3px;
+
+  color: #475467;
+
+  font-size: 13px;
+}
+
+.post-edit-image-empty span {
+  color: #98a2b3;
+
+  font-size: 11px;
+}
+
+.post-edit-remove-image {
+  position: absolute;
+
+  top: 8px;
+
+  right: 8px;
+
+  width: 30px;
+
+  height: 30px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border: 0;
+
+  border-radius: 7px;
+
+  background:
+    rgba(190, 30, 30, 0.9);
+
+  color: #ffffff;
+
+  font-size: 20px;
+
+  cursor: pointer;
+}
+
+.post-edit-upload-action {
+  margin-top: 13px;
+}
+
+.post-edit-image-help {
+  margin-top: 8px;
+
+  color: #98a2b3;
+
+  font-size: 10px;
+}
+
+
+/* =====================================================
+
+   TAG
+
+===================================================== */
+
+.post-edit-tag-cloud {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 8px;
+}
+
+.post-edit-tag-btn {
+  border:
+    1px solid #d8dee6;
+
+  background: #ffffff;
+
+  color: #586474;
+
+  padding: 6px 11px;
+
+  border-radius: 6px;
+
+  font-size: 12px;
+
+  cursor: pointer;
+
+  transition:
+    all 0.15s ease;
+}
+
+.post-edit-tag-btn:hover {
+  border-color:
+    #1d61ad;
+
+  color: #1d61ad;
+
+  background: #f7faff;
+}
+
+.post-edit-tag-btn.active {
+  background: #edf5ff;
+
+  border-color: #8db8e8;
+
+  color: #1d61ad;
+
+  font-weight: 600;
+}
+
+.post-edit-empty-tags {
+  padding: 15px;
+
+  text-align: center;
+
+  color: #98a2b3;
+
+  font-size: 12px;
+}
+
+
+/* =====================================================
+
+   LOADING INITIAL
+
+===================================================== */
+
+.post-edit-loading-page {
+  min-height: 70vh;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 12px;
+
+  color: #667085;
+
+  font-size: 13px;
+}
+
+
+/* =====================================================
+
+   LOADING UPDATE
+
+===================================================== */
+
+.post-edit-loading-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 9999;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background:
+    rgba(15, 23, 42, 0.2);
+
+  backdrop-filter: blur(2px);
+}
+
+.post-edit-loading-box {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 18px 25px;
+
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  color: #344054;
+
+  font-size: 12px;
+
+  box-shadow:
+    0 12px 35px
+    rgba(0, 0, 0, 0.15);
+}
+
+
+/* =====================================================
+
+   TOAST
+
+===================================================== */
+
+.toast-container {
+  position: fixed !important;
+
+  top: 18px !important;
+
+  right: 18px !important;
+
+  z-index: 10000 !important;
+}
+
+.toast {
+  min-width: 320px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 12px 30px
+    rgba(0, 0, 0, 0.17);
+}
+
+
+/* =====================================================
+
+   RESPONSIVE
+
+===================================================== */
+
+@media (max-width: 991px) {
+
+  .post-edit-container {
+    padding: 18px;
+  }
+
+  .post-edit-sidebar {
+    position: static;
+  }
+
+}
+
+
+@media (max-width: 576px) {
+
+  .post-edit-container {
+    padding: 12px;
+  }
+
+  .post-edit-page-header h2 {
+    font-size: 20px;
+  }
+
+  .post-edit-title-row {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .post-edit-card-body {
+    padding: 15px;
+  }
+
+  .post-edit-card-header {
+    padding: 14px 15px;
+  }
+
+  .post-edit-autosave-status {
+    display: none;
+  }
+
+  .post-edit-back-btn {
+    width: 38px;
+
+    height: 38px;
+
+    flex-basis: 38px;
+  }
+
+}

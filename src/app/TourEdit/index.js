@@ -1,42 +1,56 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
-  Container,
   Row,
   Col,
   Button,
-  Tabs,
-  Tab,
+  Form,
   Toast,
+  ToastContainer,
   Spinner,
+  Badge,
 } from "react-bootstrap";
-import Word from "../../components/Word";
-import Form from "react-bootstrap/Form";
+import {
+  FiArrowLeft,
+  FiCheck,
+  FiTrash2,
+  FiImage,
+  FiMapPin,
+  FiCalendar,
+  FiDollarSign,
+  FiStar,
+  FiSave,
+} from "react-icons/fi";
+import { useLocation, useNavigate } from "react-router-dom";
 
+import Word from "../../components/Word";
 import ImageCDNCloud from "../../components/ImageCDNCloud";
 import API from "../../config/APINoToken";
 import APIToken from "../../config/APIToken";
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { FiTrash } from "react-icons/fi";
+
+import "./index.css";
 
 const TourEdit = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+
   const { tourId } = location.state || {};
+
+  const userId = localStorage.getItem("userId");
+
+  const [loading, setLoading] = useState(false);
+  const [loadingData, setLoadingData] = useState(true);
+
   const [successAlertOpen, setSuccessAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
-  const navigate = useNavigate();
-  // const [isGroup, setIsGroup] = useState(false);
-  // const [dataTourDetail, setDataTourDetail] = useState([]);
-  // const [tourInfo, setTourInfo] = useState("");
-  // const [mainImage, setMainImage] = useState("");
+  const [alertVariant, setAlertVariant] = useState("success");
 
-  // const [tourDetail, setTourDetail] = useState("");
-  // const [tourPrice, setTourPrice] = useState("");
-  // const [tourQuantity, setTourQuantity] = useState("");
-  // const [tourHighlight, setTourHighlight] = useState([]);
-
-  let userId = localStorage.getItem("userId");
-  let [loading, setLoading] = useState(false);
+  const [options, setOptions] = useState({
+    destinations: [],
+    departures: [],
+    timeTypes: [],
+    hotelTypes: [],
+    vehicleTypes: [],
+  });
 
   const [tourData, setTourData] = useState({
     tourid: "",
@@ -47,8 +61,8 @@ const TourEdit = () => {
     departure: "",
     timetypeid: "",
     hoteltypeid: "",
-    startdate: null,
-    enddate: null,
+    startdate: "",
+    enddate: "",
     vehicletypeid: "",
     updated_by: userId,
     images: [],
@@ -59,52 +73,28 @@ const TourEdit = () => {
       freeprice: "",
       promotion: 0,
     },
-    // quantity: {
-    //   adult: "",
-    //   child: "",
-    //   free: "",
-    // },
-    highlights: [{ highlight_key: 1, highlight_value: "" }],
+    highlights: [
+      {
+        highlight_key: 1,
+        highlight_value: "",
+      },
+    ],
     isGroup: false,
   });
-  const defaultTourData = {
-    tourname: "",
-    slug: "",
-    description: "",
-    destination: "",
-    departure: "",
-    timetypeid: "",
-    hoteltypeid: "",
-    startdate: null,
-    enddate: null,
-    vehicletypeid: "",
-    updated_by: userId, // Giữ lại userId trong giá trị mặc định nếu cần
-    images: [],
-    detailContent: "",
-    price: {
-      adultprice: "",
-      childprice: "",
-      freeprice: "",
-      promotion: 0,
-    },
-    // quantity: {
-    //   adult: "",
-    //   child: "",
-    //   free: "",
-    // },
-    highlights: [{ highlight_key: 1, highlight_value: "" }],
-    isGroup: false,
+
+  /* =====================================================
+     TOAST
+  ===================================================== */
+
+  const showToast = (variant, message) => {
+    setAlertVariant(variant);
+    setAlertMessage(message);
+    setSuccessAlertOpen(true);
   };
 
-  const [key, setKey] = useState("info");
-
-  const [options, setOptions] = useState({
-    destinations: [],
-    departures: [],
-    timeTypes: [],
-    hotelTypes: [],
-    vehicleTypes: [],
-  });
+  /* =====================================================
+     LOAD DROPDOWNS
+  ===================================================== */
 
   const fetchOptions = async () => {
     try {
@@ -117,638 +107,1170 @@ const TourEdit = () => {
       ]);
 
       setOptions({
-        destinations: des.data.data,
-        departures: dep.data.data,
-        timeTypes: time.data.data,
-        hotelTypes: hotel.data.data,
-        vehicleTypes: vehicle.data.data,
-      });
-      //console.log(options);
-      //setLoading(false);
-    } catch (err) {
-      console.error("Failed to fetch dropdown data", err);
-    }
-  };
-  const getData = async () => {
-    try {
-      setLoading(true);
-      const response = await API.get(`/tour/get/${tourId}`);
-      const data = response.data.data || {};
-
-      // setDataTourDetail(data);
-      // setTourInfo(data.tour);
-      // setTourDetail(data.detail);
-      // setTourPrice(data.price);
-      // setTourQuantity(data.quantity);
-      // setTourHighlight(data.highlights);
-      // const mainImg = data.images?.find((img) => img.imagetype === 0);
-      // setMainImage(mainImg?.imageurl || "");
-
-      // Đổ dữ liệu vào tourData
-      setTourData({
-        tourid: data.tour?.tourid || "",
-        tourname: data.tour?.tourname || "",
-        slug: data.tour?.slug || "",
-        description: data.tour?.description || "",
-        destination: data.tour?.destination || "",
-        departure: data.tour?.departure || "",
-        timetypeid: data.tour?.timetypeid || "",
-        hoteltypeid: data.tour?.hoteltypeid || "",
-        startdate: data.tour?.startdate?.split("T")[0] || null,
-        enddate: data.tour?.enddate?.split("T")[0] || null,
-        vehicletypeid: data.tour?.vehicletypeid || "",
-        updated_by: userId,
-        isGroup: data.tour.tourtype === "DOAN" ? true : false,
-        images: data.images || [],
-        detailContent: data.detail.content || "",
-        price: {
-          adultprice: data.price?.adultprice || 0,
-          childprice: data.price?.childprice || 0,
-          freeprice: data.price?.freeprice || 0,
-        },
-        // Nếu bạn cần quantity thì thêm lại đoạn này
-        // quantity: {
-        //   adult: data.quantity?.adult || "",
-        //   child: data.quantity?.child || "",
-        //   free: data.quantity?.free || "",
-        // },
-        highlights: data.highlights?.length
-          ? data.highlights
-          : [{ highlight_key: 1, highlight_value: "" }],
+        destinations: des.data.data || [],
+        departures: dep.data.data || [],
+        timeTypes: time.data.data || [],
+        hotelTypes: hotel.data.data || [],
+        vehicleTypes: vehicle.data.data || [],
       });
     } catch (error) {
-      console.error(
-        "Lỗi khi lấy danh sách loại Tour:",
-        error.response || error
+      console.error("Lỗi load dữ liệu dropdown:", error);
+
+      showToast(
+        "danger",
+        "Không thể tải dữ liệu danh mục. Vui lòng tải lại trang.",
       );
-    } finally {
-      setLoading(false);
     }
   };
+
+  /* =====================================================
+     LOAD TOUR DATA
+  ===================================================== */
+
+  const getData = async () => {
+    if (!tourId) {
+      showToast("danger", "Không tìm thấy Tour ID.");
+      setLoadingData(false);
+      return;
+    }
+
+    try {
+      setLoadingData(true);
+
+      const response = await API.get(`/tour/get/${tourId}`);
+
+      const data = response.data.data || {};
+
+      setTourData({
+        tourid: data.tour?.tourid || "",
+
+        tourname: data.tour?.tourname || "",
+
+        slug: data.tour?.slug || "",
+
+        description: data.tour?.description || "",
+
+        destination: data.tour?.destination
+          ? String(data.tour.destination)
+          : "",
+
+        departure: data.tour?.departure ? String(data.tour.departure) : "",
+
+        timetypeid: data.tour?.timetypeid ? String(data.tour.timetypeid) : "",
+
+        hoteltypeid: data.tour?.hoteltypeid
+          ? String(data.tour.hoteltypeid)
+          : "",
+
+        startdate: data.tour?.startdate
+          ? data.tour.startdate.split("T")[0]
+          : "",
+
+        enddate: data.tour?.enddate ? data.tour.enddate.split("T")[0] : "",
+
+        vehicletypeid: data.tour?.vehicletypeid
+          ? String(data.tour.vehicletypeid)
+          : "",
+
+        updated_by: userId,
+
+        isGroup: data.tour?.tourtype === "DOAN",
+
+        images: data.images || [],
+
+        detailContent: data.detail?.content || "",
+
+        price: {
+          adultprice:
+            data.price?.adultprice !== null &&
+            data.price?.adultprice !== undefined
+              ? data.price.adultprice
+              : "",
+
+          childprice:
+            data.price?.childprice !== null &&
+            data.price?.childprice !== undefined
+              ? data.price.childprice
+              : "",
+
+          freeprice:
+            data.price?.freeprice !== null &&
+            data.price?.freeprice !== undefined
+              ? data.price.freeprice
+              : "",
+
+          promotion:
+            data.price?.promotion !== null &&
+            data.price?.promotion !== undefined
+              ? data.price.promotion
+              : 0,
+        },
+
+        highlights:
+          data.highlights?.length > 0
+            ? data.highlights
+            : [
+                {
+                  highlight_key: 1,
+                  highlight_value: "",
+                },
+              ],
+      });
+    } catch (error) {
+      console.error("Lỗi lấy tour:", error);
+
+      showToast(
+        "danger",
+        error?.response?.data?.message || "Không thể tải thông tin tour.",
+      );
+    } finally {
+      setLoadingData(false);
+    }
+  };
+
+  /* =====================================================
+     INIT
+  ===================================================== */
+
+  useEffect(() => {
+    fetchOptions();
+    getData();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  /* =====================================================
+     FORM
+  ===================================================== */
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    if (name === "startdate" || name === "enddate") {
-      setTourData((prev) => ({
-        ...prev,
-        [name]: value === "" ? null : value, // nếu xoá thì gán null
-      }));
-    } else {
-      setTourData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
-  };
-
-  const handleUpdateTour = async () => {
-    //console.log(tourData);
-    try {
-      setLoading(true);
-      const response = await APIToken.post("/tour/update", tourData);
-
-      if (response.status === 200) {
-        setAlertMessage("Cập nhật thông tin tour thành công");
-        //setTourData(defaultTourData);
-        setSuccessAlertOpen(true);
-
-        // Đợi 2 giây rồi mới chuyển trang
-        setTimeout(() => {
-          navigate("/tour");
-        }, 1000); // 2000ms = 2 giây
-      }
-    } catch (error) {
-      return error;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleQuantityChange = (field, value) => {
     setTourData((prev) => ({
       ...prev,
-      quantity: { ...prev.quantity, [field]: value },
+      [name]: value,
     }));
   };
 
   const handlePriceChange = (field, value) => {
     setTourData((prev) => ({
       ...prev,
-      price: { ...prev.price, [field]: value },
+
+      price: {
+        ...prev.price,
+
+        [field]: value === "" ? "" : Number(value),
+      },
     }));
   };
 
-  const handleUploadSuccess = (url) => {
-    setTourData((prevData) => ({
-      ...prevData,
-      images: [
-        // Giữ tất cả hình có imagetype khác 0
-        ...prevData.images.filter((img) => img.imagetype !== 0),
-        // Thêm hình avatar mới
+  const handleContentChange = (newContent) => {
+    setTourData((prev) => ({
+      ...prev,
+      detailContent: newContent,
+    }));
+  };
+
+  /* =====================================================
+     HIGHLIGHT
+  ===================================================== */
+
+  const handleHighlightChange = (index, value) => {
+    setTourData((prev) => {
+      const highlights = [...prev.highlights];
+
+      highlights[index] = {
+        ...highlights[index],
+        highlight_value: value,
+      };
+
+      return {
+        ...prev,
+        highlights,
+      };
+    });
+  };
+
+  const handleAddHighlight = () => {
+    setTourData((prev) => ({
+      ...prev,
+
+      highlights: [
+        ...prev.highlights,
         {
-          imagename: "", // Nếu cần thì thêm tên hình ở đây
+          highlight_key: prev.highlights.length + 1,
+          highlight_value: "",
+        },
+      ],
+    }));
+  };
+
+  const handleDeleteHighlight = (index) => {
+    setTourData((prev) => {
+      let highlights = prev.highlights.filter((_, idx) => idx !== index);
+
+      if (highlights.length === 0) {
+        highlights = [
+          {
+            highlight_key: 1,
+            highlight_value: "",
+          },
+        ];
+      }
+
+      highlights = highlights.map((item, idx) => ({
+        ...item,
+        highlight_key: idx + 1,
+      }));
+
+      return {
+        ...prev,
+        highlights,
+      };
+    });
+  };
+
+  /* =====================================================
+     IMAGE
+  ===================================================== */
+
+  const handleUploadSuccess = (url) => {
+    setTourData((prev) => ({
+      ...prev,
+
+      images: [
+        ...prev.images.filter((img) => Number(img.imagetype) !== 0),
+
+        {
+          imagename: "",
           imageurl: url,
           imagetype: 0,
         },
       ],
     }));
   };
-  const handleHighlightChange = (index, value) => {
-    const newHighlights = [...tourData.highlights];
-    newHighlights[index].highlight_value = value;
-    setTourData({ ...tourData, highlights: newHighlights });
-  };
 
-  const handleAddHighlight = () => {
-    setTourData({
-      ...tourData,
-      highlights: [
-        ...tourData.highlights,
+  const handleUploadImageListSuccess = (url) => {
+    setTourData((prev) => ({
+      ...prev,
+
+      images: [
+        ...prev.images,
+
         {
-          highlight_key: tourData.highlights.length + 1,
-          highlight_value: "",
+          imagename: "New Image",
+          imageurl: url,
+          imagetype: 1,
         },
       ],
-    });
-  };
-
-  const handleUploadImageListSuccess = (newImageUrl) => {
-    // Tạo đối tượng hình ảnh mới với imagetype = 1
-    const newImage = {
-      imagename: "New Image", // Bạn có thể thay thế bằng tên hình ảnh thực tế nếu có
-      imageurl: newImageUrl, // Dùng newImageUrl làm đường dẫn hình ảnh
-      imagetype: 1, // Gán imagetype = 1 cho hình ảnh mới
-    };
-
-    // Cập nhật mảng images trong tourData
-    setTourData((prevData) => ({
-      ...prevData,
-      images: [...prevData.images, newImage], // Thêm hình vào cuối mảng images
     }));
   };
-  const handleContentChange = (newContent) => {
-    setTourData((prevData) => ({
-      ...prevData,
-      detailContent: newContent, // Cập nhật nội dung vào detailContent
-    }));
-    setAlertMessage("Lưu thông tin thành công");
-    setSuccessAlertOpen(true);
-  };
+
   const handleDeleteImage = (imgToDelete) => {
-    const updatedImages = tourData.images.filter(
-      (img) => img.imageurl !== imgToDelete.imageurl
-    );
-    setTourData((prevData) => ({
-      ...prevData,
-      images: updatedImages,
+    setTourData((prev) => ({
+      ...prev,
+
+      images: prev.images.filter(
+        (img) => img.imageurl !== imgToDelete.imageurl,
+      ),
     }));
   };
 
-  useEffect(() => {
-    fetchOptions();
-    getData();
-  }, []);
+  const handleDeleteAvatar = () => {
+    setTourData((prev) => ({
+      ...prev,
+
+      images: prev.images.filter((img) => Number(img.imagetype) !== 0),
+    }));
+  };
+
+  /* =====================================================
+     HELPERS
+  ===================================================== */
+
+  const mainImage = useMemo(() => {
+    return tourData.images.find(
+      (img) => Number(img.imagetype) === 0 && img.imageurl,
+    );
+  }, [tourData.images]);
+
+  const galleryImages = useMemo(() => {
+    return tourData.images.filter(
+      (img) => Number(img.imagetype) === 1 && img.imageurl,
+    );
+  }, [tourData.images]);
+
+  const formatMoney = (value) => {
+    if (value === "" || value === null || value === undefined) {
+      return "Chưa nhập";
+    }
+
+    return `${Number(value).toLocaleString("vi-VN")} VNĐ`;
+  };
+
+  const isContentEmpty = (html) => {
+    if (!html) return true;
+
+    const text = html
+      .replace(/<[^>]*>/g, "")
+      .replace(/&nbsp;/g, "")
+      .trim();
+
+    return text === "";
+  };
+
+  /* =====================================================
+     COMPLETION
+  ===================================================== */
+
+  const completionData = useMemo(() => {
+    const checks = [
+      {
+        label: "Tên tour",
+        done: Boolean(tourData.tourname.trim()),
+      },
+      {
+        label: "Điểm đến",
+        done: Boolean(tourData.destination),
+      },
+      {
+        label: "Điểm khởi hành",
+        done: Boolean(tourData.departure),
+      },
+      {
+        label: "Thời lượng",
+        done: Boolean(tourData.timetypeid),
+      },
+      {
+        label: "Nội dung chi tiết",
+        done: !isContentEmpty(tourData.detailContent),
+      },
+      {
+        label: "Ảnh đại diện",
+        done: Boolean(mainImage),
+      },
+    ];
+
+    const completed = checks.filter((item) => item.done).length;
+
+    const percent = Math.round((completed / checks.length) * 100);
+
+    return {
+      checks,
+      percent,
+    };
+  }, [tourData, mainImage]);
+
+  /* =====================================================
+     UPDATE TOUR
+  ===================================================== */
+
+  const handleUpdateTour = async () => {
+    if (!tourData.tourname.trim()) {
+      showToast("danger", "Vui lòng nhập tên tour.");
+      return;
+    }
+
+    if (!tourData.destination) {
+      showToast("danger", "Vui lòng chọn điểm đến.");
+      return;
+    }
+
+    if (!tourData.departure) {
+      showToast("danger", "Vui lòng chọn điểm khởi hành.");
+      return;
+    }
+
+    /*
+      Ngày KH và ngày về KHÔNG BẮT BUỘC.
+
+      Chỉ kiểm tra khi cả hai đều có dữ liệu.
+    */
+
+    if (
+      tourData.startdate &&
+      tourData.enddate &&
+      new Date(tourData.enddate) < new Date(tourData.startdate)
+    ) {
+      showToast("danger", "Ngày về không được nhỏ hơn ngày khởi hành.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      /*
+        Không có ngày => gửi null.
+        Tránh gửi "" gây lỗi DATE ở PostgreSQL.
+      */
+
+      const payload = {
+        ...tourData,
+
+        startdate: tourData.startdate || null,
+
+        enddate: tourData.enddate || null,
+
+        highlights: tourData.highlights
+          .filter((item) => item.highlight_value?.trim() !== "")
+          .map((item, index) => ({
+            ...item,
+            highlight_key: index + 1,
+            highlight_value: item.highlight_value.trim(),
+          })),
+
+        price: {
+          adultprice:
+            tourData.price.adultprice === ""
+              ? null
+              : Number(tourData.price.adultprice),
+
+          childprice:
+            tourData.price.childprice === ""
+              ? null
+              : Number(tourData.price.childprice),
+
+          freeprice:
+            tourData.price.freeprice === ""
+              ? null
+              : Number(tourData.price.freeprice),
+
+          promotion:
+            tourData.price.promotion === ""
+              ? 0
+              : Number(tourData.price.promotion || 0),
+        },
+      };
+
+      console.log("UPDATE TOUR PAYLOAD:", payload);
+
+      const response = await APIToken.post("/tour/update", payload);
+
+      if (response.status === 200) {
+        showToast("success", "Cập nhật thông tin tour thành công.");
+
+        setTimeout(() => {
+          navigate("/tour");
+        }, 800);
+      }
+    } catch (error) {
+      console.error("Lỗi cập nhật tour:", error);
+
+      showToast(
+        "danger",
+        error?.response?.data?.message ||
+          error?.response?.data?.error ||
+          "Không thể cập nhật tour.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /* =====================================================
+     LOADING DATA
+  ===================================================== */
+
+  if (loadingData) {
+    return (
+      <div className="tour-edit-loading-page">
+        <Spinner animation="border" />
+
+        <span>Đang tải thông tin tour...</span>
+      </div>
+    );
+  }
+
+  /* =====================================================
+     UI
+  ===================================================== */
 
   return (
-    <Container className="mt-2">
-      <div
-        style={{
-          borderBottom: "1px solid #1D61AD",
-          fontSize: 20,
-          paddingTop: 10,
-          paddingBottom: 10,
-          marginBottom: 20,
-          color: "#1d61ad",
-        }}
-      >
-        THÊM MỚI TOUR
+    <div className="tour-edit-page">
+      {/* HEADER */}
+
+      <div className="tour-edit-page-header">
+        <div className="tour-edit-header-left">
+          <button
+            type="button"
+            className="tour-edit-back-btn"
+            onClick={() => navigate("/tour")}
+          >
+            <FiArrowLeft />
+          </button>
+
+          <div>
+            <div className="tour-edit-title-row">
+              <h2>Chỉnh sửa Tour</h2>
+
+              {tourData.tourid && (
+                <Badge bg="light" text="dark" className="tour-edit-id-badge">
+                  ID #{tourData.tourid}
+                </Badge>
+              )}
+            </div>
+
+            <p>
+              Cập nhật thông tin tour, giá, nội dung và hình ảnh hiển thị trên
+              website.
+            </p>
+          </div>
+        </div>
+
+        <div className="tour-edit-header-status">
+          Hoàn thiện <strong>{completionData.percent}%</strong>
+        </div>
       </div>
-      <Tabs
-        id="tour-add-tabs"
-        activeKey={key}
-        onSelect={(k) => setKey(k)}
-        className="mb-3"
-      >
-        <Tab eventKey="info" title="Thông tin Tour">
-          {/* Form nhập */}
-          <Row>
-            <label
-              style={{
-                display: "flex",
-                alignItems: "center",
-                marginBottom: "20px",
-              }}
-            >
-              <input
-                type="checkbox"
-                name="groupCustomer"
-                checked={tourData.isGroup}
-                onChange={(e) =>
-                  setTourData({ ...tourData, isGroup: e.target.checked })
-                }
-                style={{ width: "20px", height: "20px", marginRight: "8px" }}
-              />
-              Khách đoàn
-            </label>
-          </Row>
 
-          <Row className="mb-3">
-            <Col md={6}>
-              <label>Điểm đến:</label>
-              <select
-                name="destination"
-                className="form-control"
-                value={tourData.destination}
-                onChange={handleChange}
-              >
-                <option value="">-- Chọn --</option>
-                {options.destinations.map((d) => (
-                  <option key={d.travellocationid} value={d.travellocationid}>
-                    {d.travellocationid + " - " + d.travellocationname}
-                  </option>
-                ))}
-              </select>
-            </Col>
-            <Col md={6}>
-              <label>Điểm khởi hành:</label>
-              <select
-                name="departure"
-                className="form-control"
-                value={tourData.departure}
-                onChange={handleChange}
-              >
-                <option value="">-- Chọn --</option>
-                {options.departures.map((d) => (
-                  <option key={d.provinceid} value={d.provinceid}>
-                    {d.provinceid + " - " + d.provincename}
-                  </option>
-                ))}
-              </select>
-            </Col>
-          </Row>
+      <Row className="g-4">
+        {/* =====================================================
+            LEFT
+        ===================================================== */}
 
-          <Row className="mb-3">
-            <Col>
-              <Form.Label>Tên tour</Form.Label>
-              <Form.Control
-                type="text"
-                name="tourname"
-                value={tourData.tourname}
-                onChange={handleChange}
-              />
-            </Col>
+        <Col xl={8} lg={8}>
+          {/* BASIC */}
 
-            <Col md={4}>
-              <label>Loại nơi ở:</label>
-              <select
-                name="hoteltypeid"
-                className="form-control"
-                value={tourData.hoteltypeid}
-                onChange={handleChange}
-              >
-                <option value="">-- Chọn --</option>
-                {options.hotelTypes.map((t) => (
-                  <option key={t.hoteltypeid} value={t.hoteltypeid}>
-                    {t.hoteltypeid + " - " + t.hoteltypename}
-                  </option>
-                ))}
-              </select>
-            </Col>
-            <Col md={4}>
-              <label>Phương tiện:</label>
-              <select
-                name="vehicletypeid"
-                className="form-control"
-                value={tourData.vehicletypeid}
-                onChange={handleChange}
-              >
-                <option value="">-- Chọn --</option>
-                {options.vehicleTypes.map((t) => (
-                  <option key={t.vehicletypeid} value={t.vehicletypeid}>
-                    {t.vehicletypeid + " - " + t.vehicletypename}
-                  </option>
-                ))}
-              </select>
-            </Col>
-          </Row>
-          <Row className="mb-3">
-            <Col>
-              <Form.Label>Slug (Đường dẫ thân thiện)</Form.Label>
-              <Form.Control
-                type="text"
-                name="slug"
-                value={tourData.slug}
-                onChange={handleChange}
-              />
-            </Col>
-          </Row>
+          <div className="tour-edit-card">
+            <div className="tour-edit-card-header">
+              <div className="tour-edit-card-icon">
+                <FiMapPin />
+              </div>
 
-          <Row className="mb-3">
-            <Col md={4}>
-              <label>Loại thời gian:</label>
-              <select
-                name="timetypeid"
-                className="form-control"
-                value={tourData.timetypeid}
-                onChange={handleChange}
-              >
-                <option value="">-- Chọn --</option>
-                {options.timeTypes.map((t) => (
-                  <option key={t.timetypeid} value={t.timetypeid}>
-                    {t.timetypename}
-                  </option>
-                ))}
-              </select>
-            </Col>
-            <Col>
-              <Form.Label>Ngày khởi hành</Form.Label>
-              <Form.Control
-                type="date"
-                name="startdate"
-                value={tourData.startdate}
-                onChange={handleChange}
-              />
-            </Col>
-            <Col>
-              <Form.Label>Ngày về</Form.Label>
-              <Form.Control
-                type="date"
-                name="enddate"
-                value={tourData.enddate}
-                onChange={handleChange}
-              />
-            </Col>
-          </Row>
+              <div>
+                <h5>Thông tin cơ bản</h5>
 
-          {/* <Row className="mb-3">
-            <Col>
-              <Form.Label>SL Người lớn</Form.Label>
-              <Form.Control
-                type="number"
-                value={tourData.quantity.adult}
-                onChange={(e) =>
-                  handleQuantityChange("adult", Number(e.target.value))
-                }
-              />
-            </Col>
-            <Col>
-              <Form.Label>SL Trẻ em</Form.Label>
-              <Form.Control
-                type="number"
-                value={tourData.quantity.child}
-                onChange={(e) =>
-                  handleQuantityChange("child", Number(e.target.value))
-                }
-              />
-            </Col>
-            <Col>
-              <Form.Label>SL Miễn phí</Form.Label>
-              <Form.Control
-                type="number"
-                value={tourData.quantity.free}
-                onChange={(e) =>
-                  handleQuantityChange("free", Number(e.target.value))
-                }
-              />
-            </Col>
-          </Row> */}
+                <span>Tên tour, tuyến điểm và đường dẫn website</span>
+              </div>
+            </div>
 
-          <Row className="mb-3">
-            <Col>
-              <Form.Label>Giá vé từ 11t trở lên</Form.Label>
-              <Form.Control
-                type="number"
-                step="any"
-                value={tourData.price.adultprice}
-                onChange={(e) =>
-                  handlePriceChange("adultprice", Number(e.target.value))
-                }
-              />
-            </Col>
-            <Col>
-              <Form.Label>Giá vé từ 6-11t</Form.Label>
-              <Form.Control
-                type="number"
-                step="any"
-                value={tourData.price.childprice}
-                onChange={(e) =>
-                  handlePriceChange("childprice", Number(e.target.value))
-                }
-              />
-            </Col>
-            <Col>
-              <Form.Label>Giá vé nhỏ hơn 6t </Form.Label>
-              <Form.Control
-                type="number"
-                step="any"
-                value={tourData.price.freeprice}
-                onChange={(e) =>
-                  handlePriceChange("freeprice", Number(e.target.value))
-                }
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Form.Label>Điểm nổi bật của tour</Form.Label>
-              {tourData.highlights.map((h, idx) => (
-                <Form.Control
-                  key={idx}
-                  className="mb-2"
-                  type="text"
-                  placeholder={`Điểm nổi bật ${idx + 1}`}
-                  value={h.highlight_value}
-                  onChange={(e) => handleHighlightChange(idx, e.target.value)}
+            <div className="tour-edit-card-body">
+              <div className="tour-edit-group-type">
+                <div>
+                  <strong>Tour dành cho khách đoàn</strong>
+
+                  <span>
+                    Sử dụng cho doanh nghiệp, bệnh viện, ngân hàng, đoàn thể...
+                  </span>
+                </div>
+
+                <Form.Check
+                  type="switch"
+                  checked={tourData.isGroup}
+                  onChange={(e) =>
+                    setTourData((prev) => ({
+                      ...prev,
+                      isGroup: e.target.checked,
+                    }))
+                  }
+                  className="tour-edit-group-switch"
                 />
-              ))}
+              </div>
+
+              <div className="tour-edit-form-group">
+                <Form.Label>
+                  Tên tour
+                  <span className="tour-required">*</span>
+                </Form.Label>
+
+                <Form.Control
+                  className="tour-edit-input tour-edit-tourname"
+                  type="text"
+                  name="tourname"
+                  value={tourData.tourname}
+                  onChange={handleChange}
+                  placeholder="VD: Tour Phan Thiết - Mũi Né 2N1Đ"
+                />
+              </div>
+
+              <Row className="g-3">
+                <Col md={6}>
+                  <div className="tour-edit-form-group">
+                    <Form.Label>
+                      Điểm khởi hành
+                      <span className="tour-required">*</span>
+                    </Form.Label>
+
+                    <Form.Select
+                      className="tour-edit-input"
+                      name="departure"
+                      value={tourData.departure}
+                      onChange={handleChange}
+                    >
+                      <option value="">-- Chọn điểm khởi hành --</option>
+
+                      {options.departures.map((item) => (
+                        <option key={item.provinceid} value={item.provinceid}>
+                          {item.provincename}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </div>
+                </Col>
+
+                <Col md={6}>
+                  <div className="tour-edit-form-group">
+                    <Form.Label>
+                      Điểm đến
+                      <span className="tour-required">*</span>
+                    </Form.Label>
+
+                    <Form.Select
+                      className="tour-edit-input"
+                      name="destination"
+                      value={tourData.destination}
+                      onChange={handleChange}
+                    >
+                      <option value="">-- Chọn điểm đến --</option>
+
+                      {options.destinations.map((item) => (
+                        <option
+                          key={item.travellocationid}
+                          value={item.travellocationid}
+                        >
+                          {item.travellocationname}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </div>
+                </Col>
+              </Row>
+
+              <div className="tour-edit-form-group">
+                <Form.Label>Đường dẫn (Slug)</Form.Label>
+
+                <div className="tour-edit-slug-wrapper">
+                  <span>/tour/</span>
+
+                  <Form.Control
+                    className="tour-edit-input"
+                    type="text"
+                    name="slug"
+                    value={tourData.slug}
+                    onChange={handleChange}
+                    placeholder="phan-thiet-mui-ne-2n1d"
+                  />
+                </div>
+              </div>
+
+              <div className="tour-edit-form-group no-margin">
+                <div className="tour-edit-label-row">
+                  <Form.Label>Mô tả ngắn</Form.Label>
+
+                  <span>{tourData.description.length} ký tự</span>
+                </div>
+
+                <Form.Control
+                  className="tour-edit-input"
+                  as="textarea"
+                  rows={4}
+                  name="description"
+                  value={tourData.description}
+                  onChange={handleChange}
+                  placeholder="Mô tả ngắn về chương trình tour..."
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* SERVICE */}
+
+          <div className="tour-edit-card">
+            <div className="tour-edit-card-header">
+              <div className="tour-edit-card-icon">
+                <FiCalendar />
+              </div>
+
+              <div>
+                <h5>Thời gian & dịch vụ</h5>
+
+                <span>Thời lượng, ngày đi, lưu trú và phương tiện</span>
+              </div>
+            </div>
+
+            <div className="tour-edit-card-body">
+              <Row className="g-3">
+                <Col md={4}>
+                  <div className="tour-edit-form-group">
+                    <Form.Label>Thời lượng</Form.Label>
+
+                    <Form.Select
+                      className="tour-edit-input"
+                      name="timetypeid"
+                      value={tourData.timetypeid}
+                      onChange={handleChange}
+                    >
+                      <option value="">-- Chọn --</option>
+
+                      {options.timeTypes.map((item) => (
+                        <option key={item.timetypeid} value={item.timetypeid}>
+                          {item.timetypename}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </div>
+                </Col>
+
+                <Col md={4}>
+                  <div className="tour-edit-form-group">
+                    <Form.Label>Ngày khởi hành</Form.Label>
+
+                    <Form.Control
+                      className="tour-edit-input"
+                      type="date"
+                      name="startdate"
+                      value={tourData.startdate || ""}
+                      onChange={handleChange}
+                    />
+
+                    <div className="tour-edit-help">Không bắt buộc</div>
+                  </div>
+                </Col>
+
+                <Col md={4}>
+                  <div className="tour-edit-form-group">
+                    <Form.Label>Ngày về</Form.Label>
+
+                    <Form.Control
+                      className="tour-edit-input"
+                      type="date"
+                      name="enddate"
+                      value={tourData.enddate || ""}
+                      onChange={handleChange}
+                      min={tourData.startdate || undefined}
+                    />
+
+                    <div className="tour-edit-help">Không bắt buộc</div>
+                  </div>
+                </Col>
+
+                <Col md={6}>
+                  <div className="tour-edit-form-group no-margin">
+                    <Form.Label>Loại lưu trú</Form.Label>
+
+                    <Form.Select
+                      className="tour-edit-input"
+                      name="hoteltypeid"
+                      value={tourData.hoteltypeid}
+                      onChange={handleChange}
+                    >
+                      <option value="">-- Chọn loại lưu trú --</option>
+
+                      {options.hotelTypes.map((item) => (
+                        <option key={item.hoteltypeid} value={item.hoteltypeid}>
+                          {item.hoteltypename}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </div>
+                </Col>
+
+                <Col md={6}>
+                  <div className="tour-edit-form-group no-margin">
+                    <Form.Label>Phương tiện</Form.Label>
+
+                    <Form.Select
+                      className="tour-edit-input"
+                      name="vehicletypeid"
+                      value={tourData.vehicletypeid}
+                      onChange={handleChange}
+                    >
+                      <option value="">-- Chọn phương tiện --</option>
+
+                      {options.vehicleTypes.map((item) => (
+                        <option
+                          key={item.vehicletypeid}
+                          value={item.vehicletypeid}
+                        >
+                          {item.vehicletypename}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </div>
+                </Col>
+              </Row>
+            </div>
+          </div>
+
+          {/* PRICE */}
+
+          <div className="tour-edit-card">
+            <div className="tour-edit-card-header">
+              <div className="tour-edit-card-icon">
+                <FiDollarSign />
+              </div>
+
+              <div>
+                <h5>Giá tour</h5>
+
+                <span>Thiết lập giá theo độ tuổi khách</span>
+              </div>
+            </div>
+
+            <div className="tour-edit-card-body">
+              <Row className="g-3">
+                <Col md={4}>
+                  <div className="tour-edit-price-box">
+                    <span className="tour-edit-price-type">NGƯỜI LỚN</span>
+
+                    <label>Từ 11 tuổi trở lên</label>
+
+                    <div className="tour-edit-money-input">
+                      <Form.Control
+                        type="number"
+                        min="0"
+                        value={tourData.price.adultprice}
+                        onChange={(e) =>
+                          handlePriceChange("adultprice", e.target.value)
+                        }
+                      />
+
+                      <span>VNĐ</span>
+                    </div>
+
+                    <div className="tour-edit-money-preview">
+                      {formatMoney(tourData.price.adultprice)}
+                    </div>
+                  </div>
+                </Col>
+
+                <Col md={4}>
+                  <div className="tour-edit-price-box">
+                    <span className="tour-edit-price-type child">TRẺ EM</span>
+
+                    <label>Từ 6 đến 11 tuổi</label>
+
+                    <div className="tour-edit-money-input">
+                      <Form.Control
+                        type="number"
+                        min="0"
+                        value={tourData.price.childprice}
+                        onChange={(e) =>
+                          handlePriceChange("childprice", e.target.value)
+                        }
+                      />
+
+                      <span>VNĐ</span>
+                    </div>
+
+                    <div className="tour-edit-money-preview">
+                      {formatMoney(tourData.price.childprice)}
+                    </div>
+                  </div>
+                </Col>
+
+                <Col md={4}>
+                  <div className="tour-edit-price-box">
+                    <span className="tour-edit-price-type free">EM BÉ</span>
+
+                    <label>Dưới 6 tuổi</label>
+
+                    <div className="tour-edit-money-input">
+                      <Form.Control
+                        type="number"
+                        min="0"
+                        value={tourData.price.freeprice}
+                        onChange={(e) =>
+                          handlePriceChange("freeprice", e.target.value)
+                        }
+                      />
+
+                      <span>VNĐ</span>
+                    </div>
+
+                    <div className="tour-edit-money-preview">
+                      {formatMoney(tourData.price.freeprice)}
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+            </div>
+          </div>
+
+          {/* HIGHLIGHT */}
+
+          <div className="tour-edit-card">
+            <div className="tour-edit-card-header">
+              <div className="tour-edit-card-icon">
+                <FiStar />
+              </div>
+
+              <div>
+                <h5>Điểm nổi bật của Tour</h5>
+
+                <span>Những ưu điểm nổi bật hiển thị nhanh cho khách</span>
+              </div>
+            </div>
+
+            <div className="tour-edit-card-body">
+              <div className="tour-edit-highlight-list">
+                {tourData.highlights.map((item, index) => (
+                  <div className="tour-edit-highlight-row" key={index}>
+                    <div className="tour-edit-highlight-number">
+                      {index + 1}
+                    </div>
+
+                    <Form.Control
+                      className="tour-edit-input"
+                      type="text"
+                      value={item.highlight_value}
+                      placeholder={`VD: Nghỉ dưỡng resort 4 sao`}
+                      onChange={(e) =>
+                        handleHighlightChange(index, e.target.value)
+                      }
+                    />
+
+                    <button
+                      type="button"
+                      className="tour-edit-delete-btn"
+                      onClick={() => handleDeleteHighlight(index)}
+                      title="Xóa điểm nổi bật"
+                    >
+                      <FiTrash2 />
+                    </button>
+                  </div>
+                ))}
+              </div>
+
               <Button
+                type="button"
                 variant="outline-primary"
-                size="sm"
+                className="tour-edit-add-highlight"
                 onClick={handleAddHighlight}
               >
                 + Thêm điểm nổi bật
               </Button>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Form.Label>Mô tả ngắn</Form.Label>
-              <Form.Control
-                as="textarea" // Đổi thành textarea
-                name="description"
-                value={tourData.description}
-                onChange={handleChange}
-                rows={5} // Số dòng, có thể thay đổi theo ý muốn
-                style={{ resize: "both", minHeight: "150px" }}
-              />
-            </Col>
-          </Row>
-        </Tab>
+            </div>
+          </div>
 
-        <Tab eventKey="word" title="Nội dung chi tiết">
-          <Row className="mb-3">
-            {tourData.detailContent !== undefined && (
+          {/* CONTENT */}
+
+          <div className="tour-edit-card tour-edit-content-card">
+            <div className="tour-edit-card-header">
+              <div>
+                <h5>Nội dung chi tiết</h5>
+
+                <span>
+                  Chương trình, lịch trình, dịch vụ bao gồm và chính sách Tour
+                </span>
+              </div>
+
+              <div className="tour-edit-autosave">
+                <span></span>
+                Tự động ghi nhận
+              </div>
+            </div>
+
+            <div className="tour-edit-word-wrapper">
               <Word
                 value={tourData.detailContent}
-                onSave={handleContentChange}
+                onChange={handleContentChange}
               />
-            )}
-          </Row>
-        </Tab>
+            </div>
+          </div>
+        </Col>
 
-        <Tab eventKey="image" title="Danh sách hình ảnh">
-          {/* Tab 2: Word Editor */}
-          <Row className="mb-3">
-            <Col>
-              <div style={{ marginLeft: 37, marginTop: 12 }}>
-                <div className="d-flex mt-3">
-                  <div
-                    style={{
-                      marginRight: 10,
-                    }}
-                  >
-                    Chọn ảnh đại diện:{" "}
-                  </div>
-                  <ImageCDNCloud onUploadSuccess={handleUploadSuccess} />
+        {/* =====================================================
+            RIGHT SIDEBAR
+        ===================================================== */}
+
+        <Col xl={4} lg={4}>
+          <div className="tour-edit-sidebar">
+            {/* UPDATE */}
+
+            <div className="tour-edit-card tour-edit-publish-card">
+              <div className="tour-edit-card-header">
+                <div>
+                  <h5>Cập nhật Tour</h5>
+
+                  <span>Kiểm tra thông tin trước khi lưu</span>
                 </div>
-                {tourData.images.find(
-                  (img) => img.imagetype === 0 && img.imageurl
-                ) ? (
-                  <img
-                    src={
-                      tourData.images.find(
-                        (img) => img.imagetype === 0 && img.imageurl
-                      ).imageurl
-                    }
-                    alt="Selected file"
-                    width={220}
-                    height={220}
-                    style={{ marginTop: 20 }}
-                  />
-                ) : (
+              </div>
+
+              <div className="tour-edit-card-body">
+                <div className="tour-edit-progress-header">
+                  <span>Mức độ hoàn thiện</span>
+
+                  <strong>{completionData.percent}%</strong>
+                </div>
+
+                <div className="tour-edit-progress">
                   <div
                     style={{
-                      width: 220,
-                      height: 220,
-                      border: "1px #000000 dashed",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      marginTop: 20,
+                      width: `${completionData.percent}%`,
                     }}
-                  >
-                    <p>Avatar</p>
+                  ></div>
+                </div>
+
+                <div className="tour-edit-check-list">
+                  {completionData.checks.map((item, index) => (
+                    <div
+                      key={index}
+                      className={`tour-edit-check-item ${
+                        item.done ? "completed" : ""
+                      }`}
+                    >
+                      <span>{item.done ? <FiCheck /> : index + 1}</span>
+
+                      {item.label}
+                    </div>
+                  ))}
+                </div>
+
+                <Button
+                  className="tour-edit-submit-btn"
+                  disabled={loading}
+                  onClick={handleUpdateTour}
+                >
+                  {loading ? (
+                    <>
+                      <Spinner animation="border" size="sm" />
+                      Đang cập nhật...
+                    </>
+                  ) : (
+                    <>
+                      <FiSave />
+                      CẬP NHẬT TOUR
+                    </>
+                  )}
+                </Button>
+
+                <button
+                  type="button"
+                  className="tour-edit-cancel-btn"
+                  onClick={() => navigate("/tour")}
+                >
+                  Hủy và quay lại
+                </button>
+              </div>
+            </div>
+
+            {/* AVATAR */}
+
+            <div className="tour-edit-card">
+              <div className="tour-edit-card-header">
+                <div>
+                  <h5>Ảnh đại diện</h5>
+
+                  <span>Ảnh chính của Tour</span>
+                </div>
+              </div>
+
+              <div className="tour-edit-card-body">
+                {mainImage ? (
+                  <div className="tour-edit-main-image">
+                    <img src={mainImage.imageurl} alt="Ảnh đại diện tour" />
+
+                    <button type="button" onClick={handleDeleteAvatar}>
+                      <FiTrash2 />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="tour-edit-image-placeholder">
+                    <FiImage />
+
+                    <strong>Chưa có ảnh đại diện</strong>
+
+                    <span>Khuyến nghị ảnh ngang tỷ lệ 16:9</span>
                   </div>
                 )}
+
+                <div className="tour-edit-upload-area">
+                  <ImageCDNCloud onUploadSuccess={handleUploadSuccess} />
+                </div>
               </div>
-            </Col>
-            <Col>
-              <div>
-                <div className="d-flex mt-3">
-                  <div style={{ marginRight: 10 }}>Chọn ảnh: </div>
+            </div>
+
+            {/* GALLERY */}
+
+            <div className="tour-edit-card">
+              <div className="tour-edit-card-header">
+                <div>
+                  <h5>Thư viện ảnh</h5>
+
+                  <span>{galleryImages.length} ảnh trong Tour</span>
+                </div>
+              </div>
+
+              <div className="tour-edit-card-body">
+                <div className="tour-edit-upload-gallery">
                   <ImageCDNCloud
                     onUploadSuccess={handleUploadImageListSuccess}
                   />
                 </div>
 
-                <div
-                  style={{
-                    display: "flex",
-                    gap: 10,
-                    flexWrap: "wrap",
-                    marginTop: 20,
-                  }}
-                >
-                  {tourData.images.filter((img) => img.imagetype === 1).length >
-                  0 ? (
-                    tourData.images
-                      .filter((img) => img.imagetype === 1)
-                      .map((img, idx) => (
-                        <div
-                          key={idx}
-                          style={{
-                            position: "relative",
-                            width: 150,
-                            height: 150,
-                          }}
+                {galleryImages.length > 0 ? (
+                  <div className="tour-edit-gallery-grid">
+                    {galleryImages.map((img, index) => (
+                      <div
+                        className="tour-edit-gallery-item"
+                        key={`${img.imageurl}-${index}`}
+                      >
+                        <img src={img.imageurl} alt={`Tour ${index + 1}`} />
+
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteImage(img)}
                         >
-                          <img
-                            src={img.imageurl}
-                            alt={`Selected file ${idx}`}
-                            width={150}
-                            height={150}
-                            style={{
-                              objectFit: "cover",
-                              border: "1px #000000 dashed",
-                            }}
-                          />
-                          <FiTrash
-                            onClick={() => handleDeleteImage(img)}
-                            size={20}
-                            color="white"
-                            style={{
-                              position: "absolute",
-                              top: 5,
-                              right: 5,
-                              backgroundColor: "rgba(255,0,0,0.8)",
-                              borderRadius: "50%",
-                              padding: 4,
-                              cursor: "pointer",
-                            }}
-                            title="Xoá ảnh"
-                          />
-                        </div>
-                      ))
-                  ) : (
-                    <div
-                      style={{
-                        width: 150,
-                        height: 150,
-                        border: "1px #000000 dashed",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <p>Chọn ảnh</p>
-                    </div>
-                  )}
-                </div>
+                          <FiTrash2 />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="tour-edit-gallery-empty">
+                    Chưa có ảnh thư viện.
+                  </div>
+                )}
               </div>
-            </Col>
-          </Row>
-          <Row>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-              }}
-            >
-              <Button variant="primary" onClick={handleUpdateTour}>
-                Thêm Tour
-              </Button>
             </div>
-          </Row>
-        </Tab>
-      </Tabs>
-      <Toast
-        onClose={() => setSuccessAlertOpen(false)}
-        show={successAlertOpen}
-        delay={3000}
-        autohide
-        className="position-fixed top-0 end-0 m-3"
+          </div>
+        </Col>
+      </Row>
+
+      {/* TOAST */}
+
+      <ToastContainer
+        position="top-end"
+        className="p-3"
+        style={{
+          position: "fixed",
+          zIndex: 10000,
+        }}
       >
-        <Toast.Body>{alertMessage}</Toast.Body>
-      </Toast>
+        <Toast
+          bg={alertVariant}
+          show={successAlertOpen}
+          autohide
+          delay={4000}
+          onClose={() => setSuccessAlertOpen(false)}
+        >
+          <Toast.Header
+            closeButton
+            className="text-white"
+            style={{
+              backgroundColor: "rgba(0,0,0,.12)",
+              borderBottom: 0,
+            }}
+          >
+            <strong className="me-auto">Thông báo</strong>
+          </Toast.Header>
+
+          <Toast.Body className="text-white fw-bold">{alertMessage}</Toast.Body>
+        </Toast>
+      </ToastContainer>
+
+      {/* UPDATE LOADING */}
+
       {loading && (
-        <div className="loading-overlay">
-          <div className="loading-spinner">
-            <Spinner animation="border" role="status" />
+        <div className="tour-edit-loading-overlay">
+          <div className="tour-edit-loading-box">
+            <Spinner animation="border" />
+
+            <span>Đang cập nhật Tour...</span>
           </div>
         </div>
       )}
-    </Container>
+    </div>
   );
 };
 

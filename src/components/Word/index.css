@@ -1,25 +1,284 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+.blog-editor-wrapper {
+  width: 100%;
 
-@media print {
-	body {
-		margin: 0 !important;
-	}
+  background: #ffffff;
+
+  border: 1px solid #e4e7ec;
+
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 1px 2px rgba(16, 24, 40, 0.03),
+    0 2px 8px rgba(16, 24, 40, 0.04);
 }
 
-.main-container {
-	font-family: 'Lato';
-	width: fit-content;
-	margin-left: auto;
-	margin-right: auto;
+
+/* ==============================
+   HEADER
+============================== */
+
+.blog-editor-header {
+  min-height: 68px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding: 14px 18px;
+
+  background: #ffffff;
+
+  border-bottom: 1px solid #e9edf2;
 }
 
-.ck-content {
-	font-family: 'Lato';
-	line-height: 1.6;
-	word-break: break-word;
+.blog-editor-title {
+  font-size: 15px;
+
+  font-weight: 700;
+
+  color: #1f2937;
 }
 
-.editor-container_classic-editor .editor-container__editor {
-	min-width: 795px;
-	max-width: 795px;
+.blog-editor-description {
+  margin-top: 3px;
+
+  font-size: 12px;
+
+  color: #98a2b3;
+}
+
+
+/* ==============================
+   STATUS
+============================== */
+
+.blog-editor-status {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  flex-shrink: 0;
+
+  padding: 6px 11px;
+
+  border-radius: 20px;
+
+  background: #ecfdf3;
+
+  color: #15803d;
+
+  font-size: 11px;
+
+  font-weight: 600;
+}
+
+.blog-editor-status-dot {
+  width: 7px;
+
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #22c55e;
+
+  box-shadow:
+    0 0 0 3px rgba(34, 197, 94, 0.12);
+}
+
+
+/* ==============================
+   EDITOR
+============================== */
+
+.blog-editor-content {
+  width: 100%;
+}
+
+.blog-editor-content .tox-tinymce {
+  border: none !important;
+
+  border-radius: 0 !important;
+}
+
+
+/* ==============================
+   TINYMCE HEADER
+============================== */
+
+.blog-editor-content .tox-editor-header {
+  border-bottom: 1px solid #e4e7ec !important;
+
+  box-shadow: none !important;
+}
+
+.blog-editor-content .tox-toolbar-overlord {
+  background: #f8fafc !important;
+}
+
+.blog-editor-content .tox-toolbar__primary {
+  background: #f8fafc !important;
+}
+
+
+/* ==============================
+   TOOLBAR
+============================== */
+
+.blog-editor-content .tox-toolbar__group {
+  padding: 4px 6px !important;
+
+  border-right-color: #eaecf0 !important;
+}
+
+.blog-editor-content .tox-tbtn {
+  border-radius: 6px !important;
+
+  transition: background 0.15s ease;
+}
+
+.blog-editor-content .tox-tbtn:hover {
+  background: #eaf2fb !important;
+}
+
+.blog-editor-content .tox-tbtn--enabled {
+  background: #dcecff !important;
+
+  color: #1d61ad !important;
+}
+
+.blog-editor-content .tox-tbtn--select {
+  min-width: 60px;
+}
+
+
+/* ==============================
+   STATUS BAR TINYMCE
+============================== */
+
+.blog-editor-content .tox-statusbar {
+  min-height: 30px;
+
+  background: #fafafa !important;
+
+  border-top: 1px solid #e4e7ec !important;
+}
+
+
+/* ==============================
+   FOOTER
+============================== */
+
+.blog-editor-footer {
+  min-height: 45px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 10px 16px;
+
+  background: #fafafa;
+
+  border-top: 1px solid #e9edf2;
+}
+
+.blog-editor-tip {
+  flex: 1;
+
+  color: #667085;
+
+  font-size: 11px;
+
+  line-height: 1.5;
+}
+
+
+/* ==============================
+   STATS
+============================== */
+
+.blog-editor-stats {
+  display: flex;
+
+  align-items: center;
+
+  flex-shrink: 0;
+
+  gap: 0;
+
+  color: #667085;
+
+  font-size: 11px;
+
+  white-space: nowrap;
+}
+
+.blog-editor-stats span {
+  padding: 0 10px;
+
+  border-left: 1px solid #d0d5dd;
+}
+
+.blog-editor-stats span:first-child {
+  border-left: 0;
+}
+
+.blog-editor-stats strong {
+  color: #344054;
+
+  font-weight: 700;
+}
+
+
+/* Nếu HTML lớn hơn 500KB */
+.blog-editor-size-warning,
+.blog-editor-size-warning strong {
+  color: #dc2626 !important;
+}
+
+
+/* ==============================
+   RESPONSIVE
+============================== */
+
+@media (max-width: 768px) {
+  .blog-editor-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .blog-editor-footer {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 7px;
+  }
+
+  .blog-editor-stats {
+    width: 100%;
+
+    flex-wrap: wrap;
+  }
+
+  .blog-editor-stats span:first-child {
+    padding-left: 0;
+  }
+
+  .blog-editor-content .tox-toolbar__group {
+    padding: 2px !important;
+  }
 }

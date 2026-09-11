@@ -1,222 +1,1507 @@
+/* =========================================================
+   PAGE
+========================================================= */
+
 .sv-container {
-  padding: 20px;
-  background-color: #f8f9fc;
   min-height: 100vh;
+
+  padding: 28px;
+
+  background: #f5f7fa;
+
+  color: #1f2937;
 }
+
+
+/* =========================================================
+   HEADER
+========================================================= */
 
 .sv-header {
   display: flex;
-  justify-content: space-between;
+
   align-items: center;
-  border-bottom: 2px solid #1d61ad;
-  padding-bottom: 15px;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
   margin-bottom: 20px;
 }
 
-.sv-header-left h2 {
-  font-weight: 800;
-  color: #1d61ad;
-  margin: 0;
-  font-size: 24px;
+.sv-title-row {
+  display: flex;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
 }
+
+.sv-header-left h2 {
+  margin: 0;
+
+  color: #172b4d;
+
+  font-size: 26px;
+
+  font-weight: 750;
+}
+
+.sv-header-left p {
+  margin: 5px 0 0;
+
+  color: #7b8794;
+
+  font-size: 14px;
+}
+
+.sv-total-badge {
+  padding: 5px 9px;
+
+  border-radius: 20px;
+
+  background: #edf5ff;
+
+  color: #1d61ad;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   ADD BUTTON
+========================================================= */
 
 .sv-btn-add {
-  background-color: #1d61ad;
-  border: none;
-  font-weight: 600;
-  padding: 8px 20px;
-  border-radius: 6px;
+  min-height: 42px;
+
+  padding: 0 16px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  border: 0 !important;
+
+  border-radius: 8px;
+
+  background: #1d61ad !important;
+
+  font-size: 13px;
+
+  font-weight: 650;
+
+  white-space: nowrap;
+
+  transition: 0.15s ease;
 }
 
-/* Table Style */
-.sv-card-table {
-  background: white;
+.sv-btn-add:hover {
+  background: #174f8e !important;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 5px 14px
+    rgba(29, 97, 173, 0.18);
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.sv-stats-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 14px;
+
+  margin-bottom: 18px;
+}
+
+.sv-stat-card {
+  min-height: 86px;
+
+  padding: 15px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  border: 1px solid #e7ebf0;
+
   border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-  overflow: hidden;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 1px 3px
+    rgba(16, 24, 40, 0.025);
 }
 
-.sv-table { margin-bottom: 0; }
+.sv-stat-icon {
+  width: 44px;
+
+  height: 44px;
+
+  flex: 0 0 44px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 9px;
+
+  font-size: 18px;
+}
+
+.sv-stat-icon.blue {
+  background: #edf5ff;
+
+  color: #1d61ad;
+}
+
+.sv-stat-icon.purple {
+  background: #f5efff;
+
+  color: #7e22ce;
+}
+
+.sv-stat-icon.green {
+  background: #ecfdf3;
+
+  color: #16803c;
+}
+
+.sv-stat-icon.orange {
+  background: #fff7e6;
+
+  color: #c57500;
+}
+
+.sv-stat-card span {
+  display: block;
+
+  margin-bottom: 2px;
+
+  color: #98a2b3;
+
+  font-size: 12px;
+}
+
+.sv-stat-card strong {
+  color: #253858;
+
+  font-size: 22px;
+
+  font-weight: 750;
+}
+
+
+/* =========================================================
+   MAIN CARD
+========================================================= */
+
+.sv-card-table {
+  overflow: hidden;
+
+  border: 1px solid #e7ebf0;
+
+  border-radius: 12px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 1px 3px
+    rgba(16, 24, 40, 0.025);
+}
+
+
+/* =========================================================
+   TOOLBAR
+========================================================= */
+
+.sv-toolbar {
+  min-height: 70px;
+
+  padding: 14px 17px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  border-bottom: 1px solid #edf0f3;
+}
+
+.sv-toolbar-left {
+  display: flex;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 9px;
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.sv-search-box {
+  width: 340px;
+
+  height: 41px;
+
+  padding: 0 11px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  border: 1px solid #dce2e8;
+
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  transition: 0.15s;
+}
+
+.sv-search-box:focus-within {
+  border-color: #1d61ad;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(29, 97, 173, 0.08);
+}
+
+.sv-search-box > svg {
+  flex: 0 0 auto;
+
+  color: #98a2b3;
+
+  font-size: 14px;
+}
+
+.sv-search-box input {
+  width: 100%;
+
+  min-width: 0;
+
+  border: 0;
+
+  outline: 0;
+
+  color: #344054;
+
+  background: transparent;
+
+  font-size: 14px;
+}
+
+.sv-search-box input::placeholder {
+  color: #a6aeb8;
+}
+
+.sv-search-box button {
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #98a2b3;
+
+  font-size: 18px;
+}
+
+
+/* =========================================================
+   FILTER
+========================================================= */
+
+.sv-type-filter {
+  width: 180px !important;
+
+  height: 41px;
+
+  border-color: #dce2e8;
+
+  border-radius: 8px;
+
+  color: #475467;
+
+  font-size: 13px;
+}
+
+.sv-type-filter:focus {
+  border-color: #1d61ad;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(29, 97, 173, 0.08);
+}
+
+.sv-reset-filter {
+  height: 40px;
+
+  padding: 0 8px;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #dc3545;
+
+  font-size: 12px;
+}
+
+.sv-result-count {
+  color: #98a2b3;
+
+  font-size: 12px;
+
+  white-space: nowrap;
+}
+
+.sv-result-count strong {
+  color: #475467;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.sv-table {
+  width: 100%;
+
+  margin: 0;
+
+  border-collapse: collapse;
+
+  table-layout: fixed;
+}
+
+.sv-table thead {
+  background: #f8fafc;
+}
 
 .sv-table thead th {
-  background: #f1f5f9;
-  color: #475569;
+  padding: 12px 14px;
+
+  border-bottom: 1px solid #e7ebf0;
+
+  color: #7b8794;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.35px;
+
+  text-transform: uppercase;
+}
+
+.sv-table tbody tr {
+  transition:
+    background 0.15s;
+}
+
+.sv-table tbody tr:hover {
+  background: #fafcff;
+}
+
+.sv-table tbody td {
+  padding: 14px;
+
+  border-bottom: 1px solid #edf0f3;
+
+  vertical-align: middle;
+
+  color: #475467;
+
   font-size: 13px;
-  padding: 15px;
-  border: none;
 }
 
-/* Cột hình ảnh */
+.sv-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+
+/* =========================================================
+   COLUMNS
+========================================================= */
+
+.sv-col-tour {
+  width: 37%;
+}
+
+.sv-col-route {
+  width: 18%;
+}
+
+.sv-col-price {
+  width: 13%;
+}
+
+.sv-col-date {
+  width: 13%;
+}
+
+.sv-col-type {
+  width: 9%;
+}
+
+.sv-col-action {
+  width: 10%;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   TOUR CELL
+========================================================= */
+
+.sv-tour-cell {
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+
+  min-width: 0;
+}
+
 .sv-img-wrapper {
-  width: 80px;
-  height: 55px;
-  border-radius: 6px;
+  width: 105px;
+
+  height: 70px;
+
+  flex: 0 0 105px;
+
   overflow: hidden;
-  margin: 0 auto;
+
+  border: 1px solid #e5e9ef;
+
+  border-radius: 8px;
+
+  background: #f3f5f7;
 }
 
-.sv-tour-img {
+.sv-img-wrapper img {
   width: 100%;
+
   height: 100%;
+
+  display: block;
+
   object-fit: cover;
-  transition: transform 0.3s;
 }
 
-.sv-table tbody tr:hover .sv-tour-img {
-  transform: scale(1.1);
+.sv-no-image {
+  width: 100%;
+
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: #f5f7f9;
+
+  color: #b4bdc8;
+
+  font-size: 22px;
+}
+
+.sv-tour-info {
+  min-width: 0;
 }
 
 .sv-tour-name {
-  font-weight: 700;
+  width: 100%;
+
+  margin: 0 0 4px;
+
+  padding: 0;
+
+  display: -webkit-box;
+
+  overflow: hidden;
+
+  -webkit-box-orient: vertical;
+
+  -webkit-line-clamp: 2;
+
+  border: 0;
+
+  background: transparent;
+
   color: #1d61ad;
-  cursor: pointer;
+
+  text-align: left;
+
   font-size: 15px;
+
+  font-weight: 700;
+
+  line-height: 1.45;
+
+  cursor: pointer;
 }
+
+.sv-tour-name:hover {
+  color: #154f8d;
+
+  text-decoration: underline;
+}
+
+.sv-tour-id {
+  margin-bottom: 4px;
+
+  color: #98a2b3;
+
+  font-size: 11px;
+
+  font-weight: 600;
+}
+
+.sv-tour-desc-short {
+  display: -webkit-box;
+
+  overflow: hidden;
+
+  -webkit-box-orient: vertical;
+
+  -webkit-line-clamp: 1;
+
+  color: #8a94a3;
+
+  font-size: 12px;
+
+  line-height: 1.45;
+}
+
+
+/* =========================================================
+   ROUTE
+========================================================= */
+
+.sv-route {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 8px;
+
+  color: #667085;
+}
+
+.sv-route > svg {
+  margin-top: 3px;
+
+  flex: 0 0 auto;
+
+  color: #dc3545;
+
+  font-size: 13px;
+}
+
+.sv-route > div {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 1px;
+}
+
+.sv-route span,
+.sv-route strong {
+  display: block;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+.sv-route span {
+  color: #667085;
+
+  font-size: 12px;
+}
+
+.sv-route strong {
+  color: #344054;
+
+  font-size: 13px;
+
+  font-weight: 650;
+}
+
+.sv-route small {
+  color: #b3bbc5;
+
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   PRICE
+========================================================= */
 
 .sv-price {
   color: #dc2626;
+
+  font-size: 15px;
+
+  font-weight: 750;
+
+  white-space: nowrap;
+}
+
+.sv-price-note {
+  display: block;
+
+  margin-top: 2px;
+
+  color: #98a2b3;
+
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   DATE
+========================================================= */
+
+.sv-date {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  color: #475467;
+
+  font-size: 12px;
+
+  white-space: nowrap;
+}
+
+.sv-date svg {
+  color: #1d61ad;
+}
+
+.sv-date.flexible {
+  color: #8a6d1d;
+}
+
+.sv-date.flexible svg {
+  color: #c28a00;
+}
+
+
+/* =========================================================
+   TOUR TYPE
+========================================================= */
+
+.sv-badge-type {
+  display: inline-block;
+
+  padding: 5px 8px;
+
+  border-radius: 5px;
+
+  white-space: nowrap;
+
+  font-size: 10px;
+
   font-weight: 700;
 }
 
-.sv-loc { font-size: 13px; color: #64748b; }
+.sv-badge-type.group {
+  border: 1px solid #e9d5ff;
 
-/* Tác vụ */
-.sv-actions { display: flex; justify-content: center; gap: 8px; }
+  background: #f3e8ff;
 
-.sv-icon-btn {
-  border: none;
-  background: #f8fafc;
-  width: 34px;
-  height: 34px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: 0.2s;
+  color: #7e22ce;
 }
 
-.sv-icon-btn.view:hover { background: #1d61ad; color: white; }
-.sv-icon-btn.edit:hover { background: #f59e0b; color: white; }
-.sv-icon-btn.delete:hover { background: #ef4444; color: white; }
+.sv-badge-type.retail {
+  border: 1px solid #bbf7d0;
 
-/* PHÂN TRANG KIỂU SERVICE */
-.sv-pagination-bar {
-  padding: 15px 25px;
+  background: #dcfce7;
+
+  color: #15803d;
+}
+
+
+/* =========================================================
+   ACTION
+========================================================= */
+
+.sv-actions {
   display: flex;
-  justify-content: space-between;
+
+  justify-content: center;
+
+  gap: 5px;
+}
+
+.sv-icon-btn {
+  width: 34px;
+
+  height: 34px;
+
+  padding: 0;
+
+  display: flex;
+
   align-items: center;
-  border-top: 1px solid #edf2f7;
+
+  justify-content: center;
+
+  border: 0;
+
+  border-radius: 6px;
+
+  font-size: 14px;
+
+  cursor: pointer;
+
+  transition: 0.15s;
+}
+
+.sv-icon-btn.view {
+  background: #f2f4f7;
+
+  color: #586474;
+}
+
+.sv-icon-btn.edit {
+  background: #edf5ff;
+
+  color: #1d61ad;
+}
+
+.sv-icon-btn.delete {
+  background: #fff0f1;
+
+  color: #dc3545;
+}
+
+.sv-icon-btn.view:hover {
+  background: #e3e7ec;
+}
+
+.sv-icon-btn.edit:hover {
+  background: #1d61ad;
+
+  color: #ffffff;
+}
+
+.sv-icon-btn.delete:hover {
+  background: #dc3545;
+
+  color: #ffffff;
+}
+
+
+/* =========================================================
+   LOADING / EMPTY
+========================================================= */
+
+.sv-loading-cell {
+  height: 240px;
+
+  text-align: center;
+}
+
+.sv-loading-cell span {
+  display: block;
+
+  margin-top: 10px;
+
+  color: #98a2b3;
+
+  font-size: 12px;
+}
+
+.sv-empty-table {
+  height: 250px;
+
+  text-align: center;
+}
+
+.sv-empty-table > svg {
+  margin-bottom: 10px;
+
+  color: #1d61ad;
+
+  font-size: 24px;
+}
+
+.sv-empty-table strong {
+  display: block;
+
+  color: #475467;
+
+  font-size: 14px;
+}
+
+.sv-empty-table span {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #98a2b3;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+.sv-pagination-bar {
+  min-height: 62px;
+
+  padding: 12px 17px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  border-top: 1px solid #edf0f3;
 }
 
 .sv-page-count {
-  font-size: 14px;
-  font-weight: 600;
-  color: #64748b;
+  color: #98a2b3;
+
+  font-size: 12px;
+}
+
+.sv-page-count strong {
+  color: #475467;
 }
 
 .sv-page-controls {
   display: flex;
+
   align-items: center;
-  gap: 12px;
+
+  gap: 5px;
+}
+
+.sv-page-btn,
+.sv-page-number {
+  width: 34px;
+
+  height: 34px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 6px;
 }
 
 .sv-page-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 5px;
-  border: 1px solid #e2e8f0;
-  background: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #64748b;
-  transition: 0.2s;
+  border: 1px solid #dce2e8;
+
+  background: #ffffff;
+
+  color: #1d61ad;
+
+  transition: 0.15s;
 }
 
 .sv-page-btn:hover:not(:disabled) {
-  background: #1d61ad;
-  color: white;
   border-color: #1d61ad;
+
+  background: #edf5ff;
 }
 
 .sv-page-btn:disabled {
-  opacity: 0.4;
+  background: #f8fafc;
+
+  color: #c4cad1;
+
   cursor: not-allowed;
 }
 
 .sv-page-number {
-  width: 35px;
-  height: 35px;
+  border: 1px solid #1d61ad;
+
   background: #1d61ad;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 5px;
-  font-weight: 700;
-  font-size: 14px;
-}
-.sv-tour-id {
+
+  color: #ffffff;
+
   font-size: 12px;
-  font-weight: 600;
-  color: #64748b;
-  margin-bottom: 4px;
+
+  font-weight: 700;
 }
 
-.sv-tour-desc-short {
-  font-size: 13px;
-  color: #94a3b8;
-  line-height: 1.5;
-  text-align: justify;
-  
-  /* Cấu trúc quan trọng để giới hạn 2 dòng */
+
+/* =========================================================
+   MOBILE LIST
+========================================================= */
+
+.sv-mobile-list {
+  display: none;
+}
+
+
+/* =========================================================
+   DELETE MODAL
+========================================================= */
+
+.sv-delete-modal {
+  padding: 27px 22px;
+
+  text-align: center;
+}
+
+.sv-delete-icon {
+  width: 54px;
+
+  height: 54px;
+
+  margin: 0 auto 13px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #fff0f1;
+
+  color: #dc3545;
+
+  font-size: 22px;
+}
+
+.sv-delete-modal h4 {
+  margin: 0 0 8px;
+
+  color: #344054;
+
+  font-size: 17px;
+
+  font-weight: 750;
+}
+
+.sv-delete-modal p {
+  margin: 0 0 5px;
+
+  color: #667085;
+
+  font-size: 12px;
+}
+
+.sv-delete-modal > strong {
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* Số dòng muốn hiển thị */
+
+  overflow: hidden;
+
   -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  
-  max-width: 400px; /* Bạn có thể điều chỉnh độ rộng này tùy màn hình */
+
+  -webkit-line-clamp: 2;
+
+  color: #344054;
+
+  font-size: 12px;
 }
 
-/* Chỉnh lại padding của td để thông tin trông thoáng hơn */
-.sv-table tbody td {
-  padding: 12px 15px;
-  vertical-align: top; /* Cho nội dung canh trên sẽ đẹp hơn khi có mô tả */
-}
+.sv-delete-warning {
+  margin-top: 14px;
 
-/* Style chung cho nhãn loại tour */
-.sv-badge-type {
+  padding: 9px;
+
+  border-radius: 6px;
+
+  background: #fff7ed;
+
+  color: #b45309;
+
   font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  padding: 2px 8px;
-  border-radius: 4px;
-  white-space: nowrap;
 }
 
-/* Màu cho Tour Đoàn - Thường dùng màu Tím hoặc Cam để nổi bật */
-.sv-badge-type.group {
-  background-color: #f3e8ff;
-  color: #7e22ce;
-  border: 1px solid #e9d5ff;
+.sv-delete-actions {
+  margin-top: 20px;
+
+  display: flex;
+
+  justify-content: center;
+
+  gap: 8px;
 }
 
-/* Màu cho Tour Khách Lẻ - Thường dùng màu Xanh Lá hoặc Lam */
-.sv-badge-type.retail {
-  background-color: #dcfce7;
-  color: #15803d;
-  border: 1px solid #bbf7d0;
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1100px) {
+  .sv-stats-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .sv-col-route {
+    width: 19%;
+  }
+
+  .sv-col-tour {
+    width: 35%;
+  }
+
+  .sv-tour-desc-short {
+    display: none;
+  }
 }
 
-/* Điều chỉnh lại sv-tour-name để không bị quá dài khi có nhãn đi kèm */
-.sv-tour-name {
-  font-weight: 700;
-  color: #1d61ad;
-  cursor: pointer;
-  font-size: 15px;
-  max-width: 250px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+  .sv-container {
+    padding: 15px;
+  }
+
+  .sv-header {
+    align-items: stretch;
+
+    flex-direction: column;
+  }
+
+  .sv-header-left h2 {
+    font-size: 23px;
+  }
+
+  .sv-header-left p {
+    font-size: 13px;
+  }
+
+  .sv-btn-add {
+    width: 100%;
+  }
+
+  /* STATS */
+
+  .sv-stats-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+
+    gap: 9px;
+  }
+
+  .sv-stat-card {
+    min-height: 72px;
+
+    padding: 11px;
+
+    gap: 9px;
+  }
+
+  .sv-stat-icon {
+    width: 36px;
+
+    height: 36px;
+
+    flex-basis: 36px;
+
+    font-size: 14px;
+  }
+
+  .sv-stat-card span {
+    font-size: 10px;
+  }
+
+  .sv-stat-card strong {
+    font-size: 19px;
+  }
+
+  /* TOOLBAR */
+
+  .sv-toolbar {
+    align-items: stretch;
+
+    flex-direction: column;
+
+    gap: 10px;
+  }
+
+  .sv-toolbar-left {
+    width: 100%;
+
+    align-items: stretch;
+
+    flex-direction: column;
+  }
+
+  .sv-search-box {
+    width: 100%;
+  }
+
+  .sv-type-filter {
+    width: 100% !important;
+  }
+
+  .sv-reset-filter {
+    align-self: flex-start;
+
+    height: auto;
+  }
+
+  .sv-result-count {
+    display: none;
+  }
+
+  /* TABLE OFF */
+
+  .sv-desktop-table {
+    display: none;
+  }
+
+  /* MOBILE ON */
+
+  .sv-mobile-list {
+    padding: 13px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+    background: #f8fafc;
+  }
+
+  .sv-mobile-card {
+    overflow: hidden;
+
+    border: 1px solid #e4e8ed;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    box-shadow:
+      0 2px 7px
+      rgba(16, 24, 40, 0.035);
+  }
+
+  .sv-mobile-image {
+    position: relative;
+
+    width: 100%;
+
+    aspect-ratio: 16 / 8;
+
+    overflow: hidden;
+
+    background: #f2f4f7;
+
+    cursor: pointer;
+  }
+
+  .sv-mobile-image img {
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+  }
+
+  .sv-mobile-id {
+    position: absolute;
+
+    top: 9px;
+
+    left: 9px;
+
+    padding: 4px 7px;
+
+    border-radius: 5px;
+
+    background:
+      rgba(255,255,255,0.92);
+
+    color: #667085;
+
+    font-size: 10px;
+
+    font-weight: 700;
+  }
+
+  .sv-mobile-type {
+    position: absolute;
+
+    top: 9px;
+
+    right: 9px;
+
+    padding: 4px 7px;
+
+    border-radius: 5px;
+
+    font-size: 9px;
+
+    font-weight: 700;
+  }
+
+  .sv-mobile-type.group {
+    background: #f3e8ff;
+
+    color: #7e22ce;
+  }
+
+  .sv-mobile-type.retail {
+    background: #dcfce7;
+
+    color: #15803d;
+  }
+
+  .sv-mobile-body {
+    padding: 13px;
+  }
+
+  .sv-mobile-body h3 {
+    margin: 0 0 7px;
+
+    color: #253858;
+
+    font-size: 16px;
+
+    font-weight: 750;
+
+    line-height: 1.45;
+
+    cursor: pointer;
+  }
+
+  .sv-mobile-route {
+    margin-bottom: 7px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    color: #667085;
+
+    font-size: 12px;
+  }
+
+  .sv-mobile-route svg {
+    color: #dc3545;
+  }
+
+  .sv-mobile-body p {
+    margin: 0;
+
+    display: -webkit-box;
+
+    overflow: hidden;
+
+    -webkit-box-orient: vertical;
+
+    -webkit-line-clamp: 2;
+
+    color: #7b8794;
+
+    font-size: 13px;
+
+    line-height: 1.55;
+  }
+
+  .sv-mobile-info-grid {
+    margin-top: 12px;
+
+    padding-top: 11px;
+
+    display: grid;
+
+    grid-template-columns:
+      1fr 1fr;
+
+    gap: 10px;
+
+    border-top: 1px solid #edf0f3;
+  }
+
+  .sv-mobile-info-grid span {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #98a2b3;
+
+    font-size: 10px;
+  }
+
+  .sv-mobile-info-grid strong {
+    color: #475467;
+
+    font-size: 12px;
+  }
+
+  .sv-mobile-info-grid strong.price {
+    color: #dc2626;
+
+    font-size: 14px;
+  }
+
+  .sv-mobile-actions {
+    margin-top: 12px;
+
+    display: grid;
+
+    grid-template-columns:
+      repeat(3, 1fr);
+
+    gap: 6px;
+  }
+
+  .sv-mobile-actions button {
+    height: 36px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 5px;
+
+    border: 0;
+
+    border-radius: 6px;
+
+    font-size: 11px;
+
+    font-weight: 650;
+  }
+
+  .sv-mobile-actions .view {
+    background: #f2f4f7;
+
+    color: #586474;
+  }
+
+  .sv-mobile-actions .edit {
+    background: #edf5ff;
+
+    color: #1d61ad;
+  }
+
+  .sv-mobile-actions .delete {
+    background: #fff0f1;
+
+    color: #dc3545;
+  }
+
+  .sv-mobile-loading,
+  .sv-mobile-empty {
+    min-height: 190px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    color: #98a2b3;
+
+    text-align: center;
+  }
+
+  .sv-mobile-empty > svg {
+    color: #1d61ad;
+
+    font-size: 25px;
+  }
+
+  .sv-mobile-empty strong {
+    color: #475467;
+
+    font-size: 13px;
+  }
+
+  .sv-mobile-empty span {
+    font-size: 11px;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+  .sv-container {
+    padding: 10px;
+  }
+
+  .sv-total-badge {
+    display: none;
+  }
+
+  .sv-mobile-image {
+    aspect-ratio: 16 / 9;
+  }
+
+  .sv-mobile-body h3 {
+    font-size: 15px;
+  }
+
+  .sv-mobile-body p {
+    font-size: 12.5px;
+  }
 }

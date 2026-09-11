@@ -1,32 +1,33 @@
-import React, { useEffect, useState } from "react";
-import Word from "../../components/Word";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Row,
   Col,
   Button,
-  Tabs,
-  Tab,
   Toast,
   ToastContainer,
   Spinner,
+  Badge,
 } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
+
+import Word from "../../components/Word";
 import API from "../../config/APINoToken";
 import APIToken from "../../config/APIToken";
 import ImageCDNCloud from "../../components/ImageCDNCloud";
 import slugify from "slugify";
+
 import "./index.css";
 
 const GuideTravel = () => {
-  let userId = localStorage.getItem("userId");
-  const [key, setKey] = useState("info");
+  const userId = localStorage.getItem("userId");
+
   const [successAlertOpen, setSuccessAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
-  const [alertVariant, setAlertVariant] = useState("primary"); // Thêm màu cho Toast
+  const [alertVariant, setAlertVariant] = useState("primary");
+
   const [dataTag, setDataTag] = useState([]);
   const [dataCategories, setDataCategories] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [slug, setSlug] = useState("");
 
   const [blogData, setBlogData] = useState({
     title: "",
@@ -64,28 +65,45 @@ const GuideTravel = () => {
     }
   };
 
+  const createSlug = (text) => {
+    return slugify(text || "", {
+      lower: true,
+      locale: "vi",
+      remove: /[*+~.()'"!:@]/g,
+    });
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // 1. Ép kiểu cho category_id
-    let newValue = name === "category_id" ? parseInt(value, 10) : value;
+    let newValue = value;
+
+    if (name === "category_id") {
+      newValue = value === "" ? "" : parseInt(value, 10);
+    }
 
     setBlogData((prev) => ({
       ...prev,
-      // 2. Cập nhật field đang nhập
       [name]: newValue,
 
-      // 3. Nếu đang nhập title, cập nhật luôn slug (với điều kiện dùng thư viện slugify)
-      ...(name === "title" ? { slug: createSlug(value) } : {}),
+      ...(name === "title"
+        ? {
+            slug: createSlug(value),
+          }
+        : {}),
     }));
   };
 
-  // Hàm này chạy khi người dùng bấm nút Lưu trong component Word
+  /**
+   * QUAN TRỌNG:
+   * Hàm này giờ dùng để đồng bộ content trực tiếp khi soạn.
+   * Không còn phụ thuộc người dùng bấm nút Lưu.
+   */
   const handleContentChange = (newContent) => {
-    setBlogData((prev) => ({ ...prev, content: newContent }));
-    setAlertVariant("success");
-    setAlertMessage("Nội dung bài viết đã được ghi nhận! ✨");
-    setSuccessAlertOpen(true);
+    setBlogData((prev) => ({
+      ...prev,
+      content: newContent || "",
+    }));
   };
 
   const handleTagChange = (tagId) => {
@@ -93,43 +111,53 @@ const GuideTravel = () => {
       const newSelectedTags = prevSelected.includes(tagId)
         ? prevSelected.filter((id) => id !== tagId)
         : [...prevSelected, tagId];
-      setBlogData((prevData) => ({ ...prevData, tag_ids: newSelectedTags }));
+
+      setBlogData((prevData) => ({
+        ...prevData,
+        tag_ids: newSelectedTags,
+      }));
+
       return newSelectedTags;
     });
   };
 
   const handleUploadSuccess = (url) => {
-    setBlogData((prevData) => ({ ...prevData, thumbnail_url: url }));
+    setBlogData((prevData) => ({
+      ...prevData,
+      thumbnail_url: url,
+    }));
   };
 
-  const handleSubmit = async (e) => {
-    // --- KIỂM TRA RÀNG BUỘC (VALIDATION) ---
-    if (!blogData.title || !blogData.category_id) {
-      setAlertVariant("danger");
-      setAlertMessage("Vui lòng nhập đầy đủ Tiêu đề và Danh mục!");
-      setSuccessAlertOpen(true);
-      setKey("info"); // Chuyển về tab thông tin
+  const showToast = (variant, message) => {
+    setAlertVariant(variant);
+    setAlertMessage(message);
+    setSuccessAlertOpen(true);
+  };
+
+  const handleSubmit = async () => {
+    if (!blogData.title.trim()) {
+      showToast("danger", "Vui lòng nhập tiêu đề bài viết.");
+      return;
+    }
+
+    if (!blogData.category_id) {
+      showToast("danger", "Vui lòng chọn danh mục bài viết.");
       return;
     }
 
     if (!blogData.content || blogData.content.trim() === "") {
-      setAlertVariant("danger");
-      setAlertMessage(
-        "Bạn CHƯA LƯU nội dung chi tiết. Hãy bấm nút Lưu trong soạn thảo!",
-      );
-      setSuccessAlertOpen(true);
-      setKey("detail"); // Tự động chuyển sang tab nội dung để nhắc người dùng
+      showToast("danger", "Vui lòng nhập nội dung bài viết.");
       return;
     }
 
     try {
       setLoading(true);
+
       const response = await APIToken.post("/post/add", blogData);
+
       if (response.status === 201) {
-        setAlertVariant("success");
-        setAlertMessage("Chúc mừng! Bài viết đã được đăng thành công! 🎉");
-        setSuccessAlertOpen(true);
-        // Reset Form
+        showToast("success", "Đăng bài viết thành công! 🎉");
+
         setBlogData({
           title: "",
           slug: "",
@@ -140,112 +168,338 @@ const GuideTravel = () => {
           created_by: userId,
           tag_ids: [],
         });
+
         setSelectedTags([]);
       }
     } catch (error) {
-      setAlertVariant("danger");
-      setAlertMessage("Lỗi hệ thống: Không thể thêm bài viết.");
-      setSuccessAlertOpen(true);
+      console.error(error);
+
+      showToast(
+        "danger",
+        error?.response?.data?.message ||
+          "Không thể thêm bài viết. Vui lòng thử lại.",
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  const createSlug = (text) => {
-    return slugify(text, {
-      lower: true, // Chuyển về chữ thường
-      locale: "vi", // Xử lý tiếng Việt (đ, ê, ô...)
-      remove: /[*+~.()'"!:@]/g, // Loại bỏ ký tự đặc biệt
-    });
-  };
+  // Đếm mức độ hoàn thiện bài
+  const completion = useMemo(() => {
+    const items = [
+      Boolean(blogData.title.trim()),
+      Boolean(blogData.category_id),
+      Boolean(blogData.content?.trim()),
+      Boolean(blogData.thumbnail_url),
+    ];
+
+    const completed = items.filter(Boolean).length;
+
+    return Math.round((completed / items.length) * 100);
+  }, [blogData]);
 
   return (
     <div className="adv-container">
-      <div className="adv-header">
-        <div className="adv-header-info">
-          <h2>THÊM MỚI BÀI VIẾT</h2>
+      {/* HEADER */}
+      <div className="adv-page-header">
+        <div>
+          <div className="adv-page-title-row">
+            <h2>Thêm bài viết mới</h2>
+
+            <Badge
+              bg={completion === 100 ? "success" : "primary"}
+              className="adv-completion-badge"
+            >
+              Hoàn thiện {completion}%
+            </Badge>
+          </div>
+
           <p>
-            Lưu ý: Bạn cần bấm "Lưu" ở tab Nội dung chi tiết trước khi hoàn tất.
+            Nhập nội dung bài viết, thiết lập danh mục, hình ảnh và đăng bài.
+            Nội dung được ghi nhận trực tiếp khi soạn thảo.
           </p>
         </div>
       </div>
 
-      <div className="adv-content-card">
-        <Tabs
-          id="guide-tabs"
-          activeKey={key}
-          onSelect={(k) => setKey(k)}
-          className="adv-tabs mb-4"
-        >
-          <Tab eventKey="info" title="1. Thông tin chung">
-            <div className="adv-form-section">
-              <Row className="mb-4">
-                <Col md={12}>
-                  <Form.Label className="adv-label">
-                    Tiêu đề bài viết <span className="text-danger">*</span>
-                  </Form.Label>
-                  <Form.Control
-                    className="adv-input"
-                    type="text"
-                    name="title"
-                    placeholder="Nhập tiêu đề bài viết..."
-                    value={blogData.title}
-                    onChange={handleChange}
-                  />
-                </Col>
-              </Row>
+      <Row className="g-4">
+        {/* ===================================================== */}
+        {/* CỘT TRÁI */}
+        {/* ===================================================== */}
 
-              <Row className="mb-4">
-                <Col md={6}>
-                  <Form.Label className="adv-label">
-                    Đường dẫn (Slug)
-                  </Form.Label>
+        <Col xl={8} lg={8}>
+          {/* TIÊU ĐỀ */}
+          <div className="adv-card">
+            <div className="adv-card-header">
+              <div>
+                <h5>Nội dung bài viết</h5>
+                <span>Thông tin chính hiển thị trên website</span>
+              </div>
+            </div>
+
+            <div className="adv-card-body">
+              <div className="adv-form-group">
+                <Form.Label className="adv-label">
+                  Tiêu đề bài viết
+                  <span className="text-danger">*</span>
+                </Form.Label>
+
+                <Form.Control
+                  className="adv-input adv-title-input"
+                  type="text"
+                  name="title"
+                  placeholder="Ví dụ: Top 10 địa điểm du lịch Mũi Né không nên bỏ lỡ"
+                  value={blogData.title}
+                  onChange={handleChange}
+                />
+
+                <div className="adv-field-help">
+                  Nên sử dụng tiêu đề rõ ràng, hấp dẫn và chứa từ khóa chính.
+                </div>
+              </div>
+
+              {/* SLUG */}
+              <div className="adv-form-group">
+                <Form.Label className="adv-label">
+                  Đường dẫn bài viết
+                </Form.Label>
+
+                <div className="adv-slug-wrapper">
+                  <span>/blog/</span>
+
                   <Form.Control
-                    className="adv-input"
+                    className="adv-input adv-slug-input"
                     type="text"
                     name="slug"
-                    placeholder="ví dụ: kinh-nghiem-du-lich"
+                    placeholder="du-lich-mui-ne"
                     value={blogData.slug}
                     onChange={handleChange}
                   />
-                </Col>
-                <Col md={6}>
-                  <Form.Label className="adv-label">
-                    Danh mục <span className="text-danger">*</span>
-                  </Form.Label>
-                  <Form.Select
-                    className="adv-input"
-                    name="category_id"
-                    value={blogData.category_id}
-                    onChange={handleChange}
-                  >
-                    <option value="">-- Chọn danh mục --</option>
-                    {dataCategories.map((cat) => (
-                      <option key={cat.category_id} value={cat.category_id}>
-                        {cat.category_name}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </Col>
-              </Row>
+                </div>
+              </div>
 
-              <Row className="mb-4">
-                <Col>
+              {/* DESCRIPTION */}
+              <div className="adv-form-group">
+                <div className="adv-label-row">
                   <Form.Label className="adv-label">Mô tả ngắn</Form.Label>
-                  <Form.Control
-                    className="adv-input"
-                    as="textarea"
-                    name="description"
-                    value={blogData.description}
-                    onChange={handleChange}
-                    rows={4}
-                  />
-                </Col>
-              </Row>
 
-              <Row className="mb-3">
-                <Col>
-                  <Form.Label className="adv-label">Tags</Form.Label>
+                  <span
+                    className={
+                      blogData.description.length > 160
+                        ? "adv-char-count danger"
+                        : "adv-char-count"
+                    }
+                  >
+                    {blogData.description.length}/160
+                  </span>
+                </div>
+
+                <Form.Control
+                  className="adv-input"
+                  as="textarea"
+                  name="description"
+                  value={blogData.description}
+                  onChange={handleChange}
+                  rows={3}
+                  maxLength={250}
+                  placeholder="Nhập đoạn mô tả ngắn dùng khi hiển thị danh sách bài viết và SEO..."
+                />
+
+                <div className="adv-field-help">
+                  Khuyến nghị khoảng 120–160 ký tự.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* EDITOR */}
+          <div className="adv-card adv-editor-card">
+            <div className="adv-card-header">
+              <div>
+                <h5>Nội dung chi tiết</h5>
+                <span>Soạn nội dung chính của bài viết</span>
+              </div>
+
+              <div className="adv-autosave-status">
+                <span className="adv-status-dot"></span>
+                Tự động ghi nhận nội dung
+              </div>
+            </div>
+
+            <div className="adv-card-body adv-word-wrapper">
+              {/*
+                Word cần gọi onChange mỗi khi nội dung thay đổi.
+
+                Giữ onSave để tương thích với Word cũ trong lúc ông
+                chưa xoá nút Save khỏi component đó.
+              */}
+
+              <Word
+                onChange={handleContentChange}
+                onSave={handleContentChange}
+              />
+            </div>
+          </div>
+        </Col>
+
+        {/* ===================================================== */}
+        {/* CỘT PHẢI */}
+        {/* ===================================================== */}
+
+        <Col xl={4} lg={4}>
+          <div className="adv-sidebar">
+            {/* ĐĂNG BÀI */}
+            <div className="adv-card adv-publish-card">
+              <div className="adv-card-header">
+                <div>
+                  <h5>Đăng bài</h5>
+                  <span>Kiểm tra trước khi xuất bản</span>
+                </div>
+              </div>
+
+              <div className="adv-card-body">
+                <div className="adv-check-list">
+                  <div
+                    className={`adv-check-item ${
+                      blogData.title ? "completed" : ""
+                    }`}
+                  >
+                    <span className="adv-check-icon">
+                      {blogData.title ? "✓" : "1"}
+                    </span>
+
+                    <span>Tiêu đề bài viết</span>
+                  </div>
+
+                  <div
+                    className={`adv-check-item ${
+                      blogData.category_id ? "completed" : ""
+                    }`}
+                  >
+                    <span className="adv-check-icon">
+                      {blogData.category_id ? "✓" : "2"}
+                    </span>
+
+                    <span>Danh mục</span>
+                  </div>
+
+                  <div
+                    className={`adv-check-item ${
+                      blogData.content ? "completed" : ""
+                    }`}
+                  >
+                    <span className="adv-check-icon">
+                      {blogData.content ? "✓" : "3"}
+                    </span>
+
+                    <span>Nội dung chi tiết</span>
+                  </div>
+
+                  <div
+                    className={`adv-check-item ${
+                      blogData.thumbnail_url ? "completed" : ""
+                    }`}
+                  >
+                    <span className="adv-check-icon">
+                      {blogData.thumbnail_url ? "✓" : "4"}
+                    </span>
+
+                    <span>Ảnh đại diện</span>
+                  </div>
+                </div>
+
+                <Button
+                  className="adv-btn-submit"
+                  onClick={handleSubmit}
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <>
+                      <Spinner size="sm" animation="border" className="me-2" />
+                      Đang đăng...
+                    </>
+                  ) : (
+                    "ĐĂNG BÀI VIẾT"
+                  )}
+                </Button>
+              </div>
+            </div>
+
+            {/* DANH MỤC */}
+            <div className="adv-card">
+              <div className="adv-card-header">
+                <div>
+                  <h5>Danh mục</h5>
+                  <span>Phân loại bài viết</span>
+                </div>
+              </div>
+
+              <div className="adv-card-body">
+                <Form.Select
+                  className="adv-input"
+                  name="category_id"
+                  value={blogData.category_id}
+                  onChange={handleChange}
+                >
+                  <option value="">-- Chọn danh mục --</option>
+
+                  {dataCategories.map((cat) => (
+                    <option key={cat.category_id} value={cat.category_id}>
+                      {cat.category_name}
+                    </option>
+                  ))}
+                </Form.Select>
+              </div>
+            </div>
+
+            {/* ẢNH */}
+            <div className="adv-card">
+              <div className="adv-card-header">
+                <div>
+                  <h5>Ảnh đại diện</h5>
+                  <span>Hình ảnh hiển thị ngoài danh sách</span>
+                </div>
+              </div>
+
+              <div className="adv-card-body">
+                <div
+                  className={`adv-image-preview ${
+                    blogData.thumbnail_url ? "has-image" : ""
+                  }`}
+                >
+                  {blogData.thumbnail_url ? (
+                    <img
+                      src={blogData.thumbnail_url}
+                      alt="Ảnh đại diện bài viết"
+                    />
+                  ) : (
+                    <div className="adv-image-empty">
+                      <div className="adv-image-icon">▧</div>
+
+                      <strong>Chưa có ảnh đại diện</strong>
+
+                      <span>Khuyến nghị ảnh tỷ lệ 16:9</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="adv-upload-action">
+                  <ImageCDNCloud onUploadSuccess={handleUploadSuccess} />
+                </div>
+              </div>
+            </div>
+
+            {/* TAG */}
+            <div className="adv-card">
+              <div className="adv-card-header">
+                <div>
+                  <h5>Tags</h5>
+
+                  <span>Đã chọn {selectedTags.length} tag</span>
+                </div>
+              </div>
+
+              <div className="adv-card-body">
+                {dataTag.length > 0 ? (
                   <div className="adv-tag-cloud">
                     {dataTag.map((tag) => (
                       <button
@@ -256,64 +510,29 @@ const GuideTravel = () => {
                         }`}
                         onClick={() => handleTagChange(tag.tag_id)}
                       >
+                        {selectedTags.includes(tag.tag_id) && <span>✓ </span>}
+
                         {tag.tag_name}
                       </button>
                     ))}
                   </div>
-                </Col>
-              </Row>
-            </div>
-          </Tab>
-
-          <Tab eventKey="detail" title="2. Nội dung chi tiết">
-            <div className="adv-editor-section">
-              <div className="adv-warning-box mb-3">
-                ⚠️ <strong>Lưu ý:</strong> Soạn thảo xong bạn phải bấm nút{" "}
-                <strong>"Lưu"</strong> (biểu tượng đĩa mềm) trong trình soạn
-                thảo bên dưới.
-              </div>
-              <Word onSave={handleContentChange} />
-            </div>
-          </Tab>
-
-          <Tab eventKey="image" title="3. Ảnh đại diện">
-            <div className="adv-image-section">
-              <div className="adv-upload-zone">
-                <div className="d-flex align-items-center gap-3 mb-4">
-                  <span className="fw-bold">Ảnh bìa:</span>
-                  <ImageCDNCloud onUploadSuccess={handleUploadSuccess} />
-                </div>
-                <div className="adv-preview-box">
-                  {blogData.thumbnail_url ? (
-                    <img src={blogData.thumbnail_url} alt="Thumbnail" />
-                  ) : (
-                    <div className="adv-preview-placeholder">Chưa có ảnh</div>
-                  )}
-                </div>
+                ) : (
+                  <div className="adv-empty-tags">Chưa có tags.</div>
+                )}
               </div>
             </div>
-          </Tab>
-        </Tabs>
+          </div>
+        </Col>
+      </Row>
 
-        <div className="adv-footer-actions">
-          <Button
-            className="adv-btn-submit"
-            onClick={handleSubmit}
-            disabled={loading}
-          >
-            {loading ? (
-              <Spinner size="sm" animation="border" className="me-2" />
-            ) : (
-              "XÁC NHẬN ĐĂNG BÀI VIẾT"
-            )}
-          </Button>
-        </div>
-      </div>
-
+      {/* TOAST */}
       <ToastContainer
         position="top-end"
         className="p-3"
-        style={{ position: "fixed", zIndex: 9999 }} // Đã sửa z-index thành zIndex
+        style={{
+          position: "fixed",
+          zIndex: 9999,
+        }}
       >
         <Toast
           bg={alertVariant}
@@ -323,12 +542,16 @@ const GuideTravel = () => {
           autohide
         >
           <Toast.Header
-            closeButton={false}
+            closeButton
             className="text-white"
-            style={{ backgroundColor: "rgba(0,0,0,0.1)", borderBottom: "none" }}
+            style={{
+              backgroundColor: "rgba(0,0,0,0.12)",
+              borderBottom: "none",
+            }}
           >
-            <strong className="me-auto">Thông báo hệ thống</strong>
+            <strong className="me-auto">Thông báo</strong>
           </Toast.Header>
+
           <Toast.Body className="text-white fw-bold">{alertMessage}</Toast.Body>
         </Toast>
       </ToastContainer>
