@@ -529,7 +529,7 @@ const PostEdit = () => {
           <button
             type="button"
             className="post-edit-back-btn"
-            onClick={() => navigate("/post")}
+            onClick={() => navigate("/guide-travel-list")}
           >
             <FiArrowLeft />
           </button>
@@ -774,7 +774,7 @@ const PostEdit = () => {
                 <button
                   type="button"
                   className="post-edit-cancel-btn"
-                  onClick={() => navigate("/post")}
+                  onClick={() => navigate("/guide-travel-list")}
                 >
                   Hủy và quay lại
                 </button>
