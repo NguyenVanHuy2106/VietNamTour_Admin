@@ -281,16 +281,6 @@ const GuideTravel = () => {
               <div className="adv-form-group">
                 <div className="adv-label-row">
                   <Form.Label className="adv-label">Mô tả ngắn</Form.Label>
-
-                  <span
-                    className={
-                      blogData.description.length > 160
-                        ? "adv-char-count danger"
-                        : "adv-char-count"
-                    }
-                  >
-                    {blogData.description.length}/160
-                  </span>
                 </div>
 
                 <Form.Control
@@ -300,13 +290,8 @@ const GuideTravel = () => {
                   value={blogData.description}
                   onChange={handleChange}
                   rows={3}
-                  maxLength={250}
                   placeholder="Nhập đoạn mô tả ngắn dùng khi hiển thị danh sách bài viết và SEO..."
                 />
-
-                <div className="adv-field-help">
-                  Khuyến nghị khoảng 120–160 ký tự.
-                </div>
               </div>
             </div>
           </div>
