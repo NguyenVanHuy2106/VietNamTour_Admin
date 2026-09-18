@@ -1,10 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { uploadImageToR2 } from "../ImageCDNCloud";
 import "./index.css";
 
 export default function Word({ onChange, value = "" }) {
   const editorRef = useRef(null);
+
+  /*
+    QUAN TRỌNG:
+    Chỉ lấy nội dung ban đầu 1 lần khi component mount.
+    Không để initialValue thay đổi theo mỗi lần gõ/xóa.
+  */
+  const initialContentRef = useRef(value || "");
 
   const [stats, setStats] = useState({
     words: 0,
@@ -74,27 +81,13 @@ export default function Word({ onChange, value = "" }) {
   };
 
   /* =====================================================
-     SYNC VALUE FROM PARENT
-  ===================================================== */
-  useEffect(() => {
-    if (!editorRef.current) {
-      updateStats(value);
-      return;
-    }
-
-    const currentContent = editorRef.current.getContent();
-
-    if ((value || "") !== currentContent) {
-      editorRef.current.setContent(value || "");
-    }
-
-    updateStats(value, editorRef.current);
-  }, [value]);
-
-  /* =====================================================
      HANDLE EDITOR CHANGE
   ===================================================== */
   const handleEditorChange = (content, editor) => {
+    /*
+      Chỉ cập nhật stats + gửi content ra ngoài.
+      TUYỆT ĐỐI không setContent lại tại đây.
+    */
     updateStats(content, editor);
 
     if (onChange) {
@@ -133,7 +126,12 @@ export default function Word({ onChange, value = "" }) {
 
             updateStats(editor.getContent(), editor);
           }}
-          initialValue={value || ""}
+          /*
+            QUAN TRỌNG:
+            Không dùng initialValue={value || ""}
+            vì value của parent thay đổi sau mỗi lần gõ/xóa.
+          */
+          initialValue={initialContentRef.current}
           onEditorChange={handleEditorChange}
           init={{
             /* =================================================
@@ -229,9 +227,8 @@ export default function Word({ onChange, value = "" }) {
             images_upload_handler: handleImageUpload,
 
             /*
-              QUAN TRỌNG:
-              Không cho TinyMCE lưu ảnh dạng base64 trực tiếp
-              vào HTML vì có thể làm content cực nặng.
+              Không cho TinyMCE lưu ảnh base64
+              trực tiếp vào HTML.
             */
             paste_data_images: false,
 
@@ -361,9 +358,7 @@ export default function Word({ onChange, value = "" }) {
 
               img {
                 max-width: 100%;
-
                 height: auto;
-
                 display: block;
               }
 

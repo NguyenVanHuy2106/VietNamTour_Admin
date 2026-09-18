@@ -302,15 +302,6 @@ const GuideTravelDetail = () => {
                   COVER
               ============================================= */}
 
-              {dataPostDetail.thumbnail_url && (
-                <div className="gtd-cover">
-                  <img
-                    src={dataPostDetail.thumbnail_url}
-                    alt={dataPostDetail.title}
-                  />
-                </div>
-              )}
-
               {/* =============================================
                   CONTENT
               ============================================= */}

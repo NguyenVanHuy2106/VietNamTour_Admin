@@ -248,8 +248,8 @@
 
 .gtd-cover {
   width: 100%;
-
-  padding: 0 48px;
+  padding:0 48px;
+  margin-top: 18px;
 }
 
 .gtd-cover img {
