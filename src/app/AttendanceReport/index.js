@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+
 import {
   Form,
   Button,
@@ -21,42 +22,63 @@ import {
   FaMapMarkerAlt,
   FaMobileAlt,
   FaUserClock,
-  FaEdit,
   FaCheckCircle,
 } from "react-icons/fa";
+
 import APIToken from "../../config/APIToken";
+
 import "./index.css";
 
 const AttendanceReport = () => {
-  // Hàm bổ trợ để lấy định dạng yyyy-mm-dd
-  const formatDateString = (date) => date.toISOString().split("T")[0];
+  // ==========================================================
+  // DATE
+  // ==========================================================
 
-  // Khởi tạo mặc định: Đầu tháng và Hiện tại
   const getDefaultDates = () => {
     const now = new Date();
+
     const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
 
-    // Lưu ý: toISOString() có thể bị lệch múi giờ, dùng cách này để an toàn với date input
     const offset = now.getTimezoneOffset() * 60000;
+
     const localToday = new Date(now - offset).toISOString().split("T")[0];
+
     const localFirstDay = new Date(firstDay - offset)
       .toISOString()
       .split("T")[0];
 
-    return { localFirstDay, localToday };
+    return {
+      localFirstDay,
+      localToday,
+    };
   };
 
   const { localFirstDay, localToday } = getDefaultDates();
 
+  // ==========================================================
+  // DATA
+  // ==========================================================
+
   const [users, setUsers] = useState([]);
+
   const [selectedUser, setSelectedUser] = useState("");
+
   const [fromDate, setFromDate] = useState(localToday);
+
   const [toDate, setToDate] = useState(localToday);
 
   const [data, setData] = useState([]);
+
   const [loading, setLoading] = useState(false);
+
   const [fetched, setFetched] = useState(false);
+
+  // ==========================================================
+  // ADJUST ATTENDANCE
+  // ==========================================================
+
   const [showAdjustModal, setShowAdjustModal] = useState(false);
+
   const [savingAdjust, setSavingAdjust] = useState(false);
 
   const [adjustForm, setAdjustForm] = useState({
@@ -67,17 +89,91 @@ const AttendanceReport = () => {
     reason: "",
   });
 
+  // ==========================================================
+  // GET USERS
+  // ==========================================================
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const res = await APIToken.get("/user/get");
-        setUsers(res.data.data || res.data || []);
+
+        const userData = res?.data?.data || res?.data || [];
+
+        const sortedUsers = [...userData].sort(
+          (a, b) => Number(b.user_id) - Number(a.user_id),
+        );
+
+        setUsers(sortedUsers);
       } catch (err) {
         console.error("Lỗi lấy danh sách nhân viên", err);
       }
     };
+
     fetchUsers();
   }, []);
+
+  // ==========================================================
+  // FORMAT DATE
+  // ==========================================================
+
+  const formatWorkDate = (value) => {
+    if (!value) {
+      return "---";
+    }
+
+    return new Date(value).toLocaleDateString("vi-VN");
+  };
+
+  const formatWeekday = (value) => {
+    if (!value) {
+      return "";
+    }
+
+    return new Date(value).toLocaleDateString("vi-VN", {
+      weekday: "long",
+    });
+  };
+
+  // ==========================================================
+  // FORMAT TIME
+  // ==========================================================
+
+  const formatTime = (value) => {
+    if (!value) {
+      return "--:--";
+    }
+
+    return new Date(value).toLocaleTimeString("vi-VN", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+  };
+
+  // ==========================================================
+  // WORKING HOURS
+  // ==========================================================
+
+  const getWorkingHours = (checkIn, checkOut) => {
+    if (!checkIn || !checkOut) {
+      return "0.00 giờ";
+    }
+
+    const start = new Date(checkIn);
+
+    const end = new Date(checkOut);
+
+    const diffInMs = end - start;
+
+    const diffHours = diffInMs / (1000 * 60 * 60);
+
+    return `${Math.max(0, diffHours).toFixed(2)} giờ`;
+  };
+
+  // ==========================================================
+  // OPEN ADD ATTENDANCE
+  // ==========================================================
 
   const handleOpenAddAttendance = () => {
     setAdjustForm({
@@ -90,45 +186,39 @@ const AttendanceReport = () => {
 
     setShowAdjustModal(true);
   };
-  const handleOpenEditAttendance = (item) => {
-    setAdjustForm({
-      userId: String(item.userId),
 
-      workDate:
-        typeof item.workDate === "string" ? item.workDate.substring(0, 10) : "",
+  // ==========================================================
+  // ADJUST ATTENDANCE
+  // ==========================================================
 
-      checkIn: item.checkIn ? item.checkIn.substring(11, 16) : "09:00",
-
-      checkOut: item.checkOut ? item.checkOut.substring(11, 16) : "17:00",
-
-      reason: item.adjustReason || "",
-    });
-
-    setShowAdjustModal(true);
-  };
   const handleAdjustAttendance = async () => {
     if (!adjustForm.userId) {
       alert("Vui lòng chọn nhân viên.");
+
       return;
     }
 
     if (!adjustForm.workDate) {
       alert("Vui lòng chọn ngày làm việc.");
+
       return;
     }
 
     if (!adjustForm.checkIn) {
       alert("Vui lòng nhập giờ vào.");
+
       return;
     }
 
     if (!adjustForm.reason.trim()) {
       alert("Vui lòng nhập lý do kéo công.");
+
       return;
     }
 
     if (adjustForm.checkOut && adjustForm.checkOut <= adjustForm.checkIn) {
       alert("Giờ ra phải lớn hơn giờ vào.");
+
       return;
     }
 
@@ -137,13 +227,17 @@ const AttendanceReport = () => {
 
       const res = await APIToken.post("/admin/adjustAttendance", {
         userId: Number(adjustForm.userId),
+
         workDate: adjustForm.workDate,
+
         checkIn: adjustForm.checkIn,
+
         checkOut: adjustForm.checkOut || null,
+
         reason: adjustForm.reason.trim(),
       });
 
-      alert(res.data.message || "Kéo công thành công.");
+      alert(res?.data?.message || "Kéo công thành công.");
 
       setShowAdjustModal(false);
 
@@ -152,112 +246,171 @@ const AttendanceReport = () => {
       console.error("Lỗi kéo công:", err);
 
       alert(
-        err.response?.data?.message || "Không thể kéo công. Vui lòng thử lại.",
+        err?.response?.data?.message || "Không thể kéo công. Vui lòng thử lại.",
       );
     } finally {
       setSavingAdjust(false);
     }
   };
+
+  // ==========================================================
+  // GET REPORT
+  // ==========================================================
+
   const handleFetchReport = async () => {
     setLoading(true);
+
     setFetched(true);
 
     try {
-      const res = await APIToken.post("/getAttendanceHistory", {
+      const payload = {
         fromDate,
         toDate,
-        userId: parseInt(selectedUser),
-      });
+      };
 
-      setData(res.data.data || []);
+      if (selectedUser) {
+        payload.userId = parseInt(selectedUser);
+      }
+
+      const res = await APIToken.post("/getAttendanceHistory", payload);
+
+      setData(res?.data?.data || []);
     } catch (err) {
       console.error("Lỗi lấy dữ liệu chấm công", err);
+
       setData([]);
     } finally {
       setLoading(false);
     }
   };
 
+  // ==========================================================
+  // STATUS
+  // ==========================================================
+
+  const renderStatus = (item) => {
+    if (item.status === "ON_TIME") {
+      return (
+        <Badge bg="success" className="status-badge">
+          Đúng giờ
+        </Badge>
+      );
+    }
+
+    if (item.status === "LATE") {
+      return (
+        <Badge bg="danger" className="status-badge">
+          Đi trễ
+        </Badge>
+      );
+    }
+
+    return (
+      <Badge bg="secondary" className="status-badge">
+        Vắng mặt
+      </Badge>
+    );
+  };
+
+  // ==========================================================
+  // RENDER
+  // ==========================================================
+
   return (
-    <Container fluid className="admin-report-wrapper py-4">
-      <Card className="report-filter-card mb-4 border-0 shadow-sm">
+    <Container fluid className="admin-report-wrapper">
+      {/* =====================================================
+          FILTER
+      ===================================================== */}
+
+      <Card className="report-filter-card border-0">
         <Card.Body>
-          <h4
-            className="mb-4 text-primary fw-bold text-uppercase"
-            style={{ fontSize: "1.2rem", letterSpacing: "1px" }}
-          >
-            <FaSearch className="me-2" /> Báo cáo chấm công nhân viên
-          </h4>
+          <div className="report-filter-title">
+            <FaSearch />
+
+            <span>Báo cáo chấm công nhân viên</span>
+          </div>
+
           <Row className="g-3 align-items-end">
+            {/* EMPLOYEE */}
+
             <Col lg={4} md={12}>
               <Form.Group>
-                <Form.Label className="small fw-bold text-secondary">
-                  CHỌN NHÂN VIÊN
-                </Form.Label>
+                <Form.Label className="report-label">Chọn nhân viên</Form.Label>
+
                 <InputGroup className="custom-input-group">
                   <InputGroup.Text>
                     <FaUserCircle />
                   </InputGroup.Text>
+
                   <Form.Select
-                    className="shadow-none"
                     value={selectedUser}
                     onChange={(e) => setSelectedUser(e.target.value)}
                   >
                     <option value="">-- Tất cả nhân viên --</option>
+
                     {users.map((u) => (
                       <option key={u.user_id} value={u.user_id}>
-                        {u.user_id + "-" + u.name}
+                        {u.user_id} - {u.name}
                       </option>
                     ))}
                   </Form.Select>
                 </InputGroup>
               </Form.Group>
             </Col>
+
+            {/* FROM DATE */}
+
             <Col lg={3} md={6} sm={6}>
               <Form.Group>
-                <Form.Label className="small fw-bold text-secondary">
-                  TỪ NGÀY
-                </Form.Label>
+                <Form.Label className="report-label">Từ ngày</Form.Label>
+
                 <InputGroup className="custom-input-group">
                   <InputGroup.Text>
                     <FaCalendarAlt />
                   </InputGroup.Text>
+
                   <Form.Control
                     type="date"
-                    className="shadow-none"
                     value={fromDate}
                     onChange={(e) => setFromDate(e.target.value)}
                   />
                 </InputGroup>
               </Form.Group>
             </Col>
+
+            {/* TO DATE */}
+
             <Col lg={3} md={6} sm={6}>
               <Form.Group>
-                <Form.Label className="small fw-bold text-secondary">
-                  ĐẾN NGÀY
-                </Form.Label>
+                <Form.Label className="report-label">Đến ngày</Form.Label>
+
                 <InputGroup className="custom-input-group">
                   <InputGroup.Text>
                     <FaCalendarAlt />
                   </InputGroup.Text>
+
                   <Form.Control
                     type="date"
-                    className="shadow-none"
                     value={toDate}
                     onChange={(e) => setToDate(e.target.value)}
                   />
                 </InputGroup>
               </Form.Group>
             </Col>
+
+            {/* SEARCH */}
+
             <Col lg={2} md={12}>
               <Button
-                variant="primary"
-                className="w-100 fw-bold py-2 btn-search-report border-0 shadow-sm"
+                className="w-100 btn-search-report"
                 onClick={handleFetchReport}
                 disabled={loading}
               >
                 {loading ? (
-                  <Spinner size="sm" animation="border" />
+                  <>
+                    <Spinner size="sm" animation="border" className="me-2" />
+                    Đang tải
+                  </>
                 ) : (
                   "TRUY XUẤT"
                 )}
@@ -266,195 +419,167 @@ const AttendanceReport = () => {
           </Row>
         </Card.Body>
       </Card>
-      <div className="d-flex justify-content-between align-items-center mb-3">
+
+      {/* =====================================================
+          REPORT HEADER
+      ===================================================== */}
+
+      <div className="report-list-header">
         <div>
-          <h5 className="mb-0 fw-bold text-dark">Danh sách chấm công</h5>
-          <small className="text-muted">
-            Theo dõi và điều chỉnh dữ liệu chấm công nhân viên
-          </small>
+          <h5>Danh sách chấm công</h5>
+
+          <small>Theo dõi và điều chỉnh dữ liệu chấm công nhân viên</small>
         </div>
 
         <Button
           variant="warning"
-          className="btn-adjust-attendance fw-bold px-4"
+          className="btn-adjust-attendance"
           onClick={handleOpenAddAttendance}
         >
-          <FaUserClock className="me-2" />
-          KÉO CÔNG
+          <FaUserClock />
+
+          <span>Kéo công</span>
         </Button>
       </div>
-      <Card className="report-content-card border-0 shadow-sm">
-        <div className="table-responsive">
-          <Table hover className="align-middle mb-0">
+
+      {/* =====================================================
+          TABLE
+      ===================================================== */}
+
+      <Card className="report-content-card border-0">
+        <div className="table-responsive report-table-responsive">
+          <Table hover className="report-table align-middle mb-0">
             <thead>
               <tr>
-                <th className="ps-4">Ngày làm việc</th>
+                <th>Ngày làm việc</th>
+
                 <th>Nhân viên</th>
-                <th>Giờ vào (Check-in)</th>
-                <th>Giờ ra (Check-out)</th>
-                <th>Tổng giờ làm</th>
+
+                <th>Giờ vào</th>
+
+                <th>Giờ ra</th>
+
+                <th>Tổng giờ</th>
+
                 <th>Thiết bị / IP</th>
+
                 <th className="text-center">Trạng thái</th>
               </tr>
             </thead>
+
             <tbody>
-              {!fetched ? (
+              {loading ? (
                 <tr>
-                  <td colSpan="6" className="text-center py-5">
+                  <td colSpan="7" className="report-empty-cell">
+                    <Spinner animation="border" variant="primary" />
+
+                    <span>Đang tải dữ liệu...</span>
+                  </td>
+                </tr>
+              ) : !fetched ? (
+                <tr>
+                  <td colSpan="7" className="report-empty-cell">
                     <div className="empty-state">
-                      <FaSearch
-                        size={40}
-                        className="mb-3 text-muted opacity-25"
-                      />
-                      <p className="text-muted">
-                        Vui lòng chọn nhân viên để xem lịch sử chấm công
+                      <FaSearch />
+
+                      <p>
+                        Chọn nhân viên và khoảng thời gian để xem lịch sử chấm
+                        công
                       </p>
                     </div>
                   </td>
                 </tr>
               ) : data.length === 0 ? (
                 <tr>
-                  <td
-                    colSpan="6"
-                    className="text-center py-5 text-muted fst-italic"
-                  >
+                  <td colSpan="7" className="report-empty-cell">
                     Không tìm thấy dữ liệu chấm công trong khoảng thời gian này.
                   </td>
                 </tr>
               ) : (
-                data.map((item) => (
-                  <tr key={item.id}>
-                    <td className="ps-4">
-                      <div className="fw-bold text-dark">
-                        {new Date(item.workDate).toLocaleDateString("vi-VN")}
+                data.map((item, index) => (
+                  <tr
+                    key={item.id || `${item.userId}-${item.workDate}-${index}`}
+                  >
+                    {/* DATE */}
+
+                    <td data-label="Ngày làm việc">
+                      <div className="report-date">
+                        <strong>{formatWorkDate(item.workDate)}</strong>
+
+                        <small>{formatWeekday(item.workDate)}</small>
                       </div>
-                      <small className="text-muted text-capitalize">
-                        {new Date(item.workDate).toLocaleDateString("vi-VN", {
-                          weekday: "long",
-                        })}
-                      </small>
                     </td>
-                    {/* Cột Nhân viên mới thêm */}
-                    <td>
-                      <div className="d-flex align-items-center">
-                        <div
-                          className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2"
-                          style={{
-                            width: "32px",
-                            height: "32px",
-                            fontSize: "0.8rem",
-                            fontWeight: "bold",
-                          }}
-                        >
+
+                    {/* EMPLOYEE */}
+
+                    <td data-label="Nhân viên">
+                      <div className="report-user">
+                        <div className="report-user-avatar">
                           {item.fullName
-                            ? item.fullName.charAt(0).toUpperCase()
+                            ? item.fullName.trim().charAt(0).toUpperCase()
                             : "U"}
                         </div>
-                        <div>
-                          <div
-                            className="fw-bold text-dark"
-                            style={{ fontSize: "0.9rem" }}
-                          >
-                            {item.fullName || "N/A"}
-                          </div>
-                          <small
-                            className="text-muted"
-                            style={{ fontSize: "0.75rem" }}
-                          >
-                            User: {item.userId}
-                          </small>
+
+                        <div className="report-user-info">
+                          <strong>{item.fullName || "N/A"}</strong>
+
+                          <small>ID: {item.userId}</small>
                         </div>
                       </div>
                     </td>
-                    <td>
-                      <div className="d-flex align-items-center">
-                        <FaClock className="text-success me-2" />
+
+                    {/* CHECK IN */}
+
+                    <td data-label="Giờ vào">
+                      <div className="report-time">
+                        <FaClock className="checkin" />
+
+                        <span>{formatTime(item.checkIn)}</span>
+                      </div>
+                    </td>
+
+                    {/* CHECK OUT */}
+
+                    <td data-label="Giờ ra">
+                      <div className="report-time">
+                        <FaClock className="checkout" />
+
                         <span>
-                          {item.checkIn
-                            ? new Date(item.checkIn).toLocaleTimeString(
-                                "vi-VN",
-                                {
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                  second: "2-digit",
-                                },
-                              )
-                            : "--:--"}
+                          {item.checkOut ? formatTime(item.checkOut) : "--:--"}
                         </span>
                       </div>
                     </td>
-                    <td>
-                      <div className="d-flex align-items-center">
-                        <FaClock className="text-danger me-2" />
-                        <span>
-                          {item.checkOut
-                            ? new Date(item.checkOut).toLocaleTimeString(
-                                "vi-VN",
-                                {
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                  second: "2-digit",
-                                },
-                              )
-                            : "-:-"}
-                        </span>
-                      </div>
-                    </td>
-                    <td>
-                      <Badge
-                        bg="light"
-                        className="text-dark border fw-medium px-3 py-2"
-                        style={{ fontSize: "0.85rem" }}
-                      >
-                        {(() => {
-                          // 1. Nếu thiếu checkIn hoặc thiếu checkOut thì không tính toán
-                          if (!item.checkIn || !item.checkOut)
-                            return "0.00 giờ";
 
-                          const start = new Date(item.checkIn);
-                          const end = new Date(item.checkOut);
+                    {/* TOTAL */}
 
-                          // 2. Tính toán hiệu số giờ
-                          const diffInMs = end - start;
-                          const diffHours = diffInMs / (1000 * 60 * 60);
-
-                          // 3. Đảm bảo kết quả không âm và hiển thị 2 số thập phân
-                          return `${Math.max(0, diffHours).toFixed(2)} giờ`;
-                        })()}
+                    <td data-label="Tổng giờ">
+                      <Badge bg="light" className="report-hours-badge">
+                        {getWorkingHours(item.checkIn, item.checkOut)}
                       </Badge>
                     </td>
-                    <td>
+
+                    {/* DEVICE */}
+
+                    <td data-label="Thiết bị / IP">
                       <div className="device-info">
-                        <div
-                          className="small text-truncate"
-                          style={{ maxWidth: "150px" }}
-                        >
-                          <FaMobileAlt className="me-1 text-muted" />{" "}
-                          {item.deviceIdUsed || "N/A"}
+                        <div>
+                          <FaMobileAlt />
+
+                          <span>{item.deviceIdUsed || "N/A"}</span>
                         </div>
-                        <div className="small text-muted">
-                          <FaMapMarkerAlt className="me-1 text-muted" />{" "}
-                          {item.ipAddress || "---"}
+
+                        <div>
+                          <FaMapMarkerAlt />
+
+                          <span>{item.ipAddress || "---"}</span>
                         </div>
                       </div>
                     </td>
-                    <td className="text-center">
-                      <Badge
-                        bg={
-                          item.status === "ON_TIME"
-                            ? "success"
-                            : item.status === "LATE"
-                              ? "danger"
-                              : "secondary"
-                        }
-                        className="status-badge"
-                      >
-                        {item.status === "ON_TIME"
-                          ? "Đúng giờ"
-                          : item.status === "LATE"
-                            ? "Đi trễ"
-                            : "Vắng mặt"}
-                      </Badge>
+
+                    {/* STATUS */}
+
+                    <td data-label="Trạng thái" className="text-center">
+                      {renderStatus(item)}
                     </td>
                   </tr>
                 ))
@@ -463,6 +588,11 @@ const AttendanceReport = () => {
           </Table>
         </div>
       </Card>
+
+      {/* =====================================================
+          ADJUST MODAL
+      ===================================================== */}
+
       <Modal
         show={showAdjustModal}
         onHide={() => {
@@ -473,32 +603,35 @@ const AttendanceReport = () => {
         centered
         size="lg"
         backdrop="static"
+        keyboard={!savingAdjust}
       >
         <Modal.Header closeButton={!savingAdjust}>
-          <Modal.Title className="d-flex align-items-center">
-            <div className="adjust-modal-icon me-3">
+          <Modal.Title className="adjust-modal-title">
+            <div className="adjust-modal-icon">
               <FaUserClock />
             </div>
 
             <div>
-              <div className="fw-bold">Kéo công nhân viên</div>
+              <strong>Kéo công nhân viên</strong>
 
-              <small className="text-muted fw-normal">
-                Thêm mới hoặc điều chỉnh giờ chấm công
-              </small>
+              <small>Thêm mới hoặc điều chỉnh giờ chấm công</small>
             </div>
           </Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
-          <div className="adjust-info-box mb-4">
-            <FaCheckCircle className="me-2 text-success" />
-            Hệ thống sẽ tự động tạo công nếu ngày này chưa có dữ liệu. Nếu đã
-            có, dữ liệu chấm công sẽ được cập nhật.
+          <div className="adjust-info-box">
+            <FaCheckCircle />
+
+            <span>
+              Hệ thống sẽ tự động tạo công nếu ngày này chưa có dữ liệu. Nếu đã
+              có, dữ liệu chấm công sẽ được cập nhật.
+            </span>
           </div>
 
-          <Row className="g-4">
-            {/* NHÂN VIÊN */}
+          <Row className="g-3">
+            {/* EMPLOYEE */}
+
             <Col md={12}>
               <Form.Group>
                 <Form.Label className="adjust-label">
@@ -516,6 +649,7 @@ const AttendanceReport = () => {
                     onChange={(e) =>
                       setAdjustForm({
                         ...adjustForm,
+
                         userId: e.target.value,
                       })
                     }
@@ -533,7 +667,8 @@ const AttendanceReport = () => {
               </Form.Group>
             </Col>
 
-            {/* NGÀY LÀM VIỆC */}
+            {/* DATE */}
+
             <Col md={12}>
               <Form.Group>
                 <Form.Label className="adjust-label">
@@ -553,6 +688,7 @@ const AttendanceReport = () => {
                     onChange={(e) =>
                       setAdjustForm({
                         ...adjustForm,
+
                         workDate: e.target.value,
                       })
                     }
@@ -562,7 +698,8 @@ const AttendanceReport = () => {
               </Form.Group>
             </Col>
 
-            {/* GIỜ VÀO */}
+            {/* CHECK IN */}
+
             <Col md={6}>
               <Form.Group>
                 <Form.Label className="adjust-label">
@@ -581,6 +718,7 @@ const AttendanceReport = () => {
                     onChange={(e) =>
                       setAdjustForm({
                         ...adjustForm,
+
                         checkIn: e.target.value,
                       })
                     }
@@ -590,7 +728,8 @@ const AttendanceReport = () => {
               </Form.Group>
             </Col>
 
-            {/* GIỜ RA */}
+            {/* CHECK OUT */}
+
             <Col md={6}>
               <Form.Group>
                 <Form.Label className="adjust-label">Giờ ra</Form.Label>
@@ -606,6 +745,7 @@ const AttendanceReport = () => {
                     onChange={(e) =>
                       setAdjustForm({
                         ...adjustForm,
+
                         checkOut: e.target.value,
                       })
                     }
@@ -615,15 +755,14 @@ const AttendanceReport = () => {
               </Form.Group>
             </Col>
 
-            {/* GIỜ CHUẨN */}
+            {/* STANDARD */}
+
             <Col md={12}>
               <div className="standard-time-box">
                 <div>
-                  <div className="fw-bold">Giờ làm việc chuẩn</div>
+                  <strong>Giờ làm việc chuẩn</strong>
 
-                  <small className="text-muted">
-                    Nhấn để tự động điền giờ làm việc
-                  </small>
+                  <small>Nhấn để tự động điền giờ làm việc</small>
                 </div>
 
                 <Button
@@ -633,7 +772,9 @@ const AttendanceReport = () => {
                   onClick={() =>
                     setAdjustForm({
                       ...adjustForm,
+
                       checkIn: "09:00",
+
                       checkOut: "17:00",
                     })
                   }
@@ -644,7 +785,8 @@ const AttendanceReport = () => {
               </div>
             </Col>
 
-            {/* LÝ DO */}
+            {/* REASON */}
+
             <Col md={12}>
               <Form.Group>
                 <Form.Label className="adjust-label">
@@ -661,6 +803,7 @@ const AttendanceReport = () => {
                   onChange={(e) =>
                     setAdjustForm({
                       ...adjustForm,
+
                       reason: e.target.value,
                     })
                   }
@@ -668,10 +811,9 @@ const AttendanceReport = () => {
                   className="adjust-reason"
                 />
 
-                <div className="text-end mt-1">
-                  <small className="text-muted">
-                    {adjustForm.reason.length}/500
-                  </small>
+                <div className="adjust-counter">
+                  {adjustForm.reason.length}
+                  /500
                 </div>
               </Form.Group>
             </Col>
@@ -681,7 +823,6 @@ const AttendanceReport = () => {
         <Modal.Footer className="adjust-modal-footer">
           <Button
             variant="light"
-            className="px-4"
             disabled={savingAdjust}
             onClick={() => setShowAdjustModal(false)}
           >
@@ -690,7 +831,7 @@ const AttendanceReport = () => {
 
           <Button
             variant="primary"
-            className="px-4 fw-bold btn-save-adjust"
+            className="btn-save-adjust"
             disabled={savingAdjust}
             onClick={handleAdjustAttendance}
           >
@@ -702,7 +843,7 @@ const AttendanceReport = () => {
             ) : (
               <>
                 <FaCheckCircle className="me-2" />
-                XÁC NHẬN KÉO CÔNG
+                Xác nhận kéo công
               </>
             )}
           </Button>

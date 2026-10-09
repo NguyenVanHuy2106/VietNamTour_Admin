@@ -1,263 +1,1304 @@
-/* Container chung */
+/* ============================================================
+   PAGE
+============================================================ */
+
 .admin-report-wrapper {
-    background-color: #f4f7f6;
-    min-height: 100vh;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  width: 100%;
+
+  min-height: calc(100vh - 70px);
+
+  padding: 24px 30px 40px !important;
+
+  background: #f6f8fc;
+
+  color: #17345c;
+
+  overflow-x: hidden;
 }
 
-/* Tùy chỉnh Card Filter */
+/* ============================================================
+   FILTER CARD
+============================================================ */
+
 .report-filter-card {
-    border-radius: 12px;
-    background: #ffffff;
+  margin-bottom: 18px;
+
+  border: 1px solid #e2e8f2 !important;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 3px 12px
+    rgba(34, 65, 110, 0.04);
 }
 
-.custom-input-group .input-group-text {
-    background-color: #fff;
-    border-right: none;
-    color: #6c757d;
+.report-filter-card .card-body {
+  padding: 18px;
 }
 
-.custom-input-group .form-control, 
-.custom-input-group .form-select {
-    border-left: none;
-    font-size: 0.95rem;
-    color: #333;
+.report-filter-title {
+  margin-bottom: 18px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  color: #1565e8;
+
+  font-size: 18px;
+
+  font-weight: 700;
 }
 
-/* Button Truy xuất */
+.report-label {
+  margin-bottom: 6px;
+
+  color: #647894;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.35px;
+}
+
+/* ============================================================
+   INPUT
+============================================================ */
+
+.custom-input-group
+  .input-group-text {
+  width: 42px;
+
+  min-height: 42px;
+
+  justify-content: center;
+
+  background: #f7f9fc;
+
+  border-color: #dbe4ef;
+
+  border-right: 0;
+
+  color: #647894;
+}
+
+.custom-input-group
+  .form-control,
+.custom-input-group
+  .form-select {
+  min-height: 42px;
+
+  border-color: #dbe4ef;
+
+  border-left: 0;
+
+  color: #294766;
+
+  font-size: 13px;
+
+  box-shadow: none !important;
+}
+
+.custom-input-group
+  .form-control:focus,
+.custom-input-group
+  .form-select:focus {
+  border-color: #2c7be5;
+}
+
+/* ============================================================
+   SEARCH BUTTON
+============================================================ */
+
 .btn-search-report {
-    background: linear-gradient(135deg, #0d6efd 0%, #004fc5 100%);
-    letter-spacing: 0.5px;
-    transition: all 0.3s ease;
+  min-height: 42px;
+
+  border: 0 !important;
+
+  border-radius: 6px !important;
+
+  background: #1565e8 !important;
+
+  font-size: 12px !important;
+
+  font-weight: 700 !important;
+
+  letter-spacing: 0.3px;
+
+  box-shadow:
+    0 5px 14px
+    rgba(21, 101, 232, 0.16);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .btn-search-report:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+  transform:
+    translateY(-1px);
+
+  background:
+    #0d59d7 !important;
+
+  box-shadow:
+    0 7px 16px
+    rgba(21, 101, 232, 0.2);
 }
 
-/* Card Table */
-.report-content-card {
-    border-radius: 12px;
-    overflow: hidden;
+/* ============================================================
+   LIST HEADER
+============================================================ */
+
+.report-list-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 16px;
+
+  margin-bottom: 12px;
 }
 
-.report-content-card thead {
-    background-color: #f8f9fa;
+.report-list-header h5 {
+  margin: 0;
+
+  color: #17345c;
+
+  font-size: 17px;
+
+  font-weight: 700;
 }
 
-.report-content-card thead th {
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #555;
-    letter-spacing: 0.5px;
-    padding: 18px 10px;
-    border-top: none;
+.report-list-header small {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #8292a7;
+
+  font-size: 12px;
 }
 
-.report-content-card tbody tr {
-    transition: background 0.2s ease;
-}
-
-.report-content-card tbody td {
-    padding: 16px 10px;
-}
-
-/* Trạng thái Status */
-.status-badge {
-    padding: 8px 14px;
-    font-size: 0.7rem;
-    min-width: 90px;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.device-info .small {
-    font-size: 0.8rem;
-    line-height: 1.4;
-}
-
-/* Empty State */
-.empty-state {
-    padding: 40px 0;
-}
-
-/* Responsive */
-@media (max-width: 991px) {
-    .btn-search-report {
-        margin-top: 10px;
-    }
-}
-
-@media (max-width: 576px) {
-    .table-responsive .table {
-        min-width: 850px;
-    }
-    
-    .admin-report-wrapper {
-        padding-left: 10px !important;
-        padding-right: 10px !important;
-    }
-}
-
-/* =====================================================
-   MODAL KÉO CÔNG
-===================================================== */
+/* ============================================================
+   ADJUST BUTTON
+============================================================ */
 
 .btn-adjust-attendance {
-    border: none;
-    border-radius: 9px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    transition: all 0.25s ease;
+  min-height: 40px;
+
+  padding:
+    0 17px !important;
+
+  display: inline-flex !important;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  border: 0 !important;
+
+  border-radius: 7px !important;
+
+  color: #594500 !important;
+
+  font-size: 12px !important;
+
+  font-weight: 700 !important;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .btn-adjust-attendance:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(255, 193, 7, 0.3);
+  transform:
+    translateY(-1px);
+
+  box-shadow:
+    0 5px 15px
+    rgba(255, 193, 7, 0.22);
 }
 
-/* Modal */
+/* ============================================================
+   CONTENT CARD
+============================================================ */
+
+.report-content-card {
+  overflow: hidden;
+
+  border: 1px solid #e2e8f2 !important;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 3px 12px
+    rgba(34, 65, 110, 0.04);
+}
+
+/* ============================================================
+   TABLE
+============================================================ */
+
+.report-table-responsive {
+  width: 100%;
+
+  overflow-x: auto;
+
+  -webkit-overflow-scrolling:
+    touch;
+}
+
+.report-table {
+  width: 100%;
+
+  font-size: 13px;
+}
+
+.report-table thead th {
+  padding: 13px 10px;
+
+  background: #f7f9fc;
+
+  border-bottom:
+    1px solid #e1e7f0;
+
+  color: #294766;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.25px;
+
+  white-space: nowrap;
+}
+
+.report-table tbody td {
+  padding: 13px 10px;
+
+  border-bottom:
+    1px solid #edf1f6;
+
+  color: #294766;
+
+  vertical-align: middle;
+}
+
+.report-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.report-table tbody tr:hover {
+  background: #fbfdff;
+}
+
+/* ============================================================
+   DATE
+============================================================ */
+
+.report-date strong,
+.report-date small {
+  display: block;
+}
+
+.report-date strong {
+  color: #294766;
+
+  font-size: 13px;
+}
+
+.report-date small {
+  margin-top: 2px;
+
+  color: #8292a7;
+
+  font-size: 10px;
+
+  text-transform: capitalize;
+}
+
+/* ============================================================
+   USER
+============================================================ */
+
+.report-user {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  min-width: 170px;
+}
+
+.report-user-avatar {
+  width: 34px;
+
+  height: 34px;
+
+  flex: 0 0 34px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 50%;
+
+  background: #1565e8;
+
+  color: #ffffff;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+.report-user-info {
+  min-width: 0;
+}
+
+.report-user-info strong,
+.report-user-info small {
+  display: block;
+}
+
+.report-user-info strong {
+  overflow: hidden;
+
+  color: #294766;
+
+  font-size: 12px;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+.report-user-info small {
+  margin-top: 2px;
+
+  color: #8292a7;
+
+  font-size: 10px;
+}
+
+/* ============================================================
+   TIME
+============================================================ */
+
+.report-time {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  white-space: nowrap;
+}
+
+.report-time svg.checkin {
+  color: #1fbd83;
+}
+
+.report-time svg.checkout {
+  color: #ef4f5f;
+}
+
+/* ============================================================
+   HOURS
+============================================================ */
+
+.report-hours-badge {
+  padding:
+    6px 9px !important;
+
+  border:
+    1px solid #dce4ef !important;
+
+  color:
+    #294766 !important;
+
+  font-size:
+    11px !important;
+
+  font-weight:
+    600 !important;
+}
+
+/* ============================================================
+   DEVICE
+============================================================ */
+
+.device-info {
+  max-width: 180px;
+}
+
+.device-info > div {
+  display: flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  min-width: 0;
+
+  color: #647894;
+
+  font-size: 10px;
+}
+
+.device-info > div + div {
+  margin-top: 4px;
+}
+
+.device-info svg {
+  flex-shrink: 0;
+}
+
+.device-info span {
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+/* ============================================================
+   STATUS
+============================================================ */
+
+.status-badge {
+  min-width: 76px;
+
+  padding:
+    6px 9px !important;
+
+  font-size:
+    10px !important;
+
+  font-weight:
+    600 !important;
+
+  white-space: nowrap;
+}
+
+/* ============================================================
+   EMPTY
+============================================================ */
+
+.report-empty-cell {
+  padding:
+    45px 15px !important;
+
+  text-align:
+    center !important;
+
+  color:
+    #8a9aae !important;
+}
+
+.report-empty-cell >
+  span {
+  margin-left: 8px;
+}
+
+.empty-state svg {
+  margin-bottom: 12px;
+
+  color: #a8b4c2;
+
+  font-size: 34px;
+}
+
+.empty-state p {
+  margin: 0;
+
+  color: #8a9aae;
+
+  font-size: 13px;
+}
+
+/* ============================================================
+   MODAL
+============================================================ */
+
 .modal-content {
-    border: none;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.14);
+  overflow: hidden;
+
+  border: 0;
+
+  border-radius: 11px;
+
+  box-shadow:
+    0 20px 50px
+    rgba(23, 52, 92, 0.16);
 }
 
 .modal-header {
-    padding: 20px 24px;
-    border-bottom: 1px solid #edf0f2;
+  padding:
+    18px 21px;
+
+  border-bottom:
+    1px solid #e8edf4;
 }
 
 .modal-body {
-    padding: 24px;
+  padding:
+    21px;
 }
+
+.adjust-modal-title {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+.adjust-modal-title > div:last-child {
+  display: flex;
+
+  flex-direction: column;
+}
+
+.adjust-modal-title strong {
+  color: #17345c;
+
+  font-size: 18px;
+}
+
+.adjust-modal-title small {
+  margin-top: 2px;
+
+  color: #8292a7;
+
+  font-size: 11px;
+
+  font-weight: 400;
+}
+
+.adjust-modal-icon {
+  width: 44px;
+
+  height: 44px;
+
+  flex: 0 0 44px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 10px;
+
+  background: #fff6dc;
+
+  color: #d89c00;
+
+  font-size: 18px;
+}
+
+/* ============================================================
+   INFO BOX
+============================================================ */
+
+.adjust-info-box {
+  margin-bottom: 18px;
+
+  padding:
+    12px 14px;
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 8px;
+
+  border:
+    1px solid #d8f0e3;
+
+  border-radius: 8px;
+
+  background: #f3fbf7;
+
+  color: #496157;
+
+  font-size: 12px;
+
+  line-height: 1.5;
+}
+
+.adjust-info-box svg {
+  flex-shrink: 0;
+
+  margin-top: 2px;
+
+  color: #1fbd83;
+}
+
+/* ============================================================
+   ADJUST FORM
+============================================================ */
+
+.adjust-label {
+  margin-bottom: 6px;
+
+  color: #52667e;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+}
+
+.adjust-input-group
+  .input-group-text {
+  width: 42px;
+
+  min-height: 42px;
+
+  justify-content: center;
+
+  border-color: #dbe4ef;
+
+  border-right: 0;
+
+  background: #f7f9fc;
+
+  color: #647894;
+}
+
+.adjust-input-group
+  .form-control,
+.adjust-input-group
+  .form-select {
+  min-height: 42px;
+
+  border-color: #dbe4ef;
+
+  border-left: 0;
+
+  font-size: 13px;
+
+  box-shadow: none !important;
+}
+
+/* ============================================================
+   STANDARD TIME
+============================================================ */
+
+.standard-time-box {
+  padding: 12px 14px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 14px;
+
+  border:
+    1px dashed #ccd8e6;
+
+  border-radius: 8px;
+
+  background: #f8fafc;
+}
+
+.standard-time-box strong,
+.standard-time-box small {
+  display: block;
+}
+
+.standard-time-box strong {
+  color: #294766;
+
+  font-size: 12px;
+}
+
+.standard-time-box small {
+  margin-top: 3px;
+
+  color: #8292a7;
+
+  font-size: 10px;
+}
+
+/* ============================================================
+   REASON
+============================================================ */
+
+.adjust-reason {
+  min-height: 85px;
+
+  resize: vertical;
+
+  border-color: #dbe4ef;
+
+  border-radius: 7px;
+
+  font-size: 13px;
+
+  box-shadow: none !important;
+}
+
+.adjust-counter {
+  margin-top: 4px;
+
+  color: #94a2b3;
+
+  font-size: 10px;
+
+  text-align: right;
+}
+
+/* ============================================================
+   MODAL FOOTER
+============================================================ */
 
 .adjust-modal-footer {
-    padding: 16px 24px;
-    border-top: 1px solid #edf0f2;
+  padding:
+    14px 21px;
+
+  border-top:
+    1px solid #e8edf4;
 }
 
-/* Icon đầu modal */
-.adjust-modal-icon {
-    width: 46px;
-    height: 46px;
-    border-radius: 12px;
+.adjust-modal-footer .btn {
+  min-height: 40px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: #fff3cd;
-    color: #d39e00;
-
-    font-size: 20px;
+  font-size: 12px;
 }
 
-/* Thông báo */
-.adjust-info-box {
-    padding: 13px 16px;
-
-    background: #f3fbf7;
-    border: 1px solid #d8f0e3;
-    border-radius: 9px;
-
-    color: #40534a;
-    font-size: 0.88rem;
-}
-
-/* Label */
-.adjust-label {
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: #505963;
-    margin-bottom: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-}
-
-/* Input */
-.adjust-input-group .input-group-text {
-    background: #f8f9fa;
-    border-right: none;
-    color: #747d86;
-
-    width: 45px;
-    justify-content: center;
-}
-
-.adjust-input-group .form-control,
-.adjust-input-group .form-select {
-    border-left: none;
-    min-height: 44px;
-    box-shadow: none !important;
-}
-
-.adjust-input-group .form-control:focus,
-.adjust-input-group .form-select:focus {
-    border-color: #dee2e6;
-}
-
-/* Giờ làm chuẩn */
-.standard-time-box {
-    background: #f8fafb;
-
-    border: 1px dashed #cdd5dc;
-    border-radius: 10px;
-
-    padding: 13px 15px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
-}
-
-/* Lý do */
-.adjust-reason {
-    border-radius: 9px;
-    resize: none;
-    box-shadow: none !important;
-}
-
-.adjust-reason:focus {
-    border-color: #86b7fe;
-}
-
-/* Button lưu */
 .btn-save-adjust {
-    border: none;
-    border-radius: 8px;
-    min-width: 190px;
+  min-width: 175px;
+
+  font-weight: 700 !important;
+
+  text-transform: uppercase;
 }
 
-/* Mobile */
-@media (max-width: 576px) {
+/* ============================================================
+   TABLET
+============================================================ */
 
-    .modal-body {
-        padding: 18px;
-    }
+@media (max-width: 991px) {
+  .admin-report-wrapper {
+    padding:
+      20px 18px 32px !important;
+  }
 
-    .modal-header {
-        padding: 17px 18px;
-    }
+  .btn-search-report {
+    margin-top: 0;
+  }
+}
 
-    .adjust-modal-footer {
-        padding: 14px 18px;
-    }
+/* ============================================================
+   MOBILE
+============================================================ */
 
-    .standard-time-box {
-        flex-direction: column;
-        align-items: stretch;
-    }
+@media (max-width: 767px) {
+  /* ==========================================================
+     PAGE
+  ========================================================== */
 
-    .standard-time-box .btn {
-        width: 100%;
-    }
+  .admin-report-wrapper {
+    min-height:
+      calc(100vh - 60px);
 
-    .btn-save-adjust {
-        min-width: auto;
-    }
+    padding:
+      12px 10px 26px !important;
+  }
+
+  /* ==========================================================
+     FILTER
+  ========================================================== */
+
+  .report-filter-card {
+    margin-bottom: 12px;
+
+    border-radius: 8px;
+  }
+
+  .report-filter-card
+    .card-body {
+    padding: 12px;
+  }
+
+  .report-filter-title {
+    margin-bottom: 14px;
+
+    font-size: 15px;
+  }
+
+  .report-label {
+    margin-bottom: 4px;
+
+    font-size: 9px;
+  }
+
+  .custom-input-group
+    .input-group-text {
+    width: 38px;
+
+    min-height: 40px;
+
+    font-size: 12px;
+  }
+
+  .custom-input-group
+    .form-control,
+  .custom-input-group
+    .form-select {
+    min-height: 40px;
+
+    font-size: 12px;
+  }
+
+  .btn-search-report {
+    min-height: 41px;
+
+    font-size:
+      11px !important;
+  }
+
+  /* ==========================================================
+     REPORT HEADER
+  ========================================================== */
+
+  .report-list-header {
+    display: block;
+
+    margin-bottom: 10px;
+  }
+
+  .report-list-header h5 {
+    font-size: 15px;
+  }
+
+  .report-list-header small {
+    font-size: 10px;
+  }
+
+  .btn-adjust-attendance {
+    width: 100%;
+
+    min-height: 41px;
+
+    margin-top: 10px;
+
+    font-size:
+      11px !important;
+  }
+
+  /* ==========================================================
+     TABLE -> CARD
+  ========================================================== */
+
+  .report-content-card {
+    padding: 10px;
+
+    border-radius: 8px;
+  }
+
+  .report-table-responsive {
+    overflow:
+      visible !important;
+  }
+
+  .report-table,
+  .report-table tbody {
+    display: block;
+
+    width: 100%;
+  }
+
+  .report-table thead {
+    display: none;
+  }
+
+  .report-table tbody {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+  }
+
+  .report-table tbody tr {
+    display: block;
+
+    width: 100%;
+
+    overflow: hidden;
+
+    border:
+      1px solid #e2e8f2;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    box-shadow:
+      0 2px 9px
+      rgba(34, 65, 110, 0.04);
+  }
+
+  .report-table tbody tr:hover {
+    background: #ffffff;
+  }
+
+  .report-table tbody td {
+    display: grid;
+
+    grid-template-columns:
+      92px
+      minmax(0, 1fr);
+
+    align-items: center;
+
+    gap: 9px;
+
+    width: 100%;
+
+    min-height: 42px;
+
+    padding:
+      9px 11px;
+
+    border: 0;
+
+    border-bottom:
+      1px solid #edf1f6;
+
+    font-size: 11px;
+
+    text-align:
+      left !important;
+
+    white-space: normal;
+  }
+
+  .report-table tbody
+    td:last-child {
+    border-bottom: 0;
+  }
+
+  .report-table tbody
+    td::before {
+    content:
+      attr(data-label);
+
+    color: #8292a7;
+
+    font-size: 9px;
+
+    font-weight: 600;
+
+    line-height: 1.3;
+  }
+
+  /* ==========================================================
+     DATE
+  ========================================================== */
+
+  .report-table tbody
+    td[data-label="Ngày làm việc"] {
+    background: #f8fafd;
+  }
+
+  .report-date strong {
+    color: #1565e8;
+
+    font-size: 12px;
+  }
+
+  .report-date small {
+    font-size: 9px;
+  }
+
+  /* ==========================================================
+     USER
+  ========================================================== */
+
+  .report-user {
+    min-width: 0;
+
+    gap: 7px;
+  }
+
+  .report-user-avatar {
+    width: 32px;
+
+    height: 32px;
+
+    flex-basis: 32px;
+
+    font-size: 11px;
+  }
+
+  .report-user-info {
+    min-width: 0;
+  }
+
+  .report-user-info strong {
+    max-width: 100%;
+
+    font-size: 11px;
+  }
+
+  .report-user-info small {
+    font-size: 9px;
+  }
+
+  /* ==========================================================
+     TIME
+  ========================================================== */
+
+  .report-time {
+    gap: 5px;
+
+    font-size: 11px;
+  }
+
+  /* ==========================================================
+     HOURS / STATUS
+  ========================================================== */
+
+  .report-hours-badge,
+  .status-badge {
+    width: fit-content;
+
+    max-width: 100%;
+
+    padding:
+      5px 7px !important;
+
+    font-size:
+      9px !important;
+  }
+
+  /* ==========================================================
+     DEVICE
+  ========================================================== */
+
+  .device-info {
+    max-width: 100%;
+  }
+
+  .device-info > div {
+    font-size: 9px;
+  }
+
+  .device-info span {
+    white-space: normal;
+
+    overflow-wrap: anywhere;
+  }
+
+  /* ==========================================================
+     EMPTY
+  ========================================================== */
+
+  .report-empty-cell {
+    display:
+      block !important;
+
+    width:
+      100% !important;
+
+    padding:
+      30px 12px !important;
+
+    text-align:
+      center !important;
+  }
+
+  .report-empty-cell::before {
+    display: none;
+  }
+
+  .report-empty-cell > span {
+    display: block;
+
+    margin:
+      7px 0 0;
+  }
+
+  /* ==========================================================
+     MODAL
+  ========================================================== */
+
+  .modal-dialog {
+    margin:
+      10px !important;
+  }
+
+  .modal-content {
+    max-height:
+      calc(100vh - 20px);
+
+    border-radius: 9px;
+  }
+
+  .modal-header {
+    padding:
+      14px 15px;
+  }
+
+  .modal-body {
+    padding:
+      15px;
+
+    overflow-y: auto;
+  }
+
+  .adjust-modal-title {
+    gap: 9px;
+  }
+
+  .adjust-modal-icon {
+    width: 38px;
+
+    height: 38px;
+
+    flex-basis: 38px;
+
+    font-size: 15px;
+  }
+
+  .adjust-modal-title strong {
+    font-size: 15px;
+  }
+
+  .adjust-modal-title small {
+    font-size: 9px;
+  }
+
+  .adjust-info-box {
+    padding:
+      10px 11px;
+
+    font-size: 10px;
+  }
+
+  .adjust-label {
+    font-size: 9px;
+  }
+
+  .adjust-input-group
+    .input-group-text {
+    width: 38px;
+
+    min-height: 40px;
+  }
+
+  .adjust-input-group
+    .form-control,
+  .adjust-input-group
+    .form-select {
+    min-height: 40px;
+
+    font-size: 12px;
+  }
+
+  .standard-time-box {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    padding: 11px;
+  }
+
+  .standard-time-box .btn {
+    width: 100%;
+  }
+
+  .adjust-reason {
+    min-height: 75px;
+
+    font-size: 12px;
+  }
+
+  /* ==========================================================
+     FOOTER
+  ========================================================== */
+
+  .adjust-modal-footer {
+    display: grid;
+
+    grid-template-columns:
+      1fr 1fr;
+
+    gap: 8px;
+
+    padding:
+      12px 15px;
+  }
+
+  .adjust-modal-footer
+    .btn {
+    width: 100%;
+
+    min-width: 0;
+
+    margin: 0 !important;
+
+    padding:
+      0 8px;
+
+    font-size: 10px;
+  }
+
+  .btn-save-adjust {
+    min-width: 0;
+  }
+}
+
+/* ============================================================
+   SMALL MOBILE
+============================================================ */
+
+@media (max-width: 380px) {
+  .admin-report-wrapper {
+    padding:
+      10px 8px 22px !important;
+  }
+
+  .report-content-card {
+    padding: 8px;
+  }
+
+  .report-table tbody td {
+    grid-template-columns:
+      82px
+      minmax(0, 1fr);
+
+    padding:
+      8px 9px;
+
+    gap: 7px;
+  }
+
+  .report-table tbody
+    td::before {
+    font-size: 8px;
+  }
 }
