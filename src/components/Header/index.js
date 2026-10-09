@@ -192,7 +192,7 @@ const HeaderNavData = [
     link: "#",
     subMenu: [
       { id: 5.2, name: "Khách hàng", link: "/customer" },
-      { id: 5.3, name: "Người dùng hệ thống", link: "#" },
+      { id: 5.3, name: "Người dùng hệ thống", link: "/users" },
       { id: 5.4, name: "Hình ảnh", link: "/image-list" },
     ],
   },

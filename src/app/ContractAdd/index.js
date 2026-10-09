@@ -1057,7 +1057,7 @@ const ContractCreate = () => {
 
       const payload = buildPayload("DRAFT");
 
-      console.log("SAVE DRAFT PAYLOAD:", payload);
+      //console.log("SAVE DRAFT PAYLOAD:", payload);
 
       const response = await APIToken.post(
         "/contracts/add",
@@ -1118,9 +1118,9 @@ const ContractCreate = () => {
 
         setSuccessAlertOpen(true);
 
-        setTimeout(() => {
-          window.location.href = "/contract";
-        }, 1000);
+        // setTimeout(() => {
+        //   window.location.href = "/contract";
+        // }, 1000);
       }
     } catch (error) {
       console.error("Lỗi tạo hợp đồng:", error);
