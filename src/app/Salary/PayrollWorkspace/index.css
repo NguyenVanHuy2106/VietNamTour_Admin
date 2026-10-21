@@ -1,0 +1,1628 @@
+/* ============================================================
+   PAGE
+============================================================ */
+
+.payroll-workspace-page {
+  width: 100%;
+  min-height: calc(100vh - 70px);
+
+  padding: 22px 30px 40px !important;
+
+  background: #f6f8fc;
+
+  color: #17345c;
+
+  overflow-x: hidden;
+}
+
+/* ============================================================
+   BACK
+============================================================ */
+
+.workspace-back-btn {
+  margin-bottom: 12px;
+  padding: 0;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  border: 0;
+  background: transparent;
+
+  color: #647894;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.workspace-back-btn:hover {
+  color: #1565e8;
+}
+
+/* ============================================================
+   CARD
+============================================================ */
+
+.workspace-header-card,
+.workspace-main-card {
+  border: 1px solid #e2e8f2 !important;
+
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 3px 12px
+    rgba(34, 65, 110, 0.04);
+}
+
+.workspace-header-card {
+  margin-bottom: 16px;
+}
+
+.workspace-header-card
+  .card-body {
+  padding: 20px;
+}
+
+/* ============================================================
+   HEADER
+============================================================ */
+
+.workspace-header {
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: space-between;
+
+  gap: 16px;
+}
+
+.workspace-title-row {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+.workspace-main-icon {
+  width: 48px;
+  height: 48px;
+
+  flex: 0 0 48px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 11px;
+
+  background: #eaf2ff;
+
+  color: #1565e8;
+
+  font-size: 20px;
+}
+
+.workspace-title-row h4 {
+  margin: 0;
+
+  color: #17345c;
+
+  font-size: 20px;
+
+  font-weight: 700;
+}
+
+.workspace-subtitle {
+  margin-top: 5px;
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 14px;
+
+  color: #8292a7;
+
+  font-size: 10px;
+}
+
+.workspace-subtitle span {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 5px;
+}
+
+.workspace-status {
+  padding: 7px 10px !important;
+
+  font-size: 10px !important;
+
+  font-weight: 600 !important;
+}
+
+/* ============================================================
+   WORKING RULE
+============================================================ */
+
+.company-working-rule {
+  margin-top: 17px;
+
+  padding: 11px 13px;
+
+  display: flex;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 9px;
+
+  border: 1px solid #dfe8f3;
+
+  border-radius: 8px;
+
+  background: #f8fafc;
+}
+
+.working-rule-item {
+  min-height: 29px;
+
+  padding: 5px 9px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  border-radius: 6px;
+
+  background: #ffffff;
+
+  color: #647894;
+
+  font-size: 9px;
+}
+
+.working-rule-item svg {
+  color: #1565e8;
+}
+
+.working-rule-item strong {
+  color: #1565e8;
+}
+
+/* ============================================================
+   SUMMARY
+============================================================ */
+
+.workspace-summary {
+  margin-top: 16px !important;
+}
+
+.summary-card {
+  min-height: 76px;
+
+  padding: 13px 15px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  border: 1px solid #e5ebf3;
+
+  border-radius: 8px;
+
+  background: #f8fafc;
+}
+
+.summary-card small,
+.summary-card strong {
+  display: block;
+}
+
+.summary-card small {
+  color: #8292a7;
+
+  font-size: 9px;
+}
+
+.summary-card strong {
+  margin-top: 3px;
+
+  color: #294766;
+
+  font-size: 21px;
+
+  font-weight: 700;
+}
+
+.summary-card > svg {
+  color: #8ba0b9;
+
+  font-size: 20px;
+}
+
+.summary-card.success > svg {
+  color: #1fbd83;
+}
+
+.summary-card.warning > svg {
+  color: #e6a700;
+}
+
+.summary-card.primary > svg {
+  color: #1565e8;
+}
+
+/* ============================================================
+   MAIN CARD
+============================================================ */
+
+.workspace-main-card {
+  overflow: hidden;
+}
+
+/* ============================================================
+   TABS
+============================================================ */
+
+.workspace-tabs {
+  padding: 0 18px;
+
+  border-bottom:
+    1px solid #e5ebf3;
+
+  background: #ffffff;
+}
+
+.workspace-tabs
+  .nav-tabs {
+  border: 0;
+}
+
+.workspace-tabs
+  .nav-link {
+  position: relative;
+
+  padding: 15px 17px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  border: 0 !important;
+
+  border-bottom:
+    2px solid transparent !important;
+
+  background:
+    transparent !important;
+
+  color: #74869d;
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+.workspace-tabs
+  .nav-link:hover {
+  color: #1565e8;
+}
+
+.workspace-tabs
+  .nav-link.active {
+  border-bottom-color:
+    #1565e8 !important;
+
+  color: #1565e8;
+}
+
+.tab-alert-dot {
+  width: 7px;
+  height: 7px;
+
+  position: absolute;
+
+  top: 9px;
+  right: 6px;
+
+  border-radius: 50%;
+
+  background: #dc3545;
+}
+
+/* ============================================================
+   TAB BODY
+============================================================ */
+
+.workspace-tab-body {
+  padding: 18px;
+}
+
+/* ============================================================
+   SECTION HEADER
+============================================================ */
+
+.workspace-section-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 16px;
+}
+
+.workspace-section-header h5 {
+  margin: 0;
+
+  color: #17345c;
+
+  font-size: 16px;
+
+  font-weight: 700;
+}
+
+.workspace-section-header small {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #8292a7;
+
+  font-size: 10px;
+}
+
+.workspace-header-actions {
+  display: flex;
+
+  gap: 7px;
+}
+
+.workspace-header-actions
+  .btn {
+  min-height: 36px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 6px;
+
+  font-size: 10px;
+
+  font-weight: 700;
+}
+
+/* ============================================================
+   ALERT
+============================================================ */
+
+.workspace-tab-body
+  .alert {
+  padding: 10px 12px;
+
+  border-radius: 7px;
+
+  font-size: 10px;
+}
+
+/* ============================================================
+   SEARCH
+============================================================ */
+
+.workspace-search-row {
+  max-width: 380px;
+
+  margin-bottom: 14px;
+}
+
+.workspace-search-row
+  .input-group-text {
+  width: 40px;
+
+  justify-content: center;
+
+  background: #f7f9fc;
+
+  border-color: #dbe4ef;
+
+  border-right: 0;
+
+  color: #647894;
+}
+
+.workspace-search-row
+  .form-control {
+  min-height: 40px;
+
+  border-color: #dbe4ef;
+
+  border-left: 0;
+
+  color: #294766;
+
+  font-size: 12px;
+
+  box-shadow: none !important;
+}
+
+/* ============================================================
+   TABLE
+============================================================ */
+
+.workspace-table {
+  width: 100%;
+
+  font-size: 11px;
+}
+
+.workspace-table thead th {
+  padding: 12px 9px;
+
+  background: #f7f9fc;
+
+  border-bottom:
+    1px solid #e1e7f0;
+
+  color: #294766;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.2px;
+
+  white-space: nowrap;
+}
+
+.workspace-table tbody td {
+  padding: 12px 9px;
+
+  border-bottom:
+    1px solid #edf1f6;
+
+  color: #294766;
+
+  vertical-align: middle;
+}
+
+.workspace-table tbody tr:hover {
+  background: #fbfdff;
+}
+
+.workspace-table tbody
+  tr:last-child td {
+  border-bottom: 0;
+}
+
+/* ============================================================
+   USER
+============================================================ */
+
+.workspace-user {
+  min-width: 165px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+.workspace-avatar {
+  width: 34px;
+  height: 34px;
+
+  flex: 0 0 34px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 50%;
+
+  background: #1565e8;
+
+  color: #ffffff;
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+.workspace-avatar.large {
+  width: 48px;
+  height: 48px;
+
+  flex-basis: 48px;
+
+  font-size: 16px;
+}
+
+.workspace-user strong,
+.workspace-user small {
+  display: block;
+}
+
+.workspace-user strong {
+  color: #294766;
+
+  font-size: 11px;
+}
+
+.workspace-user small {
+  margin-top: 2px;
+
+  color: #8292a7;
+
+  font-size: 9px;
+}
+
+/* ============================================================
+   EMPLOYEE TYPE
+============================================================ */
+
+.employee-type-badge {
+  padding: 5px 8px !important;
+
+  font-size: 8px !important;
+
+  font-weight: 600 !important;
+
+  white-space: nowrap;
+}
+
+/* ============================================================
+   STANDARD WORK DAY
+============================================================ */
+
+.standard-workday-box strong,
+.standard-workday-box small {
+  display: block;
+}
+
+.standard-workday-box strong {
+  color: #52667e;
+
+  font-size: 14px;
+
+  font-weight: 700;
+}
+
+.standard-workday-box small {
+  margin-top: 2px;
+
+  color: #9aa8b8;
+
+  font-size: 8px;
+}
+
+/* ============================================================
+   ACTUAL WORK DAY
+============================================================ */
+
+.system-workday strong,
+.system-workday small {
+  display: block;
+}
+
+.system-workday strong {
+  color: #294766;
+
+  font-size: 14px;
+
+  font-weight: 700;
+}
+
+.system-workday small {
+  margin-top: 2px;
+
+  color: #94a2b3;
+
+  font-size: 8px;
+}
+
+/* ============================================================
+   ADJUSTMENT
+============================================================ */
+
+.workday-plus {
+  color: #198754;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+.workday-minus {
+  color: #dc3545;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+/* ============================================================
+   FINAL WORK DAY
+============================================================ */
+
+.confirmed-workday {
+  min-width: 38px;
+
+  padding: 5px 9px;
+
+  display: inline-block;
+
+  border-radius: 6px;
+
+  background: #eaf2ff;
+
+  color: #1565e8;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+.version-text {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #9ba8b6;
+
+  font-size: 8px;
+}
+
+/* ============================================================
+   ROW ACTION
+============================================================ */
+
+.workspace-row-actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 5px;
+
+  white-space: nowrap;
+}
+
+.workspace-row-actions
+  .btn {
+  min-height: 32px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 5px;
+
+  padding: 0 9px;
+
+  font-size: 9px;
+
+  font-weight: 600;
+}
+
+/* ============================================================
+   ACTION FOOTER
+============================================================ */
+
+.workspace-action-footer {
+  margin-top: 16px;
+
+  padding-top: 14px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  border-top:
+    1px solid #e9eef5;
+}
+
+.workspace-action-footer
+  .btn {
+  min-height: 38px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  font-size: 10px;
+
+  font-weight: 700;
+}
+
+.action-warning,
+.action-success {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  font-size: 10px;
+
+  font-weight: 600;
+}
+
+.action-warning {
+  color: #c78b00;
+}
+
+.action-success {
+  color: #198754;
+}
+
+/* ============================================================
+   EMPTY ATTENDANCE
+============================================================ */
+
+.attendance-empty-state {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+.attendance-empty-state > svg {
+  margin-bottom: 10px;
+
+  color: #a8b4c2;
+
+  font-size: 32px;
+}
+
+.attendance-empty-state strong {
+  color: #52667e;
+
+  font-size: 12px;
+}
+
+.attendance-empty-state span {
+  margin-top: 4px;
+
+  color: #94a2b3;
+
+  font-size: 10px;
+}
+
+.attendance-empty-state small {
+  margin-top: 4px;
+
+  color: #a6b1bf;
+
+  font-size: 9px;
+}
+
+.attendance-empty-state
+  .btn {
+  margin-top: 13px;
+
+  font-size: 10px;
+
+  font-weight: 700;
+}
+
+/* ============================================================
+   PAYROLL WORKDAY RATIO
+============================================================ */
+
+.payroll-workday-ratio {
+  display: inline-flex;
+
+  align-items: baseline;
+
+  gap: 3px;
+
+  white-space: nowrap;
+}
+
+.payroll-workday-ratio strong {
+  color: #1565e8;
+
+  font-size: 13px;
+}
+
+.payroll-workday-ratio span {
+  color: #9eabb9;
+
+  font-size: 10px;
+}
+
+.payroll-workday-ratio small {
+  color: #647894;
+
+  font-size: 10px;
+
+  font-weight: 600;
+}
+
+/* ============================================================
+   PAYROLL
+============================================================ */
+
+.bonus-deduct span {
+  display: block;
+
+  font-size: 9px;
+}
+
+.bonus {
+  color: #198754;
+}
+
+.deduct {
+  margin-top: 2px;
+
+  color: #dc3545;
+}
+
+.net-salary {
+  color: #1565e8;
+
+  font-size: 12px;
+
+  white-space: nowrap;
+}
+
+/* ============================================================
+   EMPTY / LOADING
+============================================================ */
+
+.workspace-empty {
+  padding: 45px 15px !important;
+
+  text-align: center !important;
+
+  color: #8a9aae !important;
+}
+
+.workspace-empty > span {
+  margin-left: 7px;
+}
+
+.workspace-loading {
+  min-height: 300px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 10px;
+
+  color: #8292a7;
+
+  font-size: 12px;
+}
+
+/* ============================================================
+   TIMELINE
+============================================================ */
+
+.payroll-timeline {
+  max-width: 850px;
+}
+
+.timeline-item {
+  position: relative;
+
+  padding-left: 27px;
+
+  padding-bottom: 20px;
+}
+
+.timeline-item::before {
+  content: "";
+
+  position: absolute;
+
+  top: 10px;
+
+  bottom: -5px;
+
+  left: 5px;
+
+  width: 1px;
+
+  background: #dce4ef;
+}
+
+.timeline-item:last-child::before {
+  display: none;
+}
+
+.timeline-dot {
+  width: 11px;
+  height: 11px;
+
+  position: absolute;
+
+  top: 5px;
+  left: 0;
+
+  border: 2px solid #ffffff;
+
+  border-radius: 50%;
+
+  background: #1565e8;
+
+  box-shadow:
+    0 0 0 2px
+    #cfe0fb;
+}
+
+.timeline-content {
+  padding: 11px 13px;
+
+  border: 1px solid #e5ebf3;
+
+  border-radius: 8px;
+
+  background: #f9fbfd;
+}
+
+.timeline-top {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 10px;
+}
+
+.timeline-top strong {
+  color: #294766;
+
+  font-size: 11px;
+}
+
+.timeline-top span {
+  color: #8292a7;
+
+  font-size: 9px;
+}
+
+.timeline-content p {
+  margin: 5px 0;
+
+  color: #52667e;
+
+  font-size: 10px;
+}
+
+.timeline-content small {
+  color: #8292a7;
+
+  font-size: 9px;
+}
+
+/* ============================================================
+   MODAL
+============================================================ */
+
+.modal-content {
+  overflow: hidden;
+
+  border: 0;
+
+  border-radius: 11px;
+
+  box-shadow:
+    0 20px 50px
+    rgba(23, 52, 92, 0.16);
+}
+
+/* ============================================================
+   ADJUST EMPLOYEE
+============================================================ */
+
+.adjust-employee-box {
+  margin-bottom: 15px;
+
+  padding: 12px 13px;
+
+  border: 1px solid #e5ebf3;
+
+  border-radius: 8px;
+
+  background: #f7f9fc;
+}
+
+.adjust-employee-title {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+.adjust-employee-title
+  strong,
+.adjust-employee-title
+  small {
+  display: block;
+}
+
+.adjust-employee-title
+  strong {
+  color: #294766;
+
+  font-size: 12px;
+}
+
+.adjust-employee-title
+  small {
+  margin-top: 2px;
+
+  color: #8292a7;
+
+  font-size: 9px;
+}
+
+/* ============================================================
+   ADJUST CURRENT WORK
+============================================================ */
+
+.adjust-current-work {
+  margin-top: 12px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 7px;
+}
+
+.adjust-current-work > div {
+  padding: 9px 6px;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  text-align: center;
+}
+
+.adjust-current-work span,
+.adjust-current-work strong {
+  display: block;
+}
+
+.adjust-current-work span {
+  color: #8292a7;
+
+  font-size: 8px;
+}
+
+.adjust-current-work strong {
+  margin-top: 3px;
+
+  color: #294766;
+
+  font-size: 13px;
+}
+
+.adjust-current-work
+  .adjust-final-value {
+  color: #1565e8;
+}
+
+/* ============================================================
+   PAYROLL DETAIL
+============================================================ */
+
+.payroll-detail-user {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin-bottom: 18px;
+}
+
+.payroll-detail-user h5 {
+  margin: 0;
+
+  color: #17345c;
+
+  font-size: 16px;
+}
+
+.payroll-detail-user small {
+  color: #8292a7;
+
+  font-size: 10px;
+}
+
+.payroll-detail-type {
+  margin-top: 5px;
+}
+
+.payroll-detail-type
+  .badge {
+  font-size: 8px;
+}
+
+.payroll-detail-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 9px;
+}
+
+.payroll-detail-grid > div {
+  padding: 11px 12px;
+
+  border: 1px solid #e6ebf2;
+
+  border-radius: 7px;
+
+  background: #f9fbfd;
+}
+
+.payroll-detail-grid span,
+.payroll-detail-grid strong {
+  display: block;
+}
+
+.payroll-detail-grid span {
+  color: #8292a7;
+
+  font-size: 9px;
+}
+
+.payroll-detail-grid strong {
+  margin-top: 4px;
+
+  color: #294766;
+
+  font-size: 12px;
+}
+
+.detail-positive {
+  color: #198754 !important;
+}
+
+.detail-negative {
+  color: #dc3545 !important;
+}
+
+/* ============================================================
+   NET SALARY
+============================================================ */
+
+.net-salary-box {
+  margin-top: 13px;
+
+  padding: 15px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  border-radius: 8px;
+
+  background: #eaf2ff;
+}
+
+.net-salary-box span {
+  color: #456485;
+
+  font-size: 10px;
+
+  font-weight: 700;
+}
+
+.net-salary-box strong {
+  color: #1565e8;
+
+  font-size: 20px;
+}
+
+.payroll-detail-actions {
+  margin-top: 14px;
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 7px;
+}
+
+.payroll-detail-actions
+  .btn {
+  font-size: 10px;
+
+  font-weight: 600;
+}
+
+/* ============================================================
+   TABLET
+============================================================ */
+
+@media (max-width: 991px) {
+  .payroll-workspace-page {
+    padding:
+      18px 18px 32px !important;
+  }
+
+  .payroll-detail-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .adjust-current-work {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+}
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media (max-width: 767px) {
+  .payroll-workspace-page {
+    padding:
+      12px 10px 25px !important;
+  }
+
+  /* HEADER */
+
+  .workspace-header {
+    display: block;
+  }
+
+  .workspace-title-row {
+    align-items: flex-start;
+  }
+
+  .workspace-main-icon {
+    width: 42px;
+    height: 42px;
+
+    flex-basis: 42px;
+
+    font-size: 17px;
+  }
+
+  .workspace-title-row h4 {
+    font-size: 16px;
+  }
+
+  .workspace-subtitle {
+    display: block;
+
+    font-size: 9px;
+  }
+
+  .workspace-subtitle span {
+    display: flex;
+
+    margin-top: 4px;
+  }
+
+  .workspace-status {
+    margin-top: 12px;
+  }
+
+  /* RULE */
+
+  .company-working-rule {
+    gap: 6px;
+  }
+
+  .working-rule-item {
+    width: 100%;
+
+    justify-content: flex-start;
+  }
+
+  /* SUMMARY */
+
+  .summary-card {
+    min-height: 66px;
+  }
+
+  .summary-card strong {
+    font-size: 18px;
+  }
+
+  /* TABS */
+
+  .workspace-tabs {
+    padding: 0 5px;
+  }
+
+  .workspace-tabs .nav {
+    flex-wrap: nowrap;
+
+    overflow-x: auto;
+
+    overflow-y: hidden;
+  }
+
+  .workspace-tabs
+    .nav-link {
+    padding:
+      13px 11px;
+
+    flex-shrink: 0;
+
+    white-space: nowrap;
+
+    font-size: 10px;
+  }
+
+  /* BODY */
+
+  .workspace-tab-body {
+    padding: 12px;
+  }
+
+  .workspace-section-header {
+    display: block;
+  }
+
+  .workspace-header-actions {
+    margin-top: 10px;
+
+    display: grid;
+
+    grid-template-columns:
+      1fr 1fr;
+
+    gap: 7px;
+  }
+
+  .workspace-header-actions
+    .btn {
+    width: 100%;
+
+    padding:
+      7px 8px;
+  }
+
+  .workspace-search-row {
+    max-width: 100%;
+  }
+
+  /* TABLE => CARD */
+
+  .workspace-tab-body
+    .table-responsive {
+    overflow: visible;
+  }
+
+  .workspace-table,
+  .workspace-table tbody {
+    display: block;
+
+    width: 100%;
+  }
+
+  .workspace-table thead {
+    display: none;
+  }
+
+  .workspace-table tbody {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+  }
+
+  .workspace-table tbody tr {
+    display: block;
+
+    width: 100%;
+
+    overflow: hidden;
+
+    border:
+      1px solid #e2e8f2;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    box-shadow:
+      0 2px 9px
+      rgba(34, 65, 110, 0.04);
+  }
+
+  .workspace-table tbody td {
+    display: grid;
+
+    grid-template-columns:
+      110px minmax(0, 1fr);
+
+    align-items: center;
+
+    gap: 7px;
+
+    width: 100%;
+
+    min-height: 42px;
+
+    padding:
+      9px 10px;
+
+    border: 0;
+
+    border-bottom:
+      1px solid #edf1f6;
+
+    font-size: 10px;
+
+    text-align:
+      left !important;
+
+    white-space: normal;
+  }
+
+  .workspace-table tbody
+    td:last-child {
+    border-bottom: 0;
+  }
+
+  .workspace-table tbody
+    td::before {
+    content:
+      attr(data-label);
+
+    color: #8292a7;
+
+    font-size: 8px;
+
+    font-weight: 600;
+  }
+
+  .workspace-user {
+    min-width: 0;
+  }
+
+  .workspace-user strong {
+    font-size: 10px;
+  }
+
+  .workspace-user small {
+    font-size: 8px;
+  }
+
+  .standard-workday-box,
+  .system-workday {
+    text-align: left;
+  }
+
+  .workspace-row-actions {
+    justify-content:
+      flex-start;
+
+    flex-wrap: wrap;
+  }
+
+  /* FOOTER */
+
+  .workspace-action-footer {
+    display: block;
+  }
+
+  .workspace-action-footer
+    .btn {
+    width: 100%;
+
+    margin-top: 10px;
+  }
+
+  /* DETAIL */
+
+  .payroll-detail-grid {
+    grid-template-columns:
+      1fr;
+  }
+
+  .net-salary-box strong {
+    font-size: 17px;
+  }
+
+  .adjust-current-work {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  /* TIMELINE */
+
+  .timeline-top {
+    display: block;
+  }
+
+  .timeline-top span {
+    display: block;
+
+    margin-top: 3px;
+  }
+}
+
+/* ============================================================
+   SMALL MOBILE
+============================================================ */
+
+@media (max-width: 380px) {
+  .payroll-workspace-page {
+    padding:
+      10px 8px 22px !important;
+  }
+
+  .workspace-tab-body {
+    padding: 9px;
+  }
+
+  .workspace-table tbody td {
+    grid-template-columns:
+      95px minmax(0, 1fr);
+
+    padding:
+      8px 9px;
+  }
+
+  .workspace-header-actions {
+    grid-template-columns:
+      1fr;
+  }
+
+  .adjust-current-work {
+    grid-template-columns:
+      1fr;
+  }
+}

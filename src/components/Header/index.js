@@ -108,6 +108,9 @@ const Header = () => {
                       if (sub.name === "Báo cáo chấm công") {
                         return role === "admin";
                       }
+                      if (sub.name === "Lương nhân viên") {
+                        return role === "admin";
+                      }
                       // Các mục khác (như Thoát, Thông tin...) thì hiện bình thường
                       return true;
                     })
@@ -165,6 +168,8 @@ const HeaderNavData = [
       { id: 1.5, name: "Khai báo banner", link: "/banner" },
       { id: 1.6, name: "Khai báo bộ sưu tập", link: "/collection" },
       { id: 1.7, name: "Khai báo danh mục hình ảnh", link: "/image-category" },
+      { id: 1.8, name: "Khai báo lương nhân viên", link: "/salaryConfig" },
+      { id: 1.9, name: "Khai báo cấu hình bảo hiểm", link: "/salaryInsurance" },
     ],
   },
   {
@@ -194,6 +199,7 @@ const HeaderNavData = [
       { id: 5.2, name: "Khách hàng", link: "/customer" },
       { id: 5.3, name: "Người dùng hệ thống", link: "/users" },
       { id: 5.4, name: "Hình ảnh", link: "/image-list" },
+      { id: 5.5, name: "Lương của tôi", link: "/myPayroll" },
     ],
   },
   {
@@ -212,6 +218,12 @@ const HeaderNavData = [
         id: 7.1,
         name: "Báo cáo chấm công",
         link: "/attendance-report",
+        requiredRole: "admin",
+      },
+      {
+        id: 7.2,
+        name: "Lương nhân viên",
+        link: "/PayrollPeriods",
         requiredRole: "admin",
       },
     ],

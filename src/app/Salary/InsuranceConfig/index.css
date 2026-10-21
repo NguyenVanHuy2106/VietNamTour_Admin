@@ -1,0 +1,226 @@
+.insurance-config-page {
+  min-height: calc(100vh - 70px);
+  padding: 24px 30px 40px !important;
+  background: #f6f8fc;
+  color: #17345c;
+}
+
+.insurance-header-card,
+.insurance-table-card {
+  border: 1px solid #e2e8f2 !important;
+  border-radius: 9px;
+  background: #ffffff;
+  box-shadow: 0 3px 12px rgba(34, 65, 110, 0.04);
+}
+
+.insurance-header-card {
+  margin-bottom: 18px;
+}
+
+.insurance-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.insurance-heading-icon,
+.insurance-modal-icon {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: #eaf2ff;
+  color: #1565e8;
+  font-size: 19px;
+}
+
+.insurance-heading h4 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.insurance-heading p {
+  margin: 4px 0 0;
+  color: #8292a7;
+  font-size: 12px;
+}
+
+.insurance-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.insurance-list-header h5 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.insurance-list-header small {
+  color: #8292a7;
+  font-size: 11px;
+}
+
+.insurance-add-btn {
+  display: flex !important;
+  align-items: center;
+  gap: 7px;
+  min-height: 40px;
+  border: 0 !important;
+  background: #1565e8 !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+}
+
+.insurance-table-card {
+  overflow: hidden;
+}
+
+.insurance-table {
+  font-size: 12px;
+}
+
+.insurance-table thead th {
+  padding: 13px 10px;
+  background: #f7f9fc;
+  color: #294766;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.insurance-table tbody td {
+  padding: 13px 10px;
+  border-bottom: 1px solid #edf1f6;
+  color: #294766;
+}
+
+.insurance-empty {
+  padding: 45px !important;
+  text-align: center !important;
+  color: #8a9aae !important;
+}
+
+.insurance-modal-title {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.insurance-modal-title > div:last-child {
+  display: flex;
+  flex-direction: column;
+}
+
+.insurance-modal-title strong {
+  font-size: 18px;
+}
+
+.insurance-modal-title small {
+  margin-top: 2px;
+  color: #8292a7;
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.insurance-label {
+  margin-bottom: 6px;
+  color: #647894;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.insurance-input .input-group-text {
+  width: 42px;
+  justify-content: center;
+  background: #f7f9fc;
+  border-color: #dbe4ef;
+  color: #647894;
+}
+
+.insurance-input .form-control {
+  min-height: 42px;
+  border-left: 0;
+  border-color: #dbe4ef;
+  font-size: 13px;
+}
+
+.insurance-section {
+  padding: 9px 11px;
+  border-radius: 7px;
+  background: #f6f8fc;
+  color: #17345c;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+@media (max-width: 767px) {
+  .insurance-config-page {
+    padding: 12px 10px 25px !important;
+  }
+
+  .insurance-heading h4 {
+    font-size: 16px;
+  }
+
+  .insurance-heading p {
+    font-size: 10px;
+  }
+
+  .insurance-list-header {
+    display: block;
+  }
+
+  .insurance-add-btn {
+    width: 100%;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  .insurance-table-card {
+    padding: 10px;
+  }
+
+  .insurance-table thead {
+    display: none;
+  }
+
+  .insurance-table,
+  .insurance-table tbody {
+    display: block;
+  }
+
+  .insurance-table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .insurance-table tbody tr {
+    display: block;
+    border: 1px solid #e2e8f2;
+    border-radius: 9px;
+    overflow: hidden;
+  }
+
+  .insurance-table tbody td {
+    display: grid;
+    grid-template-columns: 100px minmax(0, 1fr);
+    gap: 8px;
+    align-items: center;
+  }
+
+  .insurance-table tbody td::before {
+    content: attr(data-label);
+    color: #8292a7;
+    font-size: 9px;
+    font-weight: 600;
+  }
+}

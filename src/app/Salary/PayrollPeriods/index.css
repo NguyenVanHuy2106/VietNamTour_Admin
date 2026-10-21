@@ -1,0 +1,1140 @@
+/* ============================================================
+   PAGE
+============================================================ */
+
+.payroll-period-page {
+  width: 100%;
+  min-height: calc(100vh - 70px);
+
+  padding: 24px 30px 40px !important;
+
+  background: #f6f8fc;
+
+  color: #17345c;
+
+  overflow-x: hidden;
+}
+
+/* ============================================================
+   FILTER CARD
+============================================================ */
+
+.payroll-period-filter-card,
+.payroll-period-table-card {
+  border: 1px solid #e2e8f2 !important;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  box-shadow: 0 3px 12px rgba(34, 65, 110, 0.04);
+}
+
+.payroll-period-filter-card {
+  margin-bottom: 18px;
+}
+
+.payroll-period-filter-card .card-body {
+  padding: 20px;
+}
+
+/* ============================================================
+   PAGE TITLE
+============================================================ */
+
+.payroll-period-page-title {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 22px;
+}
+
+.payroll-period-title-icon {
+  width: 46px;
+
+  height: 46px;
+
+  flex: 0 0 46px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 10px;
+
+  background: #eaf2ff;
+
+  color: #1565e8;
+
+  font-size: 19px;
+}
+
+.payroll-period-page-title h4 {
+  margin: 0;
+
+  color: #17345c;
+
+  font-size: 20px;
+
+  font-weight: 700;
+}
+
+.payroll-period-page-title p {
+  margin: 4px 0 0;
+
+  color: #8292a7;
+
+  font-size: 12px;
+}
+
+/* ============================================================
+   FILTER INPUT
+============================================================ */
+
+.payroll-period-label {
+  margin-bottom: 6px;
+
+  color: #647894;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.35px;
+}
+
+.payroll-period-input-group .input-group-text,
+.payroll-period-modal-input .input-group-text {
+  width: 42px;
+
+  min-height: 42px;
+
+  justify-content: center;
+
+  background: #f7f9fc;
+
+  border-color: #dbe4ef;
+
+  border-right: 0;
+
+  color: #647894;
+}
+
+.payroll-period-input-group .form-control,
+.payroll-period-modal-input .form-control {
+  min-height: 42px;
+
+  border-color: #dbe4ef;
+
+  border-left: 0;
+
+  color: #294766;
+
+  font-size: 13px;
+
+  box-shadow: none !important;
+}
+
+.payroll-period-select {
+  min-height: 42px;
+
+  border-color: #dbe4ef;
+
+  color: #294766;
+
+  font-size: 13px;
+
+  box-shadow: none !important;
+}
+
+/* ============================================================
+   SEARCH
+============================================================ */
+
+.payroll-period-search-btn {
+  min-height: 42px;
+
+  border: 0 !important;
+
+  border-radius: 6px !important;
+
+  background: #1565e8 !important;
+
+  font-size: 11px !important;
+
+  font-weight: 700 !important;
+
+  letter-spacing: 0.3px;
+}
+
+/* ============================================================
+   LIST HEADER
+============================================================ */
+
+.payroll-period-list-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 12px;
+}
+
+.payroll-period-list-header h5 {
+  margin: 0;
+
+  color: #17345c;
+
+  font-size: 17px;
+
+  font-weight: 700;
+}
+
+.payroll-period-list-header small {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #8292a7;
+
+  font-size: 11px;
+}
+
+.payroll-period-add-btn {
+  min-height: 40px;
+
+  padding: 0 17px !important;
+
+  display: inline-flex !important;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  border: 0 !important;
+
+  background: #1565e8 !important;
+
+  font-size: 12px !important;
+
+  font-weight: 700 !important;
+}
+
+/* ============================================================
+   TABLE
+============================================================ */
+
+.payroll-period-table-card {
+  overflow: hidden;
+}
+
+.payroll-period-table {
+  width: 100%;
+
+  font-size: 12px;
+}
+
+.payroll-period-table thead th {
+  padding: 13px 11px;
+
+  background: #f7f9fc;
+
+  border-bottom: 1px solid #e1e7f0;
+
+  color: #294766;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.25px;
+
+  white-space: nowrap;
+}
+
+.payroll-period-table tbody td {
+  padding: 13px 11px;
+
+  border-bottom: 1px solid #edf1f6;
+
+  color: #294766;
+
+  vertical-align: middle;
+}
+
+.payroll-period-table tbody tr:hover {
+  background: #fbfdff;
+}
+
+/* ============================================================
+   PERIOD
+============================================================ */
+
+.payroll-period-name {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  min-width: 210px;
+}
+
+.payroll-period-icon {
+  width: 38px;
+
+  height: 38px;
+
+  flex: 0 0 38px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 9px;
+
+  background: #eaf2ff;
+
+  color: #1565e8;
+}
+
+.payroll-period-name strong,
+.payroll-period-name small {
+  display: block;
+}
+
+.payroll-period-name strong {
+  color: #294766;
+
+  font-size: 12px;
+}
+
+.payroll-period-name small {
+  margin-top: 2px;
+
+  color: #8292a7;
+
+  font-size: 9px;
+}
+
+/* ============================================================
+   DATE
+============================================================ */
+
+.payroll-period-date {
+  display: flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  white-space: nowrap;
+
+  font-size: 11px;
+}
+
+.payroll-period-date span {
+  color: #9aa8b8;
+}
+
+/* ============================================================
+   STANDARD DAYS
+============================================================ */
+
+.payroll-workday-box {
+  display: inline-flex;
+
+  align-items: baseline;
+
+  gap: 4px;
+}
+
+.payroll-workday-box strong {
+  color: #1565e8;
+
+  font-size: 16px;
+}
+
+.payroll-workday-box small {
+  color: #8292a7;
+
+  font-size: 9px;
+}
+
+/* ============================================================
+   PROGRESS
+============================================================ */
+
+.payroll-period-progress {
+  min-width: 170px;
+}
+
+.payroll-period-progress-label {
+  display: flex;
+
+  justify-content: space-between;
+
+  margin-bottom: 5px;
+
+  color: #647894;
+
+  font-size: 9px;
+}
+
+.payroll-period-progress-label strong {
+  color: #294766;
+}
+
+.payroll-period-progress .progress {
+  height: 6px;
+
+  border-radius: 20px;
+
+  background: #edf1f6;
+}
+
+/* ============================================================
+   STATUS
+============================================================ */
+
+.payroll-period-status {
+  padding: 6px 9px !important;
+
+  font-size: 9px !important;
+
+  font-weight: 600 !important;
+
+  white-space: nowrap;
+}
+
+/* ============================================================
+   ACTION
+============================================================ */
+
+.payroll-period-actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 6px;
+
+  white-space: nowrap;
+}
+
+.payroll-period-actions > .btn:first-child {
+  width: 36px;
+
+  height: 36px;
+
+  padding: 0;
+
+  display: grid;
+
+  place-items: center;
+}
+
+.btn-open-payroll {
+  min-height: 36px;
+  min-width: 118px;
+
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  padding: 0 12px !important;
+
+  font-size: 10px !important;
+  font-weight: 700 !important;
+
+  white-space: nowrap;
+
+  flex-shrink: 0;
+}
+
+.btn-open-payroll span {
+  display: inline-block;
+
+  width: auto !important;
+  max-width: none !important;
+
+  overflow: visible !important;
+  text-overflow: unset !important;
+
+  white-space: nowrap !important;
+
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   EMPTY
+============================================================ */
+
+.payroll-period-empty {
+  padding: 45px 15px !important;
+
+  text-align: center !important;
+
+  color: #8a9aae !important;
+}
+
+.payroll-period-empty span {
+  margin-left: 8px;
+}
+
+/* ============================================================
+   MODAL
+============================================================ */
+
+.payroll-period-modal-title {
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+}
+
+.payroll-period-modal-title > div:last-child {
+  display: flex;
+
+  flex-direction: column;
+}
+
+.payroll-period-modal-title strong {
+  color: #17345c;
+
+  font-size: 18px;
+}
+
+.payroll-period-modal-title small {
+  margin-top: 2px;
+
+  color: #8292a7;
+
+  font-size: 10px;
+
+  font-weight: 400;
+}
+
+.payroll-period-modal-icon {
+  width: 44px;
+
+  height: 44px;
+
+  flex: 0 0 44px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 10px;
+
+  background: #eaf2ff;
+
+  color: #1565e8;
+}
+
+/* ============================================================
+   INFO
+============================================================ */
+
+.payroll-period-info-box {
+  margin-bottom: 18px;
+
+  padding: 12px 14px;
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 8px;
+
+  border: 1px solid #d8f0e3;
+
+  border-radius: 8px;
+
+  background: #f3fbf7;
+
+  color: #496157;
+
+  font-size: 11px;
+
+  line-height: 1.5;
+}
+
+.payroll-period-info-box svg {
+  margin-top: 2px;
+
+  flex-shrink: 0;
+
+  color: #1fbd83;
+}
+
+/* ============================================================
+   FORM
+============================================================ */
+
+.payroll-period-modal-label {
+  margin-bottom: 6px;
+
+  color: #52667e;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+}
+
+.payroll-period-preview {
+  min-height: 71px;
+
+  padding: 11px 13px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  border: 1px dashed #ccd8e6;
+
+  border-radius: 8px;
+
+  background: #f8fafc;
+}
+
+.payroll-period-preview > svg {
+  color: #1565e8;
+
+  font-size: 17px;
+}
+
+.payroll-period-preview strong,
+.payroll-period-preview small {
+  display: block;
+}
+
+.payroll-period-preview strong {
+  color: #294766;
+
+  font-size: 11px;
+}
+
+.payroll-period-preview small {
+  margin-top: 3px;
+
+  color: #8292a7;
+
+  font-size: 9px;
+
+  line-height: 1.4;
+}
+
+/* ============================================================
+   FOOTER
+============================================================ */
+
+.payroll-period-modal-footer {
+  padding: 14px 21px;
+}
+
+.payroll-period-save-btn {
+  min-width: 155px;
+
+  font-weight: 700 !important;
+}
+
+/* ============================================================
+   TABLET
+============================================================ */
+
+@media (max-width: 991px) {
+  .payroll-period-page {
+    padding: 20px 18px 32px !important;
+  }
+}
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media (max-width: 767px) {
+  .payroll-period-page {
+    padding: 12px 10px 26px !important;
+  }
+
+  .payroll-period-filter-card .card-body {
+    padding: 13px;
+  }
+
+  .payroll-period-page-title h4 {
+    font-size: 16px;
+  }
+
+  .payroll-period-page-title p {
+    font-size: 10px;
+  }
+
+  .payroll-period-list-header {
+    display: block;
+  }
+
+  .payroll-period-add-btn {
+    width: 100%;
+
+    margin-top: 10px;
+  }
+
+  /* TABLE => CARD */
+
+  .payroll-period-table-card {
+    padding: 10px;
+  }
+
+  .payroll-period-table-card
+    .table-responsive {
+    overflow: visible;
+  }
+
+  .payroll-period-table,
+  .payroll-period-table tbody {
+    display: block;
+
+    width: 100%;
+  }
+
+  .payroll-period-table thead {
+    display: none;
+  }
+
+  .payroll-period-table tbody {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+  }
+
+  .payroll-period-table tbody tr {
+    display: block;
+
+    width: 100%;
+
+    overflow: hidden;
+
+    border: 1px solid #e2e8f2;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+  }
+
+  .payroll-period-table tbody td {
+    display: grid;
+
+    grid-template-columns: 95px minmax(0, 1fr);
+
+    align-items: center;
+
+    gap: 8px;
+
+    width: 100%;
+
+    min-height: 42px;
+
+    padding: 9px 10px;
+
+    border: 0;
+
+    border-bottom: 1px solid #edf1f6;
+
+    font-size: 11px;
+
+    text-align: left !important;
+  }
+
+  .payroll-period-table tbody td:last-child {
+    border-bottom: 0;
+  }
+
+  .payroll-period-table tbody td::before {
+    content: attr(data-label);
+
+    color: #8292a7;
+
+    font-size: 9px;
+
+    font-weight: 600;
+  }
+
+  .payroll-period-name {
+    min-width: 0;
+  }
+
+  .payroll-period-date {
+    flex-wrap: wrap;
+
+    white-space: normal;
+  }
+
+  .payroll-period-progress {
+    min-width: 0;
+  }
+
+  .payroll-period-actions {
+    justify-content: flex-start;
+
+    flex-wrap: wrap;
+  }
+
+  .btn-open-payroll {
+    flex: 1;
+
+    justify-content: center;
+  }
+
+  .payroll-period-modal-footer {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 8px;
+  }
+
+  .payroll-period-modal-footer .btn {
+    width: 100%;
+
+    margin: 0 !important;
+  }
+
+  .payroll-period-save-btn {
+    min-width: 0;
+  }
+}
+
+/* =========================================================
+   DELETE BUTTON
+========================================================= */
+
+.period-action-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.period-delete-btn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  padding: 7px 11px !important;
+
+  border: 1px solid #ffd0d0 !important;
+  border-radius: 8px !important;
+
+  background: #fff5f5 !important;
+
+  color: #d64545 !important;
+
+  font-size: 12px !important;
+  font-weight: 700 !important;
+
+  transition: all 0.2s ease;
+}
+
+.period-delete-btn:hover:not(:disabled) {
+  background: #d64545 !important;
+  border-color: #d64545 !important;
+  color: #ffffff !important;
+
+  transform: translateY(-1px);
+}
+
+.period-delete-btn:disabled {
+  opacity: 0.4 !important;
+  cursor: not-allowed !important;
+}
+
+/* ICON ONLY */
+
+.period-delete-icon-btn {
+  width: 34px;
+  height: 34px;
+
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 !important;
+
+  border: 1px solid #ffd1d1 !important;
+  border-radius: 8px !important;
+
+  background: #fff5f5 !important;
+
+  color: #d64545 !important;
+
+  font-size: 13px;
+}
+
+.period-delete-icon-btn:hover:not(:disabled) {
+  background: #d64545 !important;
+  border-color: #d64545 !important;
+  color: #ffffff !important;
+}
+
+.period-delete-icon-btn:disabled {
+  opacity: 0.35 !important;
+}
+
+/* =========================================================
+   DELETE MODAL
+========================================================= */
+
+.delete-period-modal {
+  max-width: 470px !important;
+}
+
+.delete-period-modal
+.modal-content {
+  overflow: hidden;
+
+  border: none !important;
+  border-radius: 14px !important;
+
+  box-shadow:
+    0 20px 55px
+    rgba(41, 55, 78, 0.2);
+}
+
+.delete-period-modal
+.modal-body {
+  padding: 0 !important;
+}
+
+.delete-period-content {
+  padding: 27px 25px 24px;
+
+  text-align: center;
+}
+
+.delete-period-icon {
+  width: 58px;
+  height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 auto 14px;
+
+  border-radius: 50%;
+
+  background: #fff0f0;
+
+  color: #d64545;
+
+  font-size: 24px;
+}
+
+.delete-period-content h4 {
+  margin: 0;
+
+  color: #243b5a;
+
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.delete-period-description {
+  margin: 7px 0 18px;
+
+  color: #7a8798;
+
+  font-size: 13px;
+}
+
+/* =========================================================
+   PERIOD INFO
+========================================================= */
+
+.delete-period-info {
+  overflow: hidden;
+
+  margin-bottom: 14px;
+
+  background: #f8faff;
+
+  border: 1px solid #e4eaf2;
+  border-radius: 9px;
+
+  text-align: left;
+}
+
+.delete-period-info > div {
+  min-height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding: 9px 12px;
+
+  border-bottom:
+    1px solid #e9eef5;
+}
+
+.delete-period-info
+> div:last-child {
+  border-bottom: none;
+}
+
+.delete-period-info span {
+  color: #8390a2;
+
+  font-size: 11px;
+}
+
+.delete-period-info strong {
+  color: #334c69;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  text-align: right;
+}
+
+/* =========================================================
+   WARNING
+========================================================= */
+
+.delete-period-warning {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 9px;
+
+  padding: 11px 12px;
+
+  background: #fff8e8;
+
+  border: 1px solid #ffe2a6;
+  border-radius: 8px;
+
+  color: #916419;
+
+  text-align: left;
+
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.delete-period-warning svg {
+  flex-shrink: 0;
+
+  margin-top: 2px;
+
+  color: #e5a11c;
+}
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.delete-period-actions {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 10px;
+
+  margin-top: 20px;
+}
+
+.delete-period-cancel-btn,
+.delete-period-confirm-btn {
+  min-height: 42px;
+
+  border-radius: 8px !important;
+
+  font-size: 13px !important;
+  font-weight: 800 !important;
+}
+
+.delete-period-cancel-btn {
+  background: #ffffff !important;
+
+  border:
+    1px solid #dbe2eb !important;
+
+  color: #596a80 !important;
+}
+
+.delete-period-cancel-btn:hover {
+  background: #f5f7fa !important;
+}
+
+.delete-period-confirm-btn {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  background: #d64545 !important;
+
+  border:
+    1px solid #d64545 !important;
+
+  color: #ffffff !important;
+}
+
+.delete-period-confirm-btn:hover:not(:disabled) {
+  background: #c73737 !important;
+  border-color: #c73737 !important;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 520px) {
+  .delete-period-content {
+    padding:
+      23px 18px 18px;
+  }
+
+  .delete-period-actions {
+    grid-template-columns:
+      1fr;
+  }
+
+  .delete-period-info > div {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .delete-period-info strong {
+    text-align: left;
+  }
+}

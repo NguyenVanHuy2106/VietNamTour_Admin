@@ -39,6 +39,12 @@ import CheckInvoiceTourDetail from "../../app/CheckInvoiceTourDetail";
 import ContractDetail from "../../app/ContractDetail";
 import ContractEdit from "../../app/ContractEdit";
 
+import SalaryConfig from "../../app/Salary/SalaryConfig";
+import InsuranceConfig from "../../app/Salary/InsuranceConfig";
+import PayrollPeriods from "../../app/Salary/PayrollPeriods";
+import PayrollWorkspace from "../../app/Salary/PayrollWorkspace";
+import MyPayroll from "../../app/Salary/MyPayroll";
+
 import Image from "../../app/Image";
 
 import SignIn from "../SignIn";
@@ -120,6 +126,16 @@ const RoutePage = () => {
           element={<ContractDetail />}
         />
         <Route path="/contracts/edit/:contractId" element={<ContractEdit />} />
+
+        <Route path="salaryConfig" element={<SalaryConfig />} />
+
+        <Route path="salaryInsurance" element={<InsuranceConfig />} />
+        <Route path="PayrollPeriods" element={<PayrollPeriods />} />
+        <Route
+          path="payrollWorkspace/:periodId"
+          element={<PayrollWorkspace />}
+        />
+        <Route path="myPayroll" element={<MyPayroll />} />
       </Route>
     </Routes>
   );
