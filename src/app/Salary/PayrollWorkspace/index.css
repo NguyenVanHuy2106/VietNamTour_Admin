@@ -415,6 +415,40 @@
   font-weight: 700;
 }
 
+@media (max-width: 767px) {
+  .workspace-header-actions {
+    margin-top: 10px;
+
+    display: grid;
+
+    grid-template-columns:
+      1fr;
+
+    gap: 7px;
+  }
+
+  .workspace-header-actions
+  .btn {
+    width: 100%;
+
+    padding:
+      7px 8px;
+  }
+
+  .attendance-export-modal {
+    max-width:
+      calc(
+        100vw - 12px
+      ) !important;
+
+    margin:
+      6px auto !important;
+  }
+
+  .attendance-export-preview-wrap {
+    max-height: 68vh;
+  }
+}
 /* ============================================================
    ALERT
 ============================================================ */
@@ -1625,4 +1659,388 @@
     grid-template-columns:
       1fr;
   }
+}
+
+/* ============================================================
+   ATTENDANCE EXPORT BUTTON
+============================================================ */
+
+.attendance-export-open-btn {
+  white-space: nowrap;
+}
+
+/* ============================================================
+   ATTENDANCE EXPORT MODAL
+============================================================ */
+
+.attendance-export-modal {
+  max-width: 1240px !important;
+}
+
+.attendance-export-modal
+.modal-content {
+  border: 0;
+
+  border-radius: 12px;
+
+  overflow: hidden;
+}
+
+.attendance-export-modal
+.modal-header {
+  padding: 15px 18px;
+
+  border-bottom:
+    1px solid #e4eaf2;
+}
+
+.attendance-export-modal
+.modal-title {
+  color: #17345c;
+
+  font-size: 15px;
+
+  font-weight: 700;
+}
+
+.attendance-export-modal
+.modal-body {
+  padding: 14px;
+
+  background: #eef2f7;
+}
+
+/* ============================================================
+   PREVIEW
+============================================================ */
+
+.attendance-export-preview-wrap {
+  width: 100%;
+
+  max-height: 72vh;
+
+  overflow: auto;
+}
+
+/* ============================================================
+   SHEET
+============================================================ */
+
+.attendance-export-sheet {
+  width: 1120px;
+
+  min-width: 1120px;
+
+  margin: 0 auto;
+
+  padding:
+    30px 34px 26px;
+
+  background: #ffffff;
+
+  color: #17345c;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+}
+
+/* ============================================================
+   COMPANY
+============================================================ */
+
+.attendance-export-company {
+  color: #1d61ad;
+
+  font-size: 13px;
+
+  font-weight: 800;
+
+  text-align: center;
+
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   TITLE
+============================================================ */
+
+.attendance-export-sheet h2 {
+  margin: 7px 0 5px;
+
+  color: #17345c;
+
+  font-size: 23px;
+
+  font-weight: 800;
+
+  text-align: center;
+}
+
+/* ============================================================
+   PERIOD
+============================================================ */
+
+.attendance-export-period {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 2px;
+
+  color: #52667e;
+
+  font-size: 11px;
+}
+
+.attendance-export-period
+strong {
+  color: #294766;
+
+  font-size: 12px;
+}
+
+/* ============================================================
+   RULE
+============================================================ */
+
+.attendance-export-rules {
+  margin-top: 16px;
+
+  padding: 9px 12px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-wrap: wrap;
+
+  gap:
+    7px 18px;
+
+  border:
+    1px solid #d8e4f2;
+
+  border-radius: 6px;
+
+  background: #f7faff;
+
+  color: #52667e;
+
+  font-size: 9px;
+}
+
+.attendance-export-rules
+span {
+  white-space: nowrap;
+}
+
+/* ============================================================
+   EXPORT TABLE
+============================================================ */
+
+.attendance-export-table {
+  width: 100%;
+
+  margin-top: 14px;
+
+  border-collapse: collapse;
+
+  table-layout: fixed;
+}
+
+.attendance-export-table th,
+.attendance-export-table td {
+  padding: 7px 6px;
+
+  border:
+    1px solid #cfd8e5;
+
+  color: #294766;
+
+  font-size: 9px;
+
+  vertical-align: middle;
+}
+
+/* HEADER */
+
+.attendance-export-table th {
+  background: #eaf2ff;
+
+  color: #17345c;
+
+  font-size: 8px;
+
+  font-weight: 800;
+
+  text-align: center;
+
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   COLUMN WIDTH
+============================================================ */
+/* ============================================================
+   COLUMN WIDTH
+============================================================ */
+
+.attendance-export-table
+th:nth-child(1) {
+  width: 42px;
+}
+
+.attendance-export-table
+th:nth-child(2) {
+  width: 170px;
+}
+
+.attendance-export-table
+th:nth-child(3) {
+  width: 135px;
+}
+
+.attendance-export-table
+th:nth-child(4) {
+  width: 95px;
+}
+
+.attendance-export-table
+th:nth-child(5) {
+  width: 95px;
+}
+
+.attendance-export-table
+th:nth-child(6) {
+  width: 100px;
+}
+
+.attendance-export-table
+th:nth-child(7) {
+  width: 90px;
+}
+
+.attendance-export-table
+th:nth-child(8) {
+  width: 110px;
+}
+
+/* ============================================================
+   ALIGN
+============================================================ */
+
+.attendance-export-table
+td:nth-child(1),
+.attendance-export-table
+td:nth-child(n + 4) {
+  text-align: center;
+}
+
+/* ============================================================
+   ZEBRA
+============================================================ */
+
+.attendance-export-table
+tbody
+tr:nth-child(even) {
+  background: #fbfdff;
+}
+
+/* ============================================================
+   NAME
+============================================================ */
+
+.attendance-export-name {
+  color:
+    #17345c !important;
+
+  font-weight: 700;
+}
+
+/* ============================================================
+   FINAL WORK DAY
+============================================================ */
+
+.attendance-export-final {
+  background: #f0f6ff;
+
+  color:
+    #1565e8 !important;
+
+  font-weight: 800;
+}
+
+/* ============================================================
+   NOTE
+============================================================ */
+
+.attendance-export-note {
+  margin-top: 12px;
+
+  padding: 9px 11px;
+
+  border-left:
+    3px solid #e5a700;
+
+  background: #fff9e9;
+
+  color: #6f6240;
+
+  font-size: 9px;
+
+  line-height: 1.5;
+}
+
+/* ============================================================
+   FOOTER
+============================================================ */
+
+.attendance-export-footer {
+  margin-top: 13px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content:
+    space-between;
+
+  color: #8795a8;
+
+  font-size: 8px;
+}
+
+.attendance-export-footer
+span:first-child {
+  color: #1d61ad;
+
+  font-weight: 800;
+}
+
+/* ============================================================
+   ACTION BUTTON
+============================================================ */
+
+.attendance-export-actions
+.btn {
+  min-height: 38px;
+
+  display:
+    inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 6px;
+
+  font-size: 10px;
+
+  font-weight: 700;
 }

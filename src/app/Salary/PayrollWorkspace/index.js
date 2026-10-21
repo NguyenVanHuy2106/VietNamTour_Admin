@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import {
   Alert,
@@ -26,11 +26,16 @@ import {
   FaEdit,
   FaExclamationTriangle,
   FaHistory,
+  FaImage,
+  FaFilePdf,
   FaMoneyBillWave,
   FaRedo,
   FaSearch,
   FaUsers,
 } from "react-icons/fa";
+
+import html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
 
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -76,6 +81,16 @@ const PayrollWorkspace = () => {
   const [actionLoading, setActionLoading] = useState(false);
 
   const [syncingAttendance, setSyncingAttendance] = useState(false);
+
+  // ==========================================================
+  // ATTENDANCE EXPORT
+  // ==========================================================
+
+  const [showAttendanceExport, setShowAttendanceExport] = useState(false);
+
+  const [exportingAttendance, setExportingAttendance] = useState("");
+
+  const attendanceExportRef = useRef(null);
 
   // ==========================================================
   // SEARCH
@@ -258,7 +273,38 @@ const PayrollWorkspace = () => {
       return number;
     }
 
-    return number.toFixed(1);
+    return number.toFixed(3).replace(/0+$/, "").replace(/\.$/, "");
+  };
+
+  const formatHours = (value) => {
+    const number = Number(value || 0);
+
+    if (Number.isInteger(number)) {
+      return number;
+    }
+
+    return number.toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
+  };
+
+  // ==========================================================
+  // LẤY TỔNG GIỜ
+  //
+  // Nếu BE đã trả total_work_hours
+  // => dùng trực tiếp.
+  //
+  // Nếu chưa có
+  // => attendance_work_days * 7.
+  // ==========================================================
+
+  const getAttendanceHours = (item) => {
+    if (
+      item?.total_work_hours !== undefined &&
+      item?.total_work_hours !== null
+    ) {
+      return Number(item.total_work_hours || 0);
+    }
+
+    return Number(item?.attendance_work_days || 0) * 7;
   };
 
   // ==========================================================
@@ -510,6 +556,208 @@ const PayrollWorkspace = () => {
       );
     } finally {
       setSyncingAttendance(false);
+    }
+  };
+
+  // ==========================================================
+  // EXPORT ATTENDANCE
+  // ==========================================================
+
+  const handleOpenAttendanceExport = () => {
+    if (attendances.length === 0) {
+      alert("Chưa có dữ liệu chấm công để xuất.");
+
+      return;
+    }
+
+    setShowAttendanceExport(true);
+  };
+
+  // ==========================================================
+  // FILE NAME
+  // ==========================================================
+
+  const getAttendanceExportFileName = (extension) => {
+    const code = String(period?.period_code || `KY_LUONG_${periodId}`)
+      .trim()
+      .replace(/[^a-zA-Z0-9_-]+/g, "_");
+
+    return `BANG_CONG_${code}.${extension}`;
+  };
+
+  // ==========================================================
+  // HTML -> CANVAS
+  // ==========================================================
+
+  const createAttendanceCanvas = async () => {
+    if (!attendanceExportRef.current) {
+      throw new Error("Không tìm thấy vùng xuất bảng công.");
+    }
+
+    return html2canvas(attendanceExportRef.current, {
+      scale: 2.5,
+
+      backgroundColor: "#ffffff",
+
+      useCORS: true,
+
+      logging: false,
+
+      scrollX: 0,
+
+      scrollY: -window.scrollY,
+
+      windowWidth: attendanceExportRef.current.scrollWidth,
+
+      windowHeight: attendanceExportRef.current.scrollHeight,
+    });
+  };
+
+  // ==========================================================
+  // EXPORT PNG
+  // ==========================================================
+
+  const handleExportAttendancePng = async () => {
+    try {
+      setExportingAttendance("PNG");
+
+      const canvas = await createAttendanceCanvas();
+
+      const link = document.createElement("a");
+
+      link.download = getAttendanceExportFileName("png");
+
+      link.href = canvas.toDataURL("image/png", 1);
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Export attendance PNG error:", error);
+
+      alert("Không thể xuất bảng công thành ảnh PNG.");
+    } finally {
+      setExportingAttendance("");
+    }
+  };
+
+  // ==========================================================
+  // EXPORT PDF
+  // ==========================================================
+
+  const handleExportAttendancePdf = async () => {
+    try {
+      setExportingAttendance("PDF");
+
+      const canvas = await createAttendanceCanvas();
+
+      const pdf = new jsPDF({
+        orientation: "landscape",
+
+        unit: "mm",
+
+        format: "a4",
+      });
+
+      const pageWidth = pdf.internal.pageSize.getWidth();
+
+      const pageHeight = pdf.internal.pageSize.getHeight();
+
+      const margin = 7;
+
+      const usableWidth = pageWidth - margin * 2;
+
+      const usableHeight = pageHeight - margin * 2;
+
+      /*
+       * Quy đổi pixel -> mm.
+       */
+      const pxPerMm = canvas.width / usableWidth;
+
+      /*
+       * Chiều cao tối đa
+       * cho mỗi trang PDF.
+       */
+      const maxPageHeightPx = Math.floor(usableHeight * pxPerMm);
+
+      let sourceY = 0;
+
+      let pageIndex = 0;
+
+      // ====================================================
+      // TỰ CHIA NHIỀU TRANG
+      // ====================================================
+
+      while (sourceY < canvas.height) {
+        const sliceHeight = Math.min(
+          maxPageHeightPx,
+
+          canvas.height - sourceY,
+        );
+
+        const pageCanvas = document.createElement("canvas");
+
+        pageCanvas.width = canvas.width;
+
+        pageCanvas.height = sliceHeight;
+
+        const context = pageCanvas.getContext("2d");
+
+        context.fillStyle = "#ffffff";
+
+        context.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+
+        context.drawImage(
+          canvas,
+
+          0,
+          sourceY,
+
+          canvas.width,
+          sliceHeight,
+
+          0,
+          0,
+
+          canvas.width,
+          sliceHeight,
+        );
+
+        if (pageIndex > 0) {
+          pdf.addPage("a4", "landscape");
+        }
+
+        pdf.addImage(
+          pageCanvas.toDataURL("image/png", 1),
+
+          "PNG",
+
+          margin,
+          margin,
+
+          usableWidth,
+
+          sliceHeight / pxPerMm,
+
+          undefined,
+
+          "FAST",
+        );
+
+        sourceY += sliceHeight;
+
+        pageIndex += 1;
+      }
+
+      pdf.save(getAttendanceExportFileName("pdf"));
+    } catch (error) {
+      console.error("Export attendance PDF error:", error);
+
+      alert("Không thể xuất bảng công thành PDF.");
+    } finally {
+      setExportingAttendance("");
     }
   };
 
@@ -991,6 +1239,8 @@ const PayrollWorkspace = () => {
               </div>
 
               <div className="workspace-header-actions">
+                {/* SYNC */}
+
                 <Button
                   variant="outline-primary"
                   disabled={syncingAttendance || actionLoading}
@@ -1011,6 +1261,20 @@ const PayrollWorkspace = () => {
                     </>
                   )}
                 </Button>
+
+                {/* EXPORT */}
+
+                <Button
+                  variant="outline-secondary"
+                  className="attendance-export-open-btn"
+                  disabled={attendances.length === 0 || syncingAttendance}
+                  onClick={handleOpenAttendanceExport}
+                >
+                  <FaImage />
+                  Xuất bảng công
+                </Button>
+
+                {/* CONFIRM */}
 
                 <Button
                   variant="success"
@@ -2079,6 +2343,200 @@ const PayrollWorkspace = () => {
               </>
             ) : (
               "Lưu điều chỉnh"
+            )}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* =====================================================
+    ATTENDANCE EXPORT MODAL
+===================================================== */}
+
+      <Modal
+        show={showAttendanceExport}
+        onHide={() => {
+          if (!exportingAttendance) {
+            setShowAttendanceExport(false);
+          }
+        }}
+        centered
+        size="xl"
+        backdrop={exportingAttendance ? "static" : true}
+        keyboard={!exportingAttendance}
+        dialogClassName="attendance-export-modal"
+      >
+        <Modal.Header closeButton={!exportingAttendance}>
+          <Modal.Title>Xuất bảng tổng hợp chấm công</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <div className="attendance-export-preview-wrap">
+            {/* ================================================
+          PHẦN NÀY SẼ ĐƯỢC CHỤP THÀNH PNG / PDF
+      ================================================ */}
+
+            <div className="attendance-export-sheet" ref={attendanceExportRef}>
+              {/* COMPANY */}
+
+              <div className="attendance-export-company">
+                CÔNG TY TNHH THƯƠNG MẠI DU LỊCH VÀ SỰ KIỆN VIỆT NAM
+              </div>
+
+              {/* TITLE */}
+
+              <h2>BẢNG TỔNG HỢP CHẤM CÔNG</h2>
+
+              {/* PERIOD */}
+
+              <div className="attendance-export-period">
+                <strong>{period?.period_name || "Kỳ lương"}</strong>
+
+                <span>
+                  Từ {formatDate(period?.start_date)}
+                  {" đến "}
+                  {formatDate(period?.end_date)}
+                </span>
+              </div>
+
+              {/* RULES */}
+
+              <div className="attendance-export-rules">
+                <span>Giờ làm việc: 09:00 - 12:00 và 13:00 - 17:00</span>
+
+                <span>1 ngày công = 7 giờ</span>
+
+                <span>Không tính thời gian ngoài khung 09:00 - 17:00</span>
+              </div>
+
+              {/* TABLE */}
+
+              <table className="attendance-export-table">
+                <thead>
+                  <tr>
+                    <th>STT</th>
+                    <th>Nhân viên</th>
+                    <th>Chức vụ</th>
+                    <th>Loại NV</th>
+                    <th>Công chuẩn</th>
+                    <th>Công thực tế</th>
+                    <th>Điều chỉnh</th>
+                    <th>Công tính lương</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {attendances.map((item, index) => {
+                    const employeeType =
+                      item.employee_type ||
+                      item.salary_config?.employee_type ||
+                      item.user?.employee_type;
+
+                    const typeInfo = getEmployeeTypeInfo(employeeType);
+
+                    const adjustment = Number(item.adjustment_work_days || 0);
+
+                    return (
+                      <tr key={item.payroll_attendance_id}>
+                        <td>{index + 1}</td>
+
+                        <td className="attendance-export-name">
+                          {item.user?.name || item.employee_name || "---"}
+                        </td>
+
+                        <td>
+                          {item.user?.position ||
+                            item.employee_position ||
+                            "---"}
+                        </td>
+
+                        <td>{typeInfo.label}</td>
+
+                        <td>{formatWorkDay(item.standard_work_days)}</td>
+
+                        <td>{formatWorkDay(item.attendance_work_days)}</td>
+
+                        <td>
+                          {adjustment > 0 ? "+" : ""}
+
+                          {formatWorkDay(adjustment)}
+                        </td>
+
+                        <td className="attendance-export-final">
+                          {formatWorkDay(item.confirmed_work_days)}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+
+              {/* NOTE */}
+
+              <div className="attendance-export-note">
+                <strong>Lưu ý:</strong> Nhân viên vui lòng kiểm tra lại dữ liệu
+                chấm công. Nếu có sai lệch, phản hồi lại bộ phận phụ trách trước
+                khi kỳ công được xác nhận.
+              </div>
+
+              {/* FOOTER */}
+
+              <div className="attendance-export-footer">
+                <span>VIỆT NAM TOUR</span>
+
+                <span>Ngày xuất: {new Date().toLocaleDateString("vi-VN")}</span>
+              </div>
+            </div>
+          </div>
+        </Modal.Body>
+
+        <Modal.Footer className="attendance-export-actions">
+          {/* CLOSE */}
+
+          <Button
+            variant="light"
+            disabled={Boolean(exportingAttendance)}
+            onClick={() => setShowAttendanceExport(false)}
+          >
+            Đóng
+          </Button>
+
+          {/* PNG */}
+
+          <Button
+            variant="outline-primary"
+            disabled={Boolean(exportingAttendance)}
+            onClick={handleExportAttendancePng}
+          >
+            {exportingAttendance === "PNG" ? (
+              <>
+                <Spinner animation="border" size="sm" />
+                Đang xuất PNG...
+              </>
+            ) : (
+              <>
+                <FaImage />
+                Tải ảnh PNG
+              </>
+            )}
+          </Button>
+
+          {/* PDF */}
+
+          <Button
+            variant="primary"
+            disabled={Boolean(exportingAttendance)}
+            onClick={handleExportAttendancePdf}
+          >
+            {exportingAttendance === "PDF" ? (
+              <>
+                <Spinner animation="border" size="sm" />
+                Đang xuất PDF...
+              </>
+            ) : (
+              <>
+                <FaFilePdf />
+                Tải PDF
+              </>
             )}
           </Button>
         </Modal.Footer>
