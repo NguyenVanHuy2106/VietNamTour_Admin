@@ -2044,3 +2044,654 @@ span:first-child {
 
   font-weight: 700;
 }
+
+
+/* ============================================================
+   FONT SIZE UPGRADE
+   Đồng bộ cỡ chữ với trang Quản lý tài khoản nhận lương
+   DÁN Ở CUỐI FILE index.css
+============================================================ */
+
+/* ============================================================
+   BASE PAGE
+============================================================ */
+
+.payroll-workspace-page {
+  font-size: 13px;
+}
+
+/* ============================================================
+   BACK BUTTON
+============================================================ */
+
+.workspace-back-btn {
+  font-size: 12px;
+}
+
+/* ============================================================
+   HEADER
+============================================================ */
+
+.workspace-title-row h4 {
+  font-size: 21px;
+}
+
+.workspace-subtitle {
+  font-size: 12px;
+}
+
+.workspace-status {
+  padding: 7px 10px !important;
+
+  font-size: 11px !important;
+
+  font-weight: 700 !important;
+}
+
+/* ============================================================
+   COMPANY WORKING RULE
+============================================================ */
+
+.working-rule-item {
+  min-height: 31px;
+
+  padding: 6px 10px;
+
+  font-size: 11px;
+}
+
+/* ============================================================
+   SUMMARY
+============================================================ */
+
+.summary-card small {
+  font-size: 11px;
+}
+
+.summary-card strong {
+  font-size: 22px;
+}
+
+/* ============================================================
+   TABS
+============================================================ */
+
+.workspace-tabs
+.nav-link {
+  font-size: 12px;
+}
+
+/* ============================================================
+   SECTION HEADER
+============================================================ */
+
+.workspace-section-header h5 {
+  font-size: 16px;
+}
+
+.workspace-section-header small {
+  font-size: 11px;
+}
+
+/* ============================================================
+   HEADER ACTION BUTTONS
+============================================================ */
+
+.workspace-header-actions
+.btn {
+  min-height: 38px;
+
+  padding:
+    0 12px;
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+/* ============================================================
+   ALERT
+============================================================ */
+
+.workspace-tab-body
+.alert {
+  font-size: 11px;
+}
+
+/* ============================================================
+   SEARCH
+============================================================ */
+
+.workspace-search-row
+.form-control {
+  font-size: 13px;
+}
+
+.workspace-search-row
+.input-group-text {
+  font-size: 13px;
+}
+
+/* ============================================================
+   TABLE
+============================================================ */
+
+.workspace-table {
+  font-size: 12px;
+}
+
+.workspace-table
+thead th {
+  padding:
+    12px 9px;
+
+  font-size: 10.5px;
+
+  font-weight: 700;
+}
+
+.workspace-table
+tbody td {
+  font-size: 12px;
+}
+
+/* ============================================================
+   EMPLOYEE
+============================================================ */
+
+.workspace-avatar {
+  font-size: 12px;
+}
+
+.workspace-avatar.large {
+  font-size: 16px;
+}
+
+.workspace-user strong {
+  font-size: 12px;
+}
+
+.workspace-user small {
+  font-size: 10px;
+}
+
+/* ============================================================
+   EMPLOYEE TYPE BADGE
+============================================================ */
+
+.employee-type-badge {
+  padding:
+    5px 8px !important;
+
+  font-size:
+    10px !important;
+
+  font-weight:
+    700 !important;
+}
+
+/* ============================================================
+   WORK DAYS
+============================================================ */
+
+.standard-workday-box
+strong,
+.system-workday
+strong {
+  font-size: 14px;
+}
+
+.standard-workday-box
+small,
+.system-workday
+small {
+  font-size: 10px;
+}
+
+.workday-plus,
+.workday-minus {
+  font-size: 13px;
+}
+
+.confirmed-workday {
+  font-size: 13px;
+}
+
+.version-text {
+  font-size: 10px;
+}
+
+/* ============================================================
+   ROW ACTION BUTTONS
+============================================================ */
+
+.workspace-row-actions
+.btn {
+  min-height: 34px;
+
+  padding:
+    0 10px;
+
+  font-size: 10.5px;
+
+  font-weight: 700;
+}
+
+/* ============================================================
+   ACTION FOOTER
+============================================================ */
+
+.workspace-action-footer
+.btn {
+  min-height: 40px;
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+.action-warning,
+.action-success {
+  font-size: 11px;
+}
+
+/* ============================================================
+   EMPTY STATE
+============================================================ */
+
+.attendance-empty-state
+strong {
+  font-size: 14px;
+}
+
+.attendance-empty-state
+span {
+  font-size: 11px;
+}
+
+.attendance-empty-state
+small {
+  font-size: 10px;
+}
+
+.attendance-empty-state
+.btn {
+  font-size: 11px;
+}
+
+/* ============================================================
+   PAYROLL WORKDAY RATIO
+============================================================ */
+
+.payroll-workday-ratio
+strong {
+  font-size: 14px;
+}
+
+.payroll-workday-ratio
+span {
+  font-size: 11px;
+}
+
+.payroll-workday-ratio
+small {
+  font-size: 11px;
+}
+
+/* ============================================================
+   BONUS / DEDUCT
+============================================================ */
+
+.bonus-deduct
+span {
+  font-size: 11px;
+}
+
+/* ============================================================
+   NET SALARY
+============================================================ */
+
+.net-salary {
+  font-size: 13px;
+
+  font-weight: 700;
+}
+
+/* ============================================================
+   PAGE LOADING
+============================================================ */
+
+.workspace-loading {
+  font-size: 13px;
+}
+
+/* ============================================================
+   HISTORY TIMELINE
+============================================================ */
+
+.timeline-top
+strong {
+  font-size: 12px;
+}
+
+.timeline-top
+span {
+  font-size: 10px;
+}
+
+.timeline-content
+p {
+  font-size: 11px;
+
+  line-height: 1.5;
+}
+
+.timeline-content
+small {
+  font-size: 10px;
+}
+
+/* ============================================================
+   ADJUST MODAL
+============================================================ */
+
+.adjust-employee-title
+strong {
+  font-size: 13px;
+}
+
+.adjust-employee-title
+small {
+  font-size: 10px;
+}
+
+.adjust-current-work
+span {
+  font-size: 10px;
+}
+
+.adjust-current-work
+strong {
+  font-size: 14px;
+}
+
+/* ============================================================
+   MODAL LABEL / INPUT
+============================================================ */
+
+.modal-content
+.form-label {
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+.modal-content
+.form-control,
+.modal-content
+.form-select {
+  font-size: 13px;
+}
+
+.modal-content
+.form-text {
+  font-size: 10px;
+}
+
+.modal-content
+.modal-title {
+  font-size: 17px;
+
+  font-weight: 700;
+}
+
+.modal-content
+.modal-body {
+  font-size: 12px;
+}
+
+.modal-content
+.btn {
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+/* ============================================================
+   PAYROLL DETAIL
+============================================================ */
+
+.payroll-detail-user
+h5 {
+  font-size: 17px;
+}
+
+.payroll-detail-user
+small {
+  font-size: 11px;
+}
+
+.payroll-detail-type
+.badge {
+  font-size: 10px;
+}
+
+.payroll-detail-grid
+span {
+  font-size: 10.5px;
+}
+
+.payroll-detail-grid
+strong {
+  font-size: 13px;
+}
+
+/* ============================================================
+   NET SALARY DETAIL
+============================================================ */
+
+.net-salary-box
+span {
+  font-size: 11px;
+}
+
+.net-salary-box
+strong {
+  font-size: 21px;
+}
+
+.payroll-detail-actions
+.btn {
+  min-height: 35px;
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+/* ============================================================
+   BADGES TRONG TABLE
+============================================================ */
+
+.workspace-table
+.badge {
+  font-size: 10px;
+
+  padding:
+    5px 7px;
+}
+
+/* ============================================================
+   EXPORT ATTENDANCE
+   Chỉ tăng nhẹ vì phần này còn dùng xuất PDF/PNG
+============================================================ */
+
+.attendance-export-period {
+  font-size: 12px;
+}
+
+.attendance-export-period
+strong {
+  font-size: 13px;
+}
+
+.attendance-export-rules {
+  font-size: 10px;
+}
+
+.attendance-export-table {
+  font-size: 10px;
+}
+
+.attendance-export-table
+th {
+  font-size: 9.5px;
+}
+
+.attendance-export-table
+td {
+  font-size: 10px;
+}
+
+.attendance-export-footer {
+  font-size: 9px;
+}
+
+/* ============================================================
+   RESPONSIVE TABLET
+============================================================ */
+
+@media (max-width: 991px) {
+  .workspace-title-row h4 {
+    font-size: 20px;
+  }
+
+  .workspace-subtitle {
+    font-size: 11px;
+  }
+
+  .workspace-table {
+    font-size: 11.5px;
+  }
+}
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media (max-width: 767px) {
+  .payroll-workspace-page {
+    font-size: 12px;
+  }
+
+  /* HEADER */
+
+  .workspace-title-row h4 {
+    font-size: 18px;
+  }
+
+  .workspace-subtitle {
+    font-size: 10.5px;
+  }
+
+  .workspace-status {
+    font-size:
+      10px !important;
+  }
+
+  /* RULE */
+
+  .working-rule-item {
+    font-size: 10.5px;
+  }
+
+  /* SUMMARY */
+
+  .summary-card
+  small {
+    font-size: 10px;
+  }
+
+  .summary-card
+  strong {
+    font-size: 19px;
+  }
+
+  /* TAB */
+
+  .workspace-tabs
+  .nav-link {
+    font-size: 11px;
+  }
+
+  /* SECTION */
+
+  .workspace-section-header
+  h5 {
+    font-size: 15px;
+  }
+
+  .workspace-section-header
+  small {
+    font-size: 10px;
+  }
+
+  /* BUTTON */
+
+  .workspace-header-actions
+  .btn {
+    font-size: 10.5px;
+  }
+
+  /* MOBILE CARD TABLE */
+
+  .workspace-table
+  tbody td {
+    font-size: 11px;
+  }
+
+  .workspace-table
+  tbody td::before {
+    font-size: 9.5px;
+  }
+
+  .workspace-user
+  strong {
+    font-size: 12px;
+  }
+
+  .workspace-user
+  small {
+    font-size: 10px;
+  }
+
+  .employee-type-badge {
+    font-size:
+      9.5px !important;
+  }
+
+  /* PAYROLL */
+
+  .net-salary {
+    font-size: 13px;
+  }
+
+  /* MODAL */
+
+  .modal-content
+  .modal-title {
+    font-size: 16px;
+  }
+
+  .modal-content
+  .form-label {
+    font-size: 11.5px;
+  }
+
+  .modal-content
+  .form-control,
+  .modal-content
+  .form-select {
+    font-size: 12px;
+  }
+}

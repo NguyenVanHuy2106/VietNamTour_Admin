@@ -170,6 +170,11 @@ const HeaderNavData = [
       { id: 1.7, name: "Khai báo danh mục hình ảnh", link: "/image-category" },
       { id: 1.8, name: "Khai báo lương nhân viên", link: "/salaryConfig" },
       { id: 1.9, name: "Khai báo cấu hình bảo hiểm", link: "/salaryInsurance" },
+      {
+        id: 1.11,
+        name: "Khai báo tài khoản nhân viên",
+        link: "/bankAccount",
+      },
     ],
   },
   {

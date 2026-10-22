@@ -1,0 +1,915 @@
+/* ============================================================
+   PAYMENT BUTTON
+============================================================ */
+
+.payroll-payment-btn {
+  min-height: 34px;
+  margin-left: 10px;
+  padding: 0 11px !important;
+
+  display: inline-flex !important;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 6px;
+
+  border:
+    1px solid #cbdff7 !important;
+
+  border-radius:
+    7px !important;
+
+  background:
+    #edf5ff !important;
+
+  color:
+    #1d61ad !important;
+
+  font-size:
+    11px !important;
+
+  font-weight:
+    700 !important;
+
+  white-space: nowrap;
+}
+
+.payroll-payment-btn:hover {
+  border-color:
+    #b7d1f1 !important;
+
+  background:
+    #dfeeff !important;
+
+  color:
+    #174f91 !important;
+}
+
+.payroll-payment-btn:disabled {
+  opacity: 0.5;
+}
+
+/* ============================================================
+   PAID BADGE
+============================================================ */
+
+.payroll-paid-badge {
+  padding:
+    7px 10px !important;
+
+  display:
+    inline-flex !important;
+
+  align-items: center;
+
+  gap: 5px;
+
+  font-size:
+    10px !important;
+
+  font-weight: 700;
+}
+
+/* ============================================================
+   MODAL
+============================================================ */
+
+.payroll-qr-modal
+.modal-dialog {
+  max-width: 820px;
+}
+
+.payroll-qr-modal
+.modal-content {
+  overflow: hidden;
+
+  border: 0;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 22px 60px
+    rgba(23, 52, 92, 0.2);
+}
+
+/* ============================================================
+   HEADER
+============================================================ */
+
+.payroll-qr-header {
+  padding:
+    18px 20px !important;
+
+  border-bottom:
+    1px solid #edf1f5 !important;
+
+  background: #ffffff;
+}
+
+.payroll-qr-title {
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+}
+
+.payroll-qr-title-icon {
+  width: 46px;
+  height: 46px;
+
+  flex: 0 0 46px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 10px;
+
+  background: #eaf2ff;
+
+  color: #1d61ad;
+
+  font-size: 20px;
+}
+
+.payroll-qr-title
+.modal-title {
+  color: #17345c;
+
+  font-size: 17px;
+
+  font-weight: 750;
+}
+
+.payroll-qr-title p {
+  margin: 3px 0 0;
+
+  color: #8797aa;
+
+  font-size: 11px;
+}
+
+/* ============================================================
+   BODY
+============================================================ */
+
+.payroll-qr-body {
+  padding:
+    18px 20px 20px !important;
+
+  background: #f8fafc;
+}
+
+/* ============================================================
+   LOADING
+============================================================ */
+
+.payroll-qr-loading {
+  min-height: 350px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  text-align: center;
+}
+
+.payroll-qr-loading
+.spinner-border {
+  margin-bottom: 8px;
+
+  color: #1d61ad;
+}
+
+.payroll-qr-loading
+strong {
+  color: #294766;
+
+  font-size: 14px;
+}
+
+.payroll-qr-loading
+span {
+  color: #8998aa;
+
+  font-size: 11px;
+}
+
+/* ============================================================
+   WARNING
+============================================================ */
+
+.payroll-payment-warning {
+  padding:
+    11px 13px !important;
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 9px;
+
+  border:
+    1px solid #f0dda6 !important;
+
+  border-radius:
+    8px !important;
+
+  background:
+    #fff9e9 !important;
+
+  color:
+    #796126 !important;
+
+  font-size: 11px;
+}
+
+.payroll-payment-warning
+> svg {
+  margin-top: 2px;
+
+  flex-shrink: 0;
+
+  color: #dfa91d;
+}
+
+.payroll-payment-warning
+strong,
+.payroll-payment-warning
+span {
+  display: block;
+}
+
+.payroll-payment-warning
+strong {
+  font-size: 12px;
+}
+
+.payroll-payment-warning
+span {
+  margin-top: 2px;
+
+  line-height: 1.5;
+}
+
+/* ============================================================
+   MAIN LAYOUT
+============================================================ */
+
+.payroll-payment-layout {
+  display: grid;
+
+  grid-template-columns:
+    280px 1fr;
+
+  gap: 18px;
+}
+
+/* ============================================================
+   QR LEFT
+============================================================ */
+
+.payroll-qr-left {
+  padding: 15px;
+
+  border:
+    1px solid #e3eaf3;
+
+  border-radius: 10px;
+
+  background: #ffffff;
+}
+
+.payroll-qr-box {
+  width: 100%;
+
+  aspect-ratio: 1 / 1;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  overflow: hidden;
+
+  border:
+    1px solid #edf1f5;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+}
+
+.payroll-qr-box img {
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: contain;
+}
+
+.payroll-download-qr-btn {
+  width: 100%;
+
+  min-height: 38px;
+
+  margin-top: 10px;
+
+  display:
+    inline-flex !important;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 6px;
+
+  border:
+    1px solid #d6e5f8 !important;
+
+  background:
+    #eef5ff !important;
+
+  color:
+    #1d61ad !important;
+
+  font-size:
+    11px !important;
+
+  font-weight:
+    700 !important;
+}
+
+/* ============================================================
+   INFO
+============================================================ */
+
+.payroll-payment-info {
+  padding: 15px;
+
+  border:
+    1px solid #e3eaf3;
+
+  border-radius: 10px;
+
+  background: #ffffff;
+}
+
+.payroll-payment-info-row {
+  padding-bottom: 12px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  border-bottom:
+    1px solid #edf1f5;
+}
+
+.payroll-payment-info-row
++ .payroll-payment-info-row {
+  padding-top: 12px;
+}
+
+.payroll-payment-info-icon {
+  width: 38px;
+  height: 38px;
+
+  flex: 0 0 38px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 8px;
+
+  background: #edf5ff;
+
+  color: #1d61ad;
+
+  font-size: 14px;
+}
+
+.payroll-payment-info-row
+span,
+.payroll-payment-info-row
+strong,
+.payroll-payment-info-row
+small {
+  display: block;
+}
+
+.payroll-payment-info-row
+span {
+  color: #8796a9;
+
+  font-size: 10px;
+}
+
+.payroll-payment-info-row
+strong {
+  margin-top: 2px;
+
+  color: #294766;
+
+  font-size: 13px;
+}
+
+.payroll-payment-info-row
+small {
+  margin-top: 2px;
+
+  color: #98a5b5;
+
+  font-size: 9px;
+}
+
+/* ============================================================
+   DETAIL
+============================================================ */
+
+.payroll-payment-detail-box {
+  margin-top: 10px;
+
+  padding: 10px 11px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+  border:
+    1px solid #e8edf4;
+
+  border-radius: 8px;
+
+  background: #f8fafc;
+}
+
+.payroll-payment-detail-box
+span,
+.payroll-payment-detail-box
+strong {
+  display: block;
+}
+
+.payroll-payment-detail-box
+span {
+  color: #8898aa;
+
+  font-size: 10px;
+}
+
+.payroll-payment-detail-box
+strong {
+  margin-top: 3px;
+
+  color: #17345c;
+
+  font-size: 13px;
+}
+
+.payroll-payment-detail-box
+button {
+  width: 31px;
+  height: 31px;
+
+  display: grid;
+
+  place-items: center;
+
+  flex-shrink: 0;
+
+  border:
+    1px solid #dbe5ef;
+
+  border-radius: 6px;
+
+  background: #ffffff;
+
+  color: #1d61ad;
+
+  cursor: pointer;
+}
+
+/* ============================================================
+   AMOUNT
+============================================================ */
+
+.payroll-payment-amount-card {
+  margin-top: 14px;
+
+  padding: 14px 15px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+
+  border:
+    1px solid #cde9da;
+
+  border-radius: 10px;
+
+  background: #f2fbf7;
+}
+
+.payroll-payment-amount-icon {
+  width: 42px;
+  height: 42px;
+
+  flex: 0 0 42px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 9px;
+
+  background: #dcf4e7;
+
+  color: #198754;
+
+  font-size: 18px;
+}
+
+.payroll-payment-amount-card
+> div:nth-child(2) {
+  flex: 1;
+}
+
+.payroll-payment-amount-card
+span,
+.payroll-payment-amount-card
+strong {
+  display: block;
+}
+
+.payroll-payment-amount-card
+span {
+  color: #698276;
+
+  font-size: 10px;
+}
+
+.payroll-payment-amount-card
+strong {
+  margin-top: 2px;
+
+  color: #198754;
+
+  font-size: 21px;
+
+  font-weight: 800;
+}
+
+.payroll-payment-amount-card
+button {
+  width: 34px;
+  height: 34px;
+
+  display: grid;
+
+  place-items: center;
+
+  border:
+    1px solid #c7e5d5;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #198754;
+}
+
+/* ============================================================
+   TRANSFER CONTENT
+============================================================ */
+
+.payroll-transfer-content {
+  margin-top: 10px;
+
+  padding: 12px 13px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  border:
+    1px solid #dce6f2;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+}
+
+.payroll-transfer-content
+span,
+.payroll-transfer-content
+strong {
+  display: block;
+}
+
+.payroll-transfer-content
+span {
+  color: #8998aa;
+
+  font-size: 10px;
+}
+
+.payroll-transfer-content
+strong {
+  margin-top: 3px;
+
+  color: #294766;
+
+  font-size: 13px;
+
+  letter-spacing: 0.3px;
+}
+
+.payroll-transfer-content
+.btn {
+  min-height: 34px;
+
+  display:
+    inline-flex !important;
+
+  align-items: center;
+
+  gap: 5px;
+
+  border:
+    1px solid #d6e5f8 !important;
+
+  background:
+    #eef5ff !important;
+
+  color:
+    #1d61ad !important;
+
+  font-size:
+    10px !important;
+}
+
+/* ============================================================
+   REFERENCE
+============================================================ */
+
+.payroll-payment-reference {
+  margin-top: 14px;
+
+  padding: 13px;
+
+  border:
+    1px solid #e3eaf2;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+}
+
+.payroll-payment-reference
+.form-label {
+  margin-bottom: 6px;
+
+  color: #52667e;
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+.payroll-payment-reference
+.form-control {
+  min-height: 41px;
+
+  border-color: #dbe4ef;
+
+  color: #294766;
+
+  font-size: 12px;
+
+  box-shadow: none;
+}
+
+.payroll-payment-reference
+.form-text {
+  color: #93a1b2;
+
+  font-size: 9px;
+}
+
+/* ============================================================
+   ERROR
+============================================================ */
+
+.payroll-qr-error {
+  min-height: 320px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+}
+
+.payroll-qr-error
+> svg {
+  margin-bottom: 10px;
+
+  color: #e0a725;
+
+  font-size: 34px;
+}
+
+.payroll-qr-error
+strong {
+  color: #52667e;
+
+  font-size: 14px;
+}
+
+.payroll-qr-error
+span {
+  max-width: 350px;
+
+  margin-top: 4px;
+
+  color: #8998aa;
+
+  font-size: 11px;
+}
+
+.payroll-qr-error
+.btn {
+  margin-top: 14px;
+
+  display:
+    inline-flex !important;
+
+  align-items: center;
+
+  gap: 6px;
+}
+
+/* ============================================================
+   FOOTER
+============================================================ */
+
+.payroll-qr-footer {
+  padding:
+    14px 20px !important;
+
+  border-top:
+    1px solid #edf1f5 !important;
+
+  background: #ffffff;
+}
+
+.payroll-qr-close-btn,
+.payroll-mark-paid-btn {
+  min-height: 40px;
+
+  padding:
+    0 16px !important;
+
+  font-size:
+    11px !important;
+
+  font-weight:
+    700 !important;
+}
+
+.payroll-qr-close-btn {
+  border:
+    1px solid #d9e1ea !important;
+
+  background:
+    #ffffff !important;
+
+  color:
+    #61748d !important;
+}
+
+.payroll-mark-paid-btn {
+  display:
+    inline-flex !important;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 6px;
+
+  border:
+    1px solid #198754 !important;
+
+  background:
+    #198754 !important;
+
+  color:
+    #ffffff !important;
+}
+
+.payroll-mark-paid-btn:hover {
+  border-color:
+    #146c43 !important;
+
+  background:
+    #146c43 !important;
+}
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media (max-width: 767px) {
+  .payroll-qr-modal
+  .modal-dialog {
+    margin: 10px;
+  }
+
+  .payroll-qr-header {
+    padding:
+      14px !important;
+  }
+
+  .payroll-qr-body {
+    padding:
+      14px !important;
+  }
+
+  .payroll-payment-layout {
+    grid-template-columns:
+      1fr;
+  }
+
+  .payroll-qr-left {
+    max-width: 320px;
+
+    width: 100%;
+
+    margin:
+      0 auto;
+  }
+
+  .payroll-transfer-content {
+    align-items:
+      stretch;
+
+    flex-direction:
+      column;
+  }
+
+  .payroll-transfer-content
+  .btn {
+    width: 100%;
+
+    justify-content:
+      center;
+  }
+
+  .payroll-qr-footer {
+    display: grid !important;
+
+    grid-template-columns:
+      1fr 1fr;
+
+    gap: 8px;
+
+    padding:
+      12px 14px !important;
+  }
+
+  .payroll-qr-close-btn,
+  .payroll-mark-paid-btn {
+    width: 100%;
+
+    margin: 0 !important;
+  }
+}

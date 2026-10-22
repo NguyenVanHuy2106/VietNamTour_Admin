@@ -1,0 +1,1514 @@
+/* ============================================================
+   PAGE
+============================================================ */
+
+.bank-account-page {
+  width: 100%;
+  min-height: calc(100vh - 70px);
+
+  padding: 22px 30px 40px !important;
+
+  background: #f6f8fc;
+
+  color: #17345c;
+
+  overflow-x: hidden;
+
+  font-size: 13px;
+}
+
+/* ============================================================
+   PAGE LOADING
+============================================================ */
+
+.bank-account-loading {
+  min-height: 400px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  color: #8292a7;
+
+  font-size: 13px;
+}
+
+/* ============================================================
+   HEADER
+============================================================ */
+
+.bank-account-page-header {
+  margin-bottom: 18px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+.bank-account-header-icon {
+  width: 50px;
+  height: 50px;
+
+  flex: 0 0 50px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 11px;
+
+  background: #eaf2ff;
+
+  color: #1d61ad;
+
+  font-size: 21px;
+}
+
+.bank-account-page-header h4 {
+  margin: 0;
+
+  color: #17345c;
+
+  font-size: 21px;
+
+  font-weight: 750;
+}
+
+.bank-account-page-header p {
+  margin: 5px 0 0;
+
+  color: #8292a7;
+
+  font-size: 12px;
+}
+
+/* ============================================================
+   INFO ALERT
+============================================================ */
+
+.bank-account-info-alert {
+  padding: 12px 14px !important;
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 10px;
+
+  border: 1px solid #d6e5f9 !important;
+
+  border-radius: 9px !important;
+
+  background: #eff6ff !important;
+
+  color: #456485 !important;
+}
+
+.bank-account-info-alert > svg {
+  margin-top: 2px;
+
+  flex-shrink: 0;
+
+  color: #1d61ad;
+
+  font-size: 16px;
+}
+
+.bank-account-info-alert strong,
+.bank-account-info-alert span {
+  display: block;
+}
+
+.bank-account-info-alert strong {
+  color: #294766;
+
+  font-size: 12px;
+}
+
+.bank-account-info-alert span {
+  margin-top: 3px;
+
+  font-size: 11px;
+
+  line-height: 1.5;
+}
+
+/* ============================================================
+   MANAGEMENT CARD
+============================================================ */
+
+.bank-management-card {
+  border: 1px solid #dfe7f1 !important;
+
+  border-radius: 10px !important;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 3px 12px
+    rgba(34, 65, 110, 0.04);
+}
+
+.bank-management-card
+.card-body {
+  padding: 19px;
+}
+
+/* ============================================================
+   MANAGEMENT HEADER
+============================================================ */
+
+.bank-management-header {
+  margin-bottom: 15px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+}
+
+.bank-management-header h5 {
+  margin: 0;
+
+  color: #17345c;
+
+  font-size: 16px;
+
+  font-weight: 700;
+}
+
+.bank-management-header p {
+  margin: 4px 0 0;
+
+  color: #8998aa;
+
+  font-size: 11px;
+}
+
+.bank-management-header-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+.bank-total-badge {
+  padding: 8px 11px !important;
+
+  background: #1d61ad !important;
+
+  font-size: 11px !important;
+}
+
+/* ============================================================
+   ADD BUTTON
+============================================================ */
+
+.bank-add-btn {
+  min-height: 38px;
+
+  padding:
+    0 13px !important;
+
+  display: inline-flex !important;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 6px;
+
+  border-color:
+    #1d61ad !important;
+
+  background:
+    #1d61ad !important;
+
+  font-size:
+    11px !important;
+
+  font-weight:
+    700 !important;
+
+  white-space: nowrap;
+}
+
+.bank-add-btn:hover {
+  border-color:
+    #174f91 !important;
+
+  background:
+    #174f91 !important;
+}
+
+/* ============================================================
+   MANAGEMENT SEARCH
+============================================================ */
+
+.bank-management-search {
+  margin-bottom: 14px;
+}
+
+.bank-management-search
+.input-group-text {
+  min-width: 43px;
+
+  justify-content: center;
+
+  border-color: #dbe4ef;
+
+  background: #f8fafc;
+
+  color: #75879d;
+}
+
+.bank-management-search
+.form-control {
+  min-height: 44px;
+
+  border-color: #dbe4ef;
+
+  color: #294766;
+
+  font-size: 13px;
+
+  box-shadow: none !important;
+}
+
+.bank-management-search
+.form-control:focus {
+  border-color: #8cb8f2;
+}
+
+/* ============================================================
+   TABLE
+============================================================ */
+
+.bank-management-table-wrap {
+  width: 100%;
+
+  overflow-x: auto;
+
+  border: 1px solid #e4eaf1;
+
+  border-radius: 8px;
+}
+
+.bank-management-table {
+  width: 100%;
+
+  min-width: 930px;
+
+  border-collapse: collapse;
+
+  background: #ffffff;
+}
+
+.bank-management-table
+thead {
+  background: #f6f8fc;
+}
+
+.bank-management-table
+th {
+  padding: 12px;
+
+  border-bottom:
+    1px solid #e2e8f0;
+
+  color: #60738c;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  text-align: left;
+
+  white-space: nowrap;
+}
+
+.bank-management-table
+td {
+  padding: 11px 12px;
+
+  border-bottom:
+    1px solid #edf1f5;
+
+  color: #465e79;
+
+  font-size: 11px;
+
+  vertical-align: middle;
+}
+
+.bank-management-table
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.bank-management-table
+tbody tr:hover {
+  background: #f9fbfe;
+}
+
+.bank-management-empty {
+  padding:
+    35px 15px !important;
+
+  color:
+    #94a2b3 !important;
+
+  font-size:
+    12px !important;
+
+  text-align: center;
+}
+
+/* ============================================================
+   USER ID
+============================================================ */
+
+.bank-user-id {
+  display: inline-block;
+
+  min-width: 44px;
+
+  padding: 5px 8px;
+
+  border-radius: 6px;
+
+  background: #eef4fc;
+
+  color: #1d61ad;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  text-align: center;
+}
+
+/* ============================================================
+   TABLE USER
+============================================================ */
+
+.bank-table-user {
+  min-width: 190px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+}
+
+.bank-table-avatar {
+  width: 36px;
+  height: 36px;
+
+  flex: 0 0 36px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 50%;
+
+  background: #eaf2ff;
+
+  color: #1d61ad;
+
+  font-size: 13px;
+
+  font-weight: 800;
+}
+
+.bank-table-user-info {
+  min-width: 0;
+}
+
+.bank-table-user-info strong,
+.bank-table-user-info span {
+  display: block;
+}
+
+.bank-table-user-info strong {
+  color: #294766;
+
+  font-size: 12px;
+}
+
+.bank-table-user-info span {
+  margin-top: 2px;
+
+  color: #8998aa;
+
+  font-size: 10px;
+}
+
+/* ============================================================
+   TABLE BANK
+============================================================ */
+
+.bank-table-bank {
+  min-width: 145px;
+}
+
+.bank-table-bank strong,
+.bank-table-bank span {
+  display: block;
+}
+
+.bank-table-bank strong {
+  color: #294766;
+
+  font-size: 12px;
+}
+
+.bank-table-bank span {
+  max-width: 210px;
+
+  margin-top: 2px;
+
+  overflow: hidden;
+
+  color: #8998aa;
+
+  font-size: 10px;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+.bank-table-account-number {
+  color: #17345c;
+
+  font-size: 12px;
+
+  letter-spacing: 0.2px;
+}
+
+.bank-table-account-name {
+  color: #475f7d;
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+/* ============================================================
+   TABLE ACTIONS
+============================================================ */
+
+.bank-table-actions {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 6px;
+
+  white-space: nowrap;
+}
+
+.bank-edit-btn,
+.bank-delete-btn {
+  min-height: 33px;
+
+  padding:
+    0 10px !important;
+
+  display: inline-flex !important;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 5px;
+
+  border-radius:
+    6px !important;
+
+  font-size:
+    10px !important;
+
+  font-weight:
+    700 !important;
+}
+
+.bank-edit-btn {
+  border:
+    1px solid #cddff5 !important;
+
+  background:
+    #edf5ff !important;
+
+  color:
+    #1d61ad !important;
+}
+
+.bank-edit-btn:hover {
+  background:
+    #dfeeff !important;
+
+  color:
+    #174f91 !important;
+}
+
+.bank-delete-btn {
+  border:
+    1px solid #f0cece !important;
+
+  background:
+    #fff1f1 !important;
+
+  color:
+    #dc3545 !important;
+}
+
+.bank-delete-btn:hover {
+  background:
+    #ffe2e2 !important;
+
+  color:
+    #bd2533 !important;
+}
+
+/* ============================================================
+   BOTTOM NOTICE
+============================================================ */
+
+.bank-account-bottom-notice {
+  margin-top: 13px;
+
+  padding: 10px 12px;
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 8px;
+
+  color: #8795a8;
+
+  font-size: 10px;
+
+  line-height: 1.5;
+}
+
+.bank-account-bottom-notice
+svg {
+  margin-top: 2px;
+
+  flex-shrink: 0;
+
+  color: #e1a82c;
+}
+
+/* ============================================================
+   MODAL
+============================================================ */
+
+.bank-account-modal
+.modal-dialog {
+  max-width: 760px;
+}
+
+.bank-account-modal
+.modal-content {
+  overflow: visible;
+
+  border: 0;
+
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 20px 60px
+    rgba(23, 52, 92, 0.18);
+}
+
+/* ============================================================
+   MODAL HEADER
+============================================================ */
+
+.bank-account-modal-header {
+  padding:
+    18px 20px !important;
+
+  border-bottom:
+    1px solid #edf1f5 !important;
+
+  background: #ffffff;
+}
+
+.bank-account-modal-title-wrap {
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+}
+
+.bank-account-modal-icon {
+  width: 44px;
+  height: 44px;
+
+  flex: 0 0 44px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 10px;
+
+  background: #eaf2ff;
+
+  color: #1d61ad;
+
+  font-size: 18px;
+}
+
+.bank-account-modal-title-wrap
+.modal-title {
+  color: #17345c;
+
+  font-size: 17px;
+
+  font-weight: 750;
+}
+
+.bank-account-modal-title-wrap
+p {
+  margin: 3px 0 0;
+
+  color: #8797aa;
+
+  font-size: 11px;
+}
+
+/* ============================================================
+   MODAL BODY
+============================================================ */
+
+.bank-account-modal-body {
+  padding:
+    18px 20px 20px !important;
+
+  overflow: visible;
+}
+
+/* ============================================================
+   MODAL SECTION
+============================================================ */
+
+.bank-modal-section {
+  padding: 15px;
+
+  border:
+    1px solid #e4eaf2;
+
+  border-radius: 10px;
+
+  background: #fbfcfe;
+}
+
+.bank-modal-section +
+.bank-modal-section {
+  margin-top: 14px;
+}
+
+.bank-modal-section-title {
+  margin-bottom: 13px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+}
+
+.bank-modal-section-icon {
+  width: 34px;
+  height: 34px;
+
+  flex: 0 0 34px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 8px;
+
+  background: #eaf2ff;
+
+  color: #1d61ad;
+
+  font-size: 14px;
+}
+
+.bank-modal-section-title
+strong,
+.bank-modal-section-title
+span {
+  display: block;
+}
+
+.bank-modal-section-title
+strong {
+  color: #294766;
+
+  font-size: 13px;
+}
+
+.bank-modal-section-title
+span {
+  margin-top: 2px;
+
+  color: #8a99ab;
+
+  font-size: 10px;
+}
+
+/* ============================================================
+   LABEL
+============================================================ */
+
+.bank-account-label {
+  margin-bottom:
+    7px !important;
+
+  color: #52667e;
+
+  font-size:
+    12px !important;
+
+  font-weight:
+    700 !important;
+}
+
+/* ============================================================
+   EMPLOYEE SELECT
+============================================================ */
+
+.employee-bank-select {
+  min-height: 44px;
+
+  border-color:
+    #dbe4ef !important;
+
+  color: #294766;
+
+  font-size:
+    13px !important;
+
+  box-shadow:
+    none !important;
+}
+
+.employee-bank-select:focus {
+  border-color:
+    #8cb8f2 !important;
+}
+
+/* ============================================================
+   EMPLOYEE PREVIEW
+============================================================ */
+
+.bank-modal-employee {
+  margin-top: 11px;
+
+  padding: 10px 11px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  border:
+    1px solid #dbe8f8;
+
+  border-radius: 8px;
+
+  background: #eef5ff;
+}
+
+.bank-modal-avatar {
+  width: 38px;
+  height: 38px;
+
+  flex: 0 0 38px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 50%;
+
+  background: #1d61ad;
+
+  color: #ffffff;
+
+  font-size: 13px;
+
+  font-weight: 800;
+}
+
+.bank-modal-employee-info {
+  flex: 1;
+
+  min-width: 0;
+}
+
+.bank-modal-employee
+strong,
+.bank-modal-employee
+span {
+  display: block;
+}
+
+.bank-modal-employee
+strong {
+  color: #294766;
+
+  font-size: 12px;
+}
+
+.bank-modal-employee
+span {
+  margin-top: 2px;
+
+  color: #77899e;
+
+  font-size: 10px;
+}
+
+.bank-modal-existing-badge {
+  display: inline-flex !important;
+
+  align-items: center;
+
+  gap: 4px;
+
+  padding:
+    6px 8px !important;
+
+  font-size:
+    9px !important;
+}
+
+/* ============================================================
+   ACCOUNT LOADING
+============================================================ */
+
+.bank-modal-account-loading {
+  margin-top: 10px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  color: #7d8fa4;
+
+  font-size: 11px;
+}
+
+/* ============================================================
+   INPUT
+============================================================ */
+
+.bank-account-input
+.input-group-text,
+.bank-search-input
+.input-group-text {
+  min-width: 43px;
+
+  justify-content: center;
+
+  border-color: #dbe4ef;
+
+  background: #f8fafc;
+
+  color: #75879d;
+
+  font-size: 13px;
+}
+
+.bank-account-input
+.form-control,
+.bank-search-input
+.form-control {
+  min-height: 44px;
+
+  border-color: #dbe4ef;
+
+  color: #294766;
+
+  font-size: 13px;
+
+  box-shadow: none !important;
+}
+
+.bank-account-input
+.form-control:focus,
+.bank-search-input
+.form-control:focus {
+  border-color: #8cb8f2;
+}
+
+.account-name-helper {
+  display: block;
+
+  margin-top: 5px;
+
+  color:
+    #91a0b1 !important;
+
+  font-size:
+    10px !important;
+}
+
+/* ============================================================
+   BANK SELECT
+============================================================ */
+
+.bank-select-wrapper {
+  position: relative;
+
+  z-index: 100;
+}
+
+.bank-input-logo {
+  width: 25px;
+
+  max-height: 25px;
+
+  object-fit: contain;
+}
+
+.bank-select-dropdown {
+  width: 100%;
+
+  max-height: 310px;
+
+  position: absolute;
+
+  z-index: 99999;
+
+  top: calc(100% + 5px);
+
+  left: 0;
+
+  overflow-y: auto;
+
+  border:
+    1px solid #dce4ee;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 14px 35px
+    rgba(23, 52, 92, 0.14);
+}
+
+.bank-select-item {
+  width: 100%;
+
+  min-height: 61px;
+
+  padding: 9px 12px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+
+  border: 0;
+
+  border-bottom:
+    1px solid #eef2f6;
+
+  background: #ffffff;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    all 0.15s ease;
+}
+
+.bank-select-item:last-child {
+  border-bottom: 0;
+}
+
+.bank-select-item:hover {
+  background: #f3f7fd;
+}
+
+.bank-select-logo {
+  width: 40px;
+  height: 40px;
+
+  flex: 0 0 40px;
+
+  display: grid;
+
+  place-items: center;
+
+  overflow: hidden;
+
+  border:
+    1px solid #edf1f5;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #1d61ad;
+}
+
+.bank-select-logo img {
+  width: 32px;
+
+  max-height: 32px;
+
+  object-fit: contain;
+}
+
+.bank-select-info {
+  flex: 1;
+
+  min-width: 0;
+}
+
+.bank-select-info
+strong,
+.bank-select-info
+span {
+  display: block;
+}
+
+.bank-select-info
+strong {
+  color: #294766;
+
+  font-size: 12px;
+}
+
+.bank-select-info
+span {
+  margin-top: 2px;
+
+  overflow: hidden;
+
+  color: #8b99aa;
+
+  font-size: 10px;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+.bank-select-item
+> small {
+  color: #a0adbb;
+
+  font-size: 10px;
+
+  white-space: nowrap;
+}
+
+.bank-select-empty {
+  padding: 25px;
+
+  color: #8b99aa;
+
+  font-size: 12px;
+
+  text-align: center;
+}
+
+/* ============================================================
+   BANK PREVIEW
+============================================================ */
+
+.bank-modal-bank-preview {
+  margin-top: 13px;
+
+  padding: 10px 12px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  border:
+    1px solid #dbe8f8;
+
+  border-radius: 8px;
+
+  background: #f4f8fe;
+}
+
+.bank-modal-bank-logo {
+  width: 40px;
+  height: 40px;
+
+  flex: 0 0 40px;
+
+  display: grid;
+
+  place-items: center;
+
+  overflow: hidden;
+
+  border:
+    1px solid #e4eaf2;
+
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  color: #1d61ad;
+}
+
+.bank-modal-bank-logo
+img {
+  width: 32px;
+
+  max-height: 32px;
+
+  object-fit: contain;
+}
+
+.bank-modal-bank-info {
+  flex: 1;
+
+  min-width: 0;
+}
+
+.bank-modal-bank-preview
+strong,
+.bank-modal-bank-preview
+span {
+  display: block;
+}
+
+.bank-modal-bank-preview
+strong {
+  color: #294766;
+
+  font-size: 12px;
+}
+
+.bank-modal-bank-preview
+span {
+  margin-top: 2px;
+
+  color: #77899e;
+
+  font-size: 10px;
+}
+
+.bank-modal-bank-preview
+small {
+  color: #93a1b2;
+
+  font-size: 10px;
+
+  white-space: nowrap;
+}
+
+/* ============================================================
+   WARNING
+============================================================ */
+
+.bank-account-manual-warning {
+  margin-top: 14px;
+
+  padding: 11px 13px;
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 8px;
+
+  border:
+    1px solid #f1dea8;
+
+  border-radius: 8px;
+
+  background: #fff9e9;
+
+  color: #7f672b;
+
+  font-size: 11px;
+
+  line-height: 1.5;
+}
+
+.bank-account-manual-warning
+svg {
+  margin-top: 2px;
+
+  flex-shrink: 0;
+
+  color: #dca51b;
+}
+
+/* ============================================================
+   MODAL FOOTER
+============================================================ */
+
+.bank-account-modal-footer {
+  padding:
+    14px 20px !important;
+
+  border-top:
+    1px solid #edf1f5 !important;
+
+  background: #ffffff;
+}
+
+.bank-modal-cancel-btn,
+.bank-modal-save-btn {
+  min-height: 40px;
+
+  padding:
+    0 16px !important;
+
+  border-radius:
+    7px !important;
+
+  font-size:
+    12px !important;
+
+  font-weight:
+    700 !important;
+}
+
+.bank-modal-cancel-btn {
+  border:
+    1px solid #d9e1ea !important;
+
+  background:
+    #ffffff !important;
+
+  color:
+    #61748d !important;
+}
+
+.bank-modal-cancel-btn:hover {
+  background:
+    #f5f7fa !important;
+}
+
+.bank-modal-save-btn {
+  display: inline-flex !important;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 6px;
+
+  border:
+    1px solid #1d61ad !important;
+
+  background:
+    #1d61ad !important;
+
+  color:
+    #ffffff !important;
+}
+
+.bank-modal-save-btn:hover {
+  border-color:
+    #174f91 !important;
+
+  background:
+    #174f91 !important;
+}
+
+.bank-modal-save-btn:disabled {
+  opacity: 0.55;
+}
+
+/* ============================================================
+   TABLET
+============================================================ */
+
+@media (max-width: 991px) {
+  .bank-account-page {
+    padding:
+      18px 18px 32px !important;
+  }
+
+  .bank-management-header {
+    align-items:
+      flex-start;
+  }
+}
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media (max-width: 767px) {
+  .bank-account-page {
+    padding:
+      12px 10px 25px !important;
+  }
+
+  .bank-account-page-header {
+    align-items:
+      flex-start;
+  }
+
+  .bank-account-header-icon {
+    width: 43px;
+    height: 43px;
+
+    flex-basis: 43px;
+
+    font-size: 18px;
+  }
+
+  .bank-account-page-header h4 {
+    font-size: 18px;
+  }
+
+  .bank-account-page-header p {
+    font-size: 11px;
+  }
+
+  /* MANAGEMENT */
+
+  .bank-management-card
+  .card-body {
+    padding: 14px;
+  }
+
+  .bank-management-header {
+    align-items: stretch;
+
+    flex-direction: column;
+  }
+
+  .bank-management-header-actions {
+    justify-content:
+      space-between;
+  }
+
+  .bank-add-btn {
+    flex: 1;
+  }
+
+  .bank-management-table {
+    min-width: 850px;
+  }
+
+  /* MODAL */
+
+  .bank-account-modal
+  .modal-dialog {
+    margin: 10px;
+  }
+
+  .bank-account-modal-header {
+    padding:
+      14px !important;
+  }
+
+  .bank-account-modal-body {
+    padding:
+      14px !important;
+  }
+
+  .bank-account-modal-footer {
+    padding:
+      12px 14px !important;
+
+    display: grid !important;
+
+    grid-template-columns:
+      1fr 1fr;
+
+    gap: 8px;
+  }
+
+  .bank-account-modal-title-wrap {
+    align-items:
+      flex-start;
+  }
+
+  .bank-account-modal-title-wrap
+  .modal-title {
+    font-size: 15px;
+  }
+
+  .bank-modal-section {
+    padding: 12px;
+  }
+
+  .bank-modal-employee {
+    align-items:
+      flex-start;
+
+    flex-wrap: wrap;
+  }
+
+  .bank-modal-existing-badge {
+    margin-left: 47px;
+  }
+
+  .bank-modal-bank-preview {
+    align-items:
+      flex-start;
+
+    flex-wrap: wrap;
+  }
+
+  .bank-modal-bank-preview
+  small {
+    width: 100%;
+
+    padding-left: 50px;
+  }
+
+  .bank-modal-cancel-btn,
+  .bank-modal-save-btn {
+    width: 100%;
+
+    margin: 0 !important;
+  }
+
+  .bank-select-dropdown {
+    max-height: 250px;
+  }
+}

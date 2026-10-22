@@ -44,6 +44,7 @@ import InsuranceConfig from "../../app/Salary/InsuranceConfig";
 import PayrollPeriods from "../../app/Salary/PayrollPeriods";
 import PayrollWorkspace from "../../app/Salary/PayrollWorkspace";
 import MyPayroll from "../../app/Salary/MyPayroll";
+import BankAccount from "../../app/Salary/BankAccount";
 
 import Image from "../../app/Image";
 
@@ -136,6 +137,7 @@ const RoutePage = () => {
           element={<PayrollWorkspace />}
         />
         <Route path="myPayroll" element={<MyPayroll />} />
+        <Route path="bankAccount" element={<BankAccount />} />
       </Route>
     </Routes>
   );

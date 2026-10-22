@@ -41,6 +41,8 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import APIToken from "../../../config/APIToken";
 
+import PayrollPayment from "../PayrollPayment";
+
 import "./index.css";
 
 const PayrollWorkspace = () => {
@@ -1788,6 +1790,10 @@ const PayrollWorkspace = () => {
                             >
                               Chi tiết
                             </Button>
+                            <PayrollPayment
+                              payroll={item}
+                              onRefresh={fetchPayrolls}
+                            />
                           </td>
                         </tr>
                       );
