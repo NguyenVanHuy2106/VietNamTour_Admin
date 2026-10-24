@@ -111,6 +111,9 @@ const Header = () => {
                       if (sub.name === "Lương nhân viên") {
                         return role === "admin";
                       }
+                      if (sub.name === "Quản lý phép nhân viên") {
+                        return role === "admin";
+                      }
                       // Các mục khác (như Thoát, Thông tin...) thì hiện bình thường
                       return true;
                     })
@@ -205,6 +208,7 @@ const HeaderNavData = [
       { id: 5.3, name: "Người dùng hệ thống", link: "/users" },
       { id: 5.4, name: "Hình ảnh", link: "/image-list" },
       { id: 5.5, name: "Lương của tôi", link: "/myPayroll" },
+      { id: 5.6, name: "Nghỉ phép", link: "/myLeave" },
     ],
   },
   {
@@ -216,7 +220,7 @@ const HeaderNavData = [
   { id: 7, name: "CHẤM CÔNG", link: "/attendance" },
   {
     id: 8,
-    name: "BÁO CÁO",
+    name: "QUẢN TRỊ",
     link: "#",
     subMenu: [
       {
@@ -229,6 +233,12 @@ const HeaderNavData = [
         id: 7.2,
         name: "Lương nhân viên",
         link: "/PayrollPeriods",
+        requiredRole: "admin",
+      },
+      {
+        id: 7.3,
+        name: "Quản lý phép nhân viên",
+        link: "/leaveManagement",
         requiredRole: "admin",
       },
     ],

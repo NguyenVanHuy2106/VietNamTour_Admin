@@ -45,6 +45,8 @@ import PayrollPeriods from "../../app/Salary/PayrollPeriods";
 import PayrollWorkspace from "../../app/Salary/PayrollWorkspace";
 import MyPayroll from "../../app/Salary/MyPayroll";
 import BankAccount from "../../app/Salary/BankAccount";
+import MyLeave from "../../app/Leave/MyLeave/index.js";
+import LeaveManagement from "../../app/Leave/LeaveManagement/index.js";
 
 import Image from "../../app/Image";
 
@@ -138,6 +140,8 @@ const RoutePage = () => {
         />
         <Route path="myPayroll" element={<MyPayroll />} />
         <Route path="bankAccount" element={<BankAccount />} />
+        <Route path="myLeave" element={<MyLeave />} />
+        <Route path="leaveManagement" element={<LeaveManagement />} />
       </Route>
     </Routes>
   );
