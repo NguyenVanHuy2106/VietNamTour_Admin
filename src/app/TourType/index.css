@@ -1,150 +1,1293 @@
-/* Container đặc thù cho TourType */
-.tt-container {
-  padding: 25px;
-  background-color: #f4f7f6;
+/* =========================================================
+   TOUR TYPE PAGE
+========================================================= */
+
+.tt-page {
+  width: 100%;
+
   min-height: 100vh;
+
+  padding: 20px;
+
+  background: #f6f8fc;
+
+  font-size: 12px;
 }
+
+
+/* =========================================================
+   HEADER
+========================================================= */
 
 .tt-header {
   display: flex;
-  justify-content: space-between;
+
   align-items: center;
-  margin-bottom: 20px;
+
+  justify-content: space-between;
+
+  gap: 18px;
+
+  margin-bottom: 16px;
 }
+
+
+.tt-header-info {
+  min-width: 0;
+}
+
+
+.tt-eyebrow {
+  margin-bottom: 4px;
+
+  color: #1d61ad;
+
+  font-size: 11px;
+
+  font-weight: 900;
+
+  letter-spacing: 0.8px;
+}
+
 
 .tt-header-info h2 {
-  font-weight: 700;
-  color: #1a3353;
-  margin: 0;
+  margin: 0 0 4px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  color: #17345c;
+
+  font-size: 24px;
+
+  font-weight: 900;
 }
 
-.tt-header-info p {
-  color: #6c757d;
-  font-size: 14px;
+
+.tt-header-info h2 svg {
+  color: #1d61ad;
+
+  font-size: 21px;
 }
+
+
+.tt-header-info p {
+  margin: 0;
+
+  color: #7f8da0;
+
+  font-size: 13px;
+}
+
 
 .tt-header-actions {
   display: flex;
-  gap: 15px;
+
+  align-items: center;
+
+  gap: 8px;
 }
 
-.tt-search-bar {
-  width: 280px;
+
+.tt-refresh-btn {
+  min-height: 40px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 6px;
+
+  padding: 0 14px;
+
+  background: #ffffff;
+
+  border: 1px solid #dce4ed;
+
+  border-radius: 8px;
+
+  color: #5d7188;
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+  cursor: pointer;
 }
+
+
+.tt-refresh-btn:hover {
+  background: #f8faff;
+
+  color: #1d61ad;
+}
+
+
+.tt-refresh-btn:disabled {
+  opacity: 0.6;
+
+  cursor: default;
+}
+
 
 .tt-btn-add {
-  display: flex;
+  min-height: 40px;
+
+  display: inline-flex !important;
+
   align-items: center;
-  gap: 8px;
-  border-radius: 8px;
-  padding: 8px 20px;
+
+  justify-content: center;
+
+  gap: 6px;
+
+  padding: 0 15px !important;
+
+  background: #1d61ad !important;
+
+  border: 1px solid #1d61ad !important;
+
+  border-radius: 8px !important;
+
+  color: #ffffff !important;
+
+  font-size: 12px !important;
+
+  font-weight: 900 !important;
 }
 
-/* Card chứa bảng */
-.tt-content-card {
+
+.tt-btn-add:hover {
+  background: #174f8f !important;
+
+  border-color: #174f8f !important;
+}
+
+
+/* =========================================================
+   TOOLBAR
+========================================================= */
+
+.tt-toolbar {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  margin-bottom: 10px;
+
+  padding: 12px 14px;
+
   background: #ffffff;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  border: 1px solid #edf2f9;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 10px;
 }
 
-/* Table styling */
+
+.tt-toolbar-info {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+
+.tt-toolbar-info strong {
+  color: #17345c;
+
+  font-size: 14px;
+
+  font-weight: 900;
+}
+
+
+.tt-toolbar-info span {
+  color: #8794a6;
+
+  font-size: 11px;
+}
+
+
+.tt-toolbar-info b {
+  color: #1d61ad;
+
+  font-weight: 900;
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.tt-search {
+  width: 320px;
+
+  height: 39px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 0 11px;
+
+  background: #f8faff;
+
+  border: 1px solid #dce4ed;
+
+  border-radius: 7px;
+}
+
+
+.tt-search svg {
+  flex: 0 0 auto;
+
+  color: #8795a8;
+
+  font-size: 15px;
+}
+
+
+.tt-search input {
+  width: 100%;
+
+  min-width: 0;
+
+  padding: 0;
+
+  background: transparent;
+
+  border: none;
+
+  outline: none;
+
+  color: #43566d;
+
+  font-size: 12px;
+}
+
+
+.tt-search input::placeholder {
+  color: #9ba7b5;
+}
+
+
+/* =========================================================
+   CONTENT CARD
+========================================================= */
+
+.tt-content-card {
+  overflow: hidden;
+
+  background: #ffffff;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 10px;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.tt-table-wrapper {
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+
 .tt-table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 8px;
+
+  min-width: 900px;
+
+  border-collapse: collapse;
 }
+
 
 .tt-table thead th {
-  color: #adb5bd;
-  font-weight: 600;
+  padding: 11px 13px;
+
+  background: #f7f9fc;
+
+  border-bottom: 1px solid #e8edf4;
+
+  color: #64758a;
+
+  font-size: 11px;
+
+  font-weight: 900;
+
   text-transform: uppercase;
-  font-size: 12px;
-  padding: 12px;
-  border: none;
+
+  letter-spacing: 0.2px;
+
+  white-space: nowrap;
 }
 
-.tt-table tbody tr {
-  background: #fff;
-  transition: transform 0.2s;
-}
-
-.tt-table tbody tr:hover {
-  background: #f9fbfd;
-  transform: scale(1.002);
-}
 
 .tt-table tbody td {
-  padding: 15px;
+  padding: 12px 13px;
+
+  border-bottom: 1px solid #eef1f5;
+
+  color: #50637a;
+
+  font-size: 12px;
+
   vertical-align: middle;
-  border-top: 1px solid #f1f4f8;
-  border-bottom: 1px solid #f1f4f8;
 }
+
+
+.tt-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+
+.tt-table tbody tr {
+  transition:
+    background 0.15s ease;
+}
+
+
+.tt-table tbody tr:hover {
+  background: #fafcff;
+}
+
+
+.tt-col-id {
+  width: 80px;
+}
+
+
+/* =========================================================
+   ID
+========================================================= */
 
 .tt-id {
-  color: #95aac9;
-  font-weight: 500;
+  display: inline-flex;
+
+  align-items: center;
+
+  min-height: 27px;
+
+  padding: 3px 8px;
+
+  background: #f1f4f8;
+
+  border-radius: 6px;
+
+  color: #71839a;
+
+  font-size: 10.5px;
+
+  font-weight: 800;
 }
+
+
+/* =========================================================
+   NAME
+========================================================= */
+
+.tt-name {
+  min-width: 220px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+}
+
+
+.tt-name-icon {
+  width: 34px;
+
+  height: 34px;
+
+  flex: 0 0 34px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: #edf4ff;
+
+  border-radius: 8px;
+
+  color: #1d61ad;
+
+  font-size: 14px;
+}
+
+
+.tt-name strong {
+  color: #17345c;
+
+  font-size: 13px;
+
+  font-weight: 900;
+
+  line-height: 1.4;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
 
 .tt-desc-cell {
-  max-width: 250px;
-  white-space: nowrap;
+  max-width: 360px;
+
   overflow: hidden;
+
+  color: #718399;
+
+  font-size: 11.5px;
+
+  line-height: 1.5;
+
   text-overflow: ellipsis;
-  color: #6e84a3;
+
+  white-space: nowrap;
 }
+
+
+/* =========================================================
+   USER
+========================================================= */
 
 .tt-user {
+  display: inline-flex;
+
+  align-items: center;
+
+  min-height: 27px;
+
+  padding: 3px 8px;
+
   background: #f1f4f8;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  color: #2c3e50;
+
+  border-radius: 6px;
+
+  color: #53677d;
+
+  font-size: 10.5px;
+
+  font-weight: 700;
+
+  white-space: nowrap;
 }
 
-/* Nút tác vụ */
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.tt-status {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 6px;
+
+  min-height: 28px;
+
+  padding: 3px 9px;
+
+  border-radius: 999px;
+
+  font-size: 10.5px;
+
+  font-weight: 800;
+
+  white-space: nowrap;
+}
+
+
+.tt-status.active {
+  background: #e9f8ef;
+
+  color: #13804b;
+}
+
+
+.tt-status.inactive {
+  background: #edf1f6;
+
+  color: #6b7b8e;
+}
+
+
+.tt-status-dot {
+  width: 6px;
+
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: currentColor;
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
 .tt-actions {
   display: flex;
-  gap: 8px;
+
+  align-items: center;
+
   justify-content: center;
+
+  gap: 6px;
 }
 
-.tt-btn {
+
+.tt-action-btn {
+  width: 34px;
+
+  height: 34px;
+
+  flex: 0 0 34px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 0;
+
   border: none;
-  background: none;
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: 0.2s;
+
+  border-radius: 7px;
+
+  font-size: 19px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease;
 }
 
-.tt-btn.edit { background: #e3ebf6; color: #2c7be5; }
-.tt-btn.delete { background: #fbeae9; color: #e63757; }
-.tt-btn:hover { filter: brightness(0.9); }
 
-/* Phân trang */
+.tt-action-btn.edit {
+  background: #edf4ff;
+
+  color: #1d61ad;
+}
+
+
+.tt-action-btn.delete {
+  background: #fff0f0;
+
+  color: #c74f4f;
+}
+
+
+.tt-action-btn:hover {
+  transform: translateY(-1px);
+}
+
+
+.tt-action-btn.edit:hover {
+  background: #dcecff;
+}
+
+
+.tt-action-btn.delete:hover {
+  background: #ffe1e1;
+}
+
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
 .tt-pagination {
+  min-height: 54px;
+
   display: flex;
-  justify-content: space-between;
+
   align-items: center;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+  padding: 10px 14px;
+
+  background: #fafbfd;
+
+  border-top: 1px solid #edf0f4;
+}
+
+
+.tt-pagination-info {
+  color: #8190a3;
+
+  font-size: 11px;
+}
+
+
+.tt-pagination-info strong {
+  color: #53677e;
+
+  font-weight: 900;
+}
+
+
+.tt-pagination-control {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  color: #7e8da0;
+
+  font-size: 11px;
+}
+
+
+.tt-pagination-control button {
+  width: 32px;
+
+  height: 32px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 0;
+
+  background: #ffffff;
+
+  border: 1px solid #dce4ed;
+
+  border-radius: 6px;
+
+  color: #52677e;
+
+  font-size: 12px;
+
+  cursor: pointer;
+}
+
+
+.tt-pagination-control button:hover:not(:disabled) {
+  background: #edf4ff;
+
+  border-color: #c9dff5;
+
+  color: #1d61ad;
+}
+
+
+.tt-pagination-control button:disabled {
+  opacity: 0.4;
+
+  cursor: default;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.tt-loading {
+  min-height: 320px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 9px;
+
+  color: #7c8ca0;
+
+  font-size: 12px;
+}
+
+
+.tt-loading .spinner-border {
+  color: #1d61ad;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.tt-empty {
+  min-height: 320px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 6px;
+
+  color: #91a0b1;
+
+  text-align: center;
+}
+
+
+.tt-empty > svg {
+  margin-bottom: 4px;
+
+  color: #bec8d5;
+
+  font-size: 38px;
+}
+
+
+.tt-empty h4 {
+  margin: 0;
+
+  color: #50657d;
+
+  font-size: 15px;
+
+  font-weight: 900;
+}
+
+
+.tt-empty p {
+  margin: 0;
+
+  font-size: 11.5px;
+}
+
+
+.tt-empty-add {
+  margin-top: 8px;
+
+  display: inline-flex !important;
+
+  align-items: center;
+
+  gap: 5px;
+
+  background: #1d61ad !important;
+
+  border-color: #1d61ad !important;
+
+  font-size: 11px !important;
+
+  font-weight: 800 !important;
+}
+
+
+/* =========================================================
+   FORM MODAL
+========================================================= */
+
+.tt-form-modal {
+  max-width: 560px !important;
+}
+
+
+.tt-form-modal
+.modal-content {
+  overflow: hidden;
+
+  border: none;
+
+  border-radius: 13px;
+
+  box-shadow:
+    0 18px 50px
+    rgba(
+      24,
+      46,
+      74,
+      0.18
+    );
+}
+
+
+.tt-form-modal
+.modal-header {
+  padding: 15px 17px;
+
+  border-bottom: 1px solid #e7ecf2;
+}
+
+
+.tt-form-modal
+.modal-title {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+
+.tt-modal-icon {
+  width: 38px;
+
+  height: 38px;
+
+  flex: 0 0 38px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: #edf4ff;
+
+  border-radius: 8px;
+
+  color: #1d61ad;
+
+  font-size: 19px;
+}
+
+
+.tt-form-modal
+.modal-title > div:last-child {
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+}
+
+
+.tt-form-modal
+.modal-title strong {
+  color: #17345c;
+
+  font-size: 15px;
+
+  font-weight: 900;
+}
+
+
+.tt-form-modal
+.modal-title span {
+  margin-top: 2px;
+
+  color: #8795a8;
+
+  font-size: 10.5px;
+
+  font-weight: 400;
+}
+
+
+.tt-form-modal
+.modal-body {
+  padding: 17px;
+
+  background: #f8faff;
+}
+
+
+.tt-form-group {
+  margin-bottom: 15px;
+}
+
+
+.tt-form-group:last-child {
+  margin-bottom: 0;
+}
+
+
+.tt-form-group label {
+  margin-bottom: 6px;
+
+  color: #455a72;
+
+  font-size: 11.5px;
+
+  font-weight: 900;
+}
+
+
+.tt-required {
+  margin-left: 3px;
+
+  color: #d74c4c;
+}
+
+
+.tt-form-group
+.form-control {
+  min-height: 42px;
+
+  padding: 9px 11px;
+
+  background: #ffffff;
+
+  border: 1px solid #dce4ed;
+
+  border-radius: 7px;
+
+  color: #42566e;
+
+  font-size: 12px;
+
+  box-shadow: none !important;
+}
+
+
+.tt-form-group
+.form-control:focus {
+  border-color: #7ba7d8;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(
+      29,
+      97,
+      173,
+      0.08
+    ) !important;
+}
+
+
+.tt-form-group
+textarea.form-control {
+  min-height: 100px;
+
+  resize: vertical;
+}
+
+
+.tt-character-count {
+  margin-top: 4px;
+
+  color: #98a4b3;
+
+  font-size: 9.5px;
+
+  text-align: right;
+}
+
+
+/* =========================================================
+   MODAL FOOTER
+========================================================= */
+
+.tt-form-modal
+.modal-footer {
+  padding: 12px 16px;
+
+  border-top: 1px solid #e7ecf2;
+}
+
+
+.tt-modal-cancel,
+.tt-modal-save {
+  min-height: 38px;
+
+  display: inline-flex !important;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 6px;
+
+  padding: 0 14px !important;
+
+  border-radius: 7px !important;
+
+  font-size: 11.5px !important;
+
+  font-weight: 800 !important;
+}
+
+
+.tt-modal-cancel {
+  background: #ffffff !important;
+
+  border: 1px solid #dce4ed !important;
+
+  color: #61758c !important;
+}
+
+
+.tt-modal-save {
+  background: #1d61ad !important;
+
+  border: 1px solid #1d61ad !important;
+
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   DELETE MODAL
+========================================================= */
+
+.tt-delete-modal {
+  max-width: 430px !important;
+}
+
+
+.tt-delete-modal
+.modal-content {
+  border: none;
+
+  border-radius: 13px;
+
+  box-shadow:
+    0 18px 50px
+    rgba(
+      24,
+      46,
+      74,
+      0.2
+    );
+}
+
+
+.tt-delete-content {
+  padding: 28px 24px;
+
+  text-align: center;
+}
+
+
+.tt-delete-icon {
+  width: 58px;
+
+  height: 58px;
+
+  margin: 0 auto 13px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: #fff0f0;
+
+  border-radius: 50%;
+
+  color: #c94f4f;
+
+  font-size: 31px;
+}
+
+
+.tt-delete-content h4 {
+  margin: 0 0 7px;
+
+  color: #263d57;
+
+  font-size: 17px;
+
+  font-weight: 900;
+}
+
+
+.tt-delete-content p {
+  margin: 0;
+
+  color: #718298;
+
+  font-size: 12px;
+
+  line-height: 1.5;
+}
+
+
+.tt-delete-content p strong {
+  color: #3c526b;
+}
+
+
+.tt-delete-warning {
+  margin-top: 13px;
+
+  padding: 8px 10px;
+
+  background: #fff8e8;
+
+  border-radius: 7px;
+
+  color: #9a751c;
+
+  font-size: 10.5px;
+}
+
+
+.tt-delete-actions {
   margin-top: 20px;
+
+  display: flex;
+
+  justify-content: center;
+
+  gap: 8px;
 }
 
-.tt-page-btns button {
-  background: #fff;
-  border: 1px solid #d8e2ef;
-  padding: 4px 12px;
-  border-radius: 4px;
-  margin-left: 5px;
+
+.tt-delete-cancel,
+.tt-delete-confirm {
+  min-height: 38px;
+
+  display: inline-flex !important;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 6px;
+
+  padding: 0 15px !important;
+
+  border-radius: 7px !important;
+
+  font-size: 11.5px !important;
+
+  font-weight: 800 !important;
 }
 
-.tt-page-btns button:disabled { background: #f9fbfd; color: #d8e2ef; }
-.tt-page-active {
-  background: #2c7be5 !important;
-  color: white;
-  border-color: #2c7be5 !important;
+
+.tt-delete-cancel {
+  background: #ffffff !important;
+
+  border: 1px solid #dce4ed !important;
+
+  color: #60748b !important;
+}
+
+
+.tt-delete-confirm {
+  background: #c84f4f !important;
+
+  border: 1px solid #c84f4f !important;
+
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.tt-toast-body {
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+
+  .tt-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+
+  .tt-header-actions {
+    width: 100%;
+  }
+
+
+  .tt-refresh-btn,
+  .tt-btn-add {
+    flex: 1;
+  }
+
+
+  .tt-toolbar {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+
+  .tt-search {
+    width: 100%;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .tt-page {
+    padding: 12px;
+  }
+
+
+  .tt-header-info h2 {
+    font-size: 21px;
+  }
+
+
+  .tt-header-actions {
+    flex-direction: column;
+  }
+
+
+  .tt-refresh-btn,
+  .tt-btn-add {
+    width: 100%;
+  }
+
+
+  .tt-pagination {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+
+  .tt-pagination-control {
+    width: 100%;
+
+    justify-content: space-between;
+  }
+
 }

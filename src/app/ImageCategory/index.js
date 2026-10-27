@@ -1,9 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+
 import API from "../../config/APINoToken";
 import APIToken from "../../config/APIToken";
+
 import { BsCaretLeft, BsCaretRight, BsSearch } from "react-icons/bs";
-import { FaPlus } from "react-icons/fa";
+
+import { FaPlus, FaImages, FaSyncAlt } from "react-icons/fa";
+
 import { CiTrash, CiEdit } from "react-icons/ci";
+
 import {
   Modal,
   Button,
@@ -11,319 +16,812 @@ import {
   Spinner,
   Toast,
   ToastContainer,
-  Badge,
-  InputGroup,
 } from "react-bootstrap";
-import "./index.css"; // Đảm bảo đổi tên file CSS tương ứng
+
+import "./index.css";
+
+// ==========================================================
+// CONFIG
+// ==========================================================
+
+const ITEMS_PER_PAGE = 10;
+
+// ==========================================================
+// COMPONENT
+// ==========================================================
 
 const ImageCategory = () => {
+  // ========================================================
+  // DATA
+  // ========================================================
+
   const [dataImageCat, setDataImageCat] = useState([]);
+
+  // ========================================================
+  // LOADING
+  // ========================================================
+
   const [loading, setLoading] = useState(false);
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const [saving, setSaving] = useState(false);
+
+  const [deleting, setDeleting] = useState(false);
+
+  // ========================================================
+  // SEARCH / PAGINATION
+  // ========================================================
+
   const [currentPage, setCurrentPage] = useState(1);
+
   const [searchTerm, setSearchTerm] = useState("");
-  const itemsPerPage = 10;
+
+  // ========================================================
+  // FORM
+  // ========================================================
 
   const [openModal, setOpenModal] = useState(false);
+
   const [editMode, setEditMode] = useState(false);
+
   const [currentId, setCurrentId] = useState(null);
+
   const [tFImageCatValue, setTFImageCatValue] = useState("");
+
   const [tFDesValue, setTFDesValue] = useState("");
+
   const [isError, setIsError] = useState(false);
+
   const [error, setError] = useState("");
 
-  const [successAlertOpen, setSuccessAlertOpen] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
+  // ========================================================
+  // DELETE
+  // ========================================================
+
   const [openModalDelete, setOpenModalDelete] = useState(false);
+
   const [deleteId, setDeleteId] = useState(null);
+
+  const [deleteName, setDeleteName] = useState("");
+
+  // ========================================================
+  // TOAST
+  // ========================================================
+
+  const [successAlertOpen, setSuccessAlertOpen] = useState(false);
+
+  const [alertMessage, setAlertMessage] = useState("");
+
+  const [toastType, setToastType] = useState("success");
+
+  // ========================================================
+  // USER
+  // ========================================================
 
   const userId = localStorage.getItem("userId");
 
-  useEffect(() => {
-    getData();
-  }, []);
+  // ========================================================
+  // TOAST
+  // ========================================================
 
-  const getData = async () => {
+  const showToast = (message, type = "success") => {
+    setAlertMessage(message);
+    setToastType(type);
+    setSuccessAlertOpen(true);
+  };
+
+  // ========================================================
+  // GET DATA
+  // ========================================================
+
+  const getData = async (isRefresh = false) => {
     try {
-      setLoading(true);
+      if (isRefresh) {
+        setRefreshing(true);
+      } else {
+        setLoading(true);
+      }
+
       const response = await API.get("/imgCat/get");
-      setDataImageCat(response.data.data || []);
+
+      setDataImageCat(response?.data?.data || []);
     } catch (err) {
-      console.error(err);
+      console.error("get ImageCategory error:", err);
+
+      showToast(
+        err?.response?.data?.message ||
+          "Không thể tải danh sách danh mục hình ảnh.",
+        "danger",
+      );
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   };
+
+  // ========================================================
+  // FIRST LOAD
+  // ========================================================
+
+  useEffect(() => {
+    getData();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // ========================================================
+  // OPEN ADD
+  // ========================================================
 
   const handleOpenAdd = () => {
     setEditMode(false);
+
+    setCurrentId(null);
+
     setTFImageCatValue("");
+
     setTFDesValue("");
+
     setIsError(false);
+
+    setError("");
+
     setOpenModal(true);
   };
+
+  // ========================================================
+  // OPEN EDIT
+  // ========================================================
 
   const handleOpenEdit = (item) => {
     setEditMode(true);
+
     setCurrentId(item.id);
-    setTFImageCatValue(item.name);
-    setTFDesValue(item.description);
+
+    setTFImageCatValue(item.name || "");
+
+    setTFDesValue(item.description || "");
+
     setIsError(false);
+
+    setError("");
+
     setOpenModal(true);
   };
 
-  const handleSave = async () => {
-    if (tFImageCatValue.trim().length === 0) {
-      setError("Vui lòng nhập tên danh mục");
-      setIsError(true);
+  // ========================================================
+  // CLOSE FORM
+  // ========================================================
+
+  const handleCloseModal = () => {
+    if (saving) {
       return;
     }
+
+    setOpenModal(false);
+
+    setIsError(false);
+
+    setError("");
+  };
+
+  // ========================================================
+  // SAVE
+  // ========================================================
+
+  const handleSave = async () => {
+    const name = tFImageCatValue.trim();
+
+    if (!name) {
+      setError("Vui lòng nhập tên danh mục.");
+
+      setIsError(true);
+
+      return;
+    }
+
     try {
-      setLoading(true);
+      setSaving(true);
+
+      setIsError(false);
+
       const payload = {
-        name: tFImageCatValue,
-        description: tFDesValue,
+        name,
+
+        description: tFDesValue.trim(),
+
         created_by: userId,
       };
+
       let response;
+
       if (editMode) {
         response = await APIToken.put(`/imgCat/update/${currentId}`, payload);
       } else {
         response = await APIToken.post("/imgCat/add", payload);
       }
+
       if (response.status === 200 || response.status === 201) {
-        setAlertMessage(
-          editMode ? "Cập nhật thành công ✨" : "Thêm mới thành công ✨"
+        showToast(
+          editMode
+            ? "Cập nhật danh mục hình ảnh thành công."
+            : "Thêm danh mục hình ảnh thành công.",
         );
-        setSuccessAlertOpen(true);
+
         setOpenModal(false);
-        getData();
+
+        await getData();
       }
+    } catch (err) {
+      console.error("save ImageCategory error:", err);
+
+      showToast(
+        err?.response?.data?.message || "Không thể lưu danh mục hình ảnh.",
+        "danger",
+      );
     } finally {
-      setLoading(false);
+      setSaving(false);
     }
   };
+
+  // ========================================================
+  // OPEN DELETE
+  // ========================================================
+
+  const handleOpenDelete = (item) => {
+    setDeleteId(item.id);
+
+    setDeleteName(item.name || "");
+
+    setOpenModalDelete(true);
+  };
+
+  // ========================================================
+  // DELETE
+  // ========================================================
 
   const handleAgreeDelete = async () => {
+    if (!deleteId) {
+      return;
+    }
+
     try {
-      setLoading(true);
+      setDeleting(true);
+
       const response = await APIToken.delete(`/imgCat/delete/${deleteId}`);
+
       if (response.status === 200) {
-        setAlertMessage("Xoá dữ liệu thành công");
-        setSuccessAlertOpen(true);
-        getData();
+        showToast("Xóa danh mục hình ảnh thành công.");
+
+        setOpenModalDelete(false);
+
+        setDeleteId(null);
+
+        setDeleteName("");
+
+        await getData();
       }
+    } catch (err) {
+      console.error("delete ImageCategory error:", err);
+
+      showToast(
+        err?.response?.data?.message || "Không thể xóa danh mục hình ảnh.",
+        "danger",
+      );
     } finally {
-      setLoading(false);
-      setOpenModalDelete(false);
+      setDeleting(false);
     }
   };
 
-  const filteredData = dataImageCat.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  // ========================================================
+  // SEARCH
+  // ========================================================
+
+  const filteredData = useMemo(() => {
+    const keyword = searchTerm.trim().toLowerCase();
+
+    if (!keyword) {
+      return dataImageCat;
+    }
+
+    return dataImageCat.filter((item) => {
+      const name = String(item.name || "").toLowerCase();
+
+      const description = String(item.description || "").toLowerCase();
+
+      return name.includes(keyword) || description.includes(keyword);
+    });
+  }, [dataImageCat, searchTerm]);
+
+  // ========================================================
+  // PAGINATION
+  // ========================================================
+
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredData.length / ITEMS_PER_PAGE),
   );
-  const indexOfLastItem = currentPage * itemsPerPage;
+
+  const safePage = Math.min(currentPage, totalPages);
+
+  const indexOfFirstItem = (safePage - 1) * ITEMS_PER_PAGE;
+
   const currentItems = filteredData.slice(
-    indexOfLastItem - itemsPerPage,
-    indexOfLastItem
+    indexOfFirstItem,
+    indexOfFirstItem + ITEMS_PER_PAGE,
   );
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
+
+  // ========================================================
+  // RENDER
+  // ========================================================
 
   return (
-    <div className="imgc-container">
-      {/* Header đồng bộ layout TourType */}
+    <div className="imgc-page">
+      {/* ==================================================
+          HEADER
+      ================================================== */}
+
       <div className="imgc-header">
         <div className="imgc-header-info">
-          <h2>Danh mục hình ảnh</h2>
-          <p>Quản lý các nhóm phân loại hình ảnh hệ thống</p>
+          <div className="imgc-eyebrow">VIỆT NAM TOUR · KHAI BÁO</div>
+
+          <h2>
+            <FaImages />
+            Danh mục hình ảnh
+          </h2>
+
+          <p>Quản lý các nhóm phân loại hình ảnh sử dụng trong hệ thống.</p>
         </div>
+
         <div className="imgc-header-actions">
-          <InputGroup className="imgc-search-bar">
-            <InputGroup.Text>
-              <BsSearch />
-            </InputGroup.Text>
-            <Form.Control
-              placeholder="Tìm kiếm..."
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                setCurrentPage(1);
-              }}
-            />
-          </InputGroup>
-          <Button
-            variant="primary"
-            className="imgc-btn-add"
-            onClick={handleOpenAdd}
+          <button
+            type="button"
+            className="imgc-refresh-btn"
+            disabled={refreshing}
+            onClick={() => getData(true)}
           >
-            <FaPlus /> <span>Thêm mới</span>
+            {refreshing ? (
+              <Spinner animation="border" size="sm" />
+            ) : (
+              <FaSyncAlt />
+            )}
+            Làm mới
+          </button>
+
+          <Button className="imgc-btn-add" onClick={handleOpenAdd}>
+            <FaPlus />
+            Thêm danh mục
           </Button>
         </div>
       </div>
 
-      <div className="imgc-content-card">
-        <div className="table-responsive">
-          <table className="imgc-table">
-            <thead>
-              <tr>
-                <th>Mã</th>
-                <th>Tên danh mục</th>
-                <th>Mô tả</th>
-                <th>Người thêm</th>
-                <th>Trạng thái</th>
-                <th className="text-center">Tác vụ</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentItems.length > 0 ? (
-                currentItems.map((item) => (
-                  <tr key={item.id}>
-                    <td>
-                      <span className="imgc-id">#{item.id}</span>
-                    </td>
-                    <td className="fw-bold">{item.name}</td>
-                    <td className="imgc-desc-cell">
-                      {item.description || "---"}
-                    </td>
-                    <td>
-                      <span className="imgc-user">
-                        {item.created_by || "Admin"}
-                      </span>
-                    </td>
-                    <td>
-                      <Badge bg="success">Hoạt động</Badge>
-                    </td>
-                    <td>
-                      <div className="imgc-actions">
-                        <button
-                          className="imgc-btn edit"
-                          onClick={() => handleOpenEdit(item)}
-                        >
-                          <CiEdit />
-                        </button>
-                        <button
-                          className="imgc-btn delete"
-                          onClick={() => {
-                            setDeleteId(item.id);
-                            setOpenModalDelete(true);
-                          }}
-                        >
-                          <CiTrash />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="6" className="text-center py-4">
-                    Không có dữ liệu
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+      {/* ==================================================
+          TOOLBAR
+      ================================================== */}
+
+      <div className="imgc-toolbar">
+        <div className="imgc-toolbar-info">
+          <strong>Danh sách danh mục hình ảnh</strong>
+
+          <span>
+            Có <b>{filteredData.length}</b> danh mục
+          </span>
         </div>
 
-        {/* Phân trang đúng kiểu Customer/TourType */}
-        <div className="imgc-pagination">
-          <span className="text-muted">
-            Trang {currentPage} / {totalPages || 1}
-          </span>
-          <div className="imgc-page-btns">
-            <button
-              disabled={currentPage === 1}
-              onClick={() => setCurrentPage((v) => v - 1)}
-            >
-              <BsCaretLeft />
-            </button>
-            <button className="imgc-page-active">{currentPage}</button>
-            <button
-              disabled={currentPage === totalPages || totalPages === 0}
-              onClick={() => setCurrentPage((v) => v + 1)}
-            >
-              <BsCaretRight />
-            </button>
-          </div>
+        <div className="imgc-search">
+          <BsSearch />
+
+          <input
+            type="text"
+            value={searchTerm}
+            placeholder="Tìm tên hoặc mô tả..."
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
       </div>
 
-      {/* Modal Form */}
-      <Modal show={openModal} onHide={() => setOpenModal(false)} centered>
-        <Modal.Header closeButton className="border-0">
-          <Modal.Title className="fw-bold">
-            {editMode ? "Sửa danh mục" : "Thêm danh mục mới"}
+      {/* ==================================================
+          CONTENT
+      ================================================== */}
+
+      <div className="imgc-content-card">
+        {loading ? (
+          <div className="imgc-loading">
+            <Spinner animation="border" />
+
+            <span>Đang tải danh mục hình ảnh...</span>
+          </div>
+        ) : currentItems.length === 0 ? (
+          <div className="imgc-empty">
+            <FaImages />
+
+            <h4>Chưa có dữ liệu</h4>
+
+            <p>Không tìm thấy danh mục hình ảnh phù hợp.</p>
+
+            {!searchTerm && (
+              <Button className="imgc-empty-add" onClick={handleOpenAdd}>
+                <FaPlus />
+                Thêm danh mục đầu tiên
+              </Button>
+            )}
+          </div>
+        ) : (
+          <>
+            <div className="imgc-table-wrapper">
+              <table className="imgc-table">
+                <thead>
+                  <tr>
+                    <th className="imgc-col-id">Mã</th>
+
+                    <th>Tên danh mục</th>
+
+                    <th>Mô tả</th>
+
+                    <th>Người thêm</th>
+
+                    <th className="text-center">Trạng thái</th>
+
+                    <th className="text-center">Tác vụ</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {currentItems.map((item) => (
+                    <tr key={item.id}>
+                      {/* ID */}
+
+                      <td>
+                        <span className="imgc-id">#{item.id}</span>
+                      </td>
+
+                      {/* NAME */}
+
+                      <td>
+                        <div className="imgc-name">
+                          <div className="imgc-name-icon">
+                            <FaImages />
+                          </div>
+
+                          <strong>{item.name || "-"}</strong>
+                        </div>
+                      </td>
+
+                      {/* DESCRIPTION */}
+
+                      <td>
+                        <div
+                          className="imgc-desc-cell"
+                          title={item.description || ""}
+                        >
+                          {item.description || "Chưa có mô tả"}
+                        </div>
+                      </td>
+
+                      {/* USER */}
+
+                      <td>
+                        <span className="imgc-user">
+                          {item.created_by ? `NV #${item.created_by}` : "Admin"}
+                        </span>
+                      </td>
+
+                      {/* STATUS */}
+
+                      <td className="text-center">
+                        <span className="imgc-status active">
+                          <span className="imgc-status-dot" />
+                          Hoạt động
+                        </span>
+                      </td>
+
+                      {/* ACTION */}
+
+                      <td className="text-center">
+                        <div className="imgc-actions">
+                          <button
+                            type="button"
+                            className="imgc-action-btn edit"
+                            title="Chỉnh sửa"
+                            onClick={() => handleOpenEdit(item)}
+                          >
+                            <CiEdit />
+                          </button>
+
+                          <button
+                            type="button"
+                            className="imgc-action-btn delete"
+                            title="Xóa"
+                            onClick={() => handleOpenDelete(item)}
+                          >
+                            <CiTrash />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* ==================================================
+                PAGINATION
+            ================================================== */}
+
+            <div className="imgc-pagination">
+              <div className="imgc-pagination-info">
+                Hiển thị <strong>{indexOfFirstItem + 1}</strong>
+                {" - "}
+                <strong>
+                  {Math.min(
+                    indexOfFirstItem + ITEMS_PER_PAGE,
+                    filteredData.length,
+                  )}
+                </strong>
+                {" / "}
+                <strong>{filteredData.length}</strong>
+              </div>
+
+              <div className="imgc-pagination-control">
+                <button
+                  type="button"
+                  disabled={safePage <= 1}
+                  onClick={() =>
+                    setCurrentPage((current) => Math.max(1, current - 1))
+                  }
+                >
+                  <BsCaretLeft />
+                </button>
+
+                <span>
+                  Trang <strong>{safePage}</strong>
+                  {" / "}
+                  <strong>{totalPages}</strong>
+                </span>
+
+                <button
+                  type="button"
+                  disabled={safePage >= totalPages}
+                  onClick={() =>
+                    setCurrentPage((current) =>
+                      Math.min(totalPages, current + 1),
+                    )
+                  }
+                >
+                  <BsCaretRight />
+                </button>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* ==================================================
+          FORM MODAL
+      ================================================== */}
+
+      <Modal
+        show={openModal}
+        onHide={handleCloseModal}
+        centered
+        backdrop={saving ? "static" : true}
+        keyboard={!saving}
+        dialogClassName="imgc-form-modal"
+      >
+        <Modal.Header closeButton={!saving}>
+          <Modal.Title>
+            <div className="imgc-modal-icon">
+              {editMode ? <CiEdit /> : <FaPlus />}
+            </div>
+
+            <div>
+              <strong>
+                {editMode
+                  ? "Cập nhật danh mục hình ảnh"
+                  : "Thêm danh mục hình ảnh"}
+              </strong>
+
+              <span>
+                {editMode
+                  ? "Điều chỉnh thông tin nhóm hình ảnh trong hệ thống."
+                  : "Khai báo thêm một nhóm hình ảnh mới."}
+              </span>
+            </div>
           </Modal.Title>
         </Modal.Header>
+
         <Modal.Body>
           <Form>
-            <Form.Group className="mb-3">
-              <Form.Label className="fw-bold">Tên danh mục hình</Form.Label>
+            {/* NAME */}
+
+            <Form.Group className="imgc-form-group">
+              <Form.Label>
+                Tên danh mục hình
+                <span className="imgc-required">*</span>
+              </Form.Label>
+
               <Form.Control
+                autoFocus
                 value={tFImageCatValue}
-                onChange={(e) => setTFImageCatValue(e.target.value)}
+                placeholder="Ví dụ: Hình ảnh tour, khách sạn, nhà hàng..."
                 isInvalid={isError}
+                onChange={(e) => {
+                  setTFImageCatValue(e.target.value);
+
+                  if (e.target.value.trim()) {
+                    setIsError(false);
+                  }
+                }}
               />
+
               <Form.Control.Feedback type="invalid">
                 {error}
               </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label className="fw-bold">Mô tả</Form.Label>
+
+            {/* DESCRIPTION */}
+
+            <Form.Group className="imgc-form-group">
+              <Form.Label>Mô tả</Form.Label>
+
               <Form.Control
                 as="textarea"
-                rows={3}
+                rows={4}
                 value={tFDesValue}
+                placeholder="Nhập mô tả ngắn về danh mục hình ảnh..."
                 onChange={(e) => setTFDesValue(e.target.value)}
               />
+
+              <div className="imgc-character-count">
+                {tFDesValue.length} ký tự
+              </div>
             </Form.Group>
-            <Form.Check
-              type="switch"
-              label="Kích hoạt danh mục"
-              checked
-              disabled
-            />
+
+            {/* STATUS */}
+
+            <Form.Group className="imgc-form-group">
+              <Form.Label>Trạng thái</Form.Label>
+
+              <div className="imgc-status-box">
+                <div>
+                  <strong>Đang hoạt động</strong>
+
+                  <span>
+                    Danh mục này đang được phép sử dụng trong hệ thống.
+                  </span>
+                </div>
+
+                <Form.Check
+                  type="switch"
+                  checked
+                  disabled
+                  id="img-category-status"
+                />
+              </div>
+            </Form.Group>
           </Form>
         </Modal.Body>
-        <Modal.Footer className="border-0">
-          <Button variant="light" onClick={() => setOpenModal(false)}>
+
+        <Modal.Footer>
+          <Button
+            className="imgc-modal-cancel"
+            disabled={saving}
+            onClick={handleCloseModal}
+          >
             Hủy
           </Button>
-          <Button variant="primary" onClick={handleSave} className="px-4">
-            {loading ? <Spinner size="sm" /> : "Lưu"}
+
+          <Button
+            className="imgc-modal-save"
+            disabled={saving}
+            onClick={handleSave}
+          >
+            {saving ? (
+              <>
+                <Spinner animation="border" size="sm" />
+                Đang lưu...
+              </>
+            ) : (
+              <>
+                {editMode ? <CiEdit /> : <FaPlus />}
+
+                {editMode ? "Cập nhật" : "Thêm mới"}
+              </>
+            )}
           </Button>
         </Modal.Footer>
       </Modal>
 
-      {/* Modal Delete */}
+      {/* ==================================================
+          DELETE MODAL
+      ================================================== */}
+
       <Modal
         show={openModalDelete}
-        onHide={() => setOpenModalDelete(false)}
+        onHide={() => {
+          if (deleting) {
+            return;
+          }
+
+          setOpenModalDelete(false);
+        }}
         centered
-        size="sm"
+        backdrop={deleting ? "static" : true}
+        keyboard={!deleting}
+        dialogClassName="imgc-delete-modal"
       >
-        <div className="p-4 text-center">
-          <CiTrash size={50} color="#dc3545" />
-          <h5 className="mt-3 fw-bold">Xác nhận xóa?</h5>
-          <p className="text-muted small">Dữ liệu này sẽ bị xóa vĩnh viễn.</p>
-          <div className="d-flex gap-2 justify-content-center mt-4">
-            <Button variant="light" onClick={() => setOpenModalDelete(false)}>
-              Đóng
+        <div className="imgc-delete-content">
+          <div className="imgc-delete-icon">
+            <CiTrash />
+          </div>
+
+          <h4>Xóa danh mục hình ảnh?</h4>
+
+          <p>
+            Bạn có chắc chắn muốn xóa{" "}
+            <strong>{deleteName || "danh mục này"}</strong>?
+          </p>
+
+          <div className="imgc-delete-warning">
+            Dữ liệu sau khi xóa có thể không khôi phục được.
+          </div>
+
+          <div className="imgc-delete-actions">
+            <Button
+              className="imgc-delete-cancel"
+              disabled={deleting}
+              onClick={() => setOpenModalDelete(false)}
+            >
+              Hủy
             </Button>
-            <Button variant="danger" onClick={handleAgreeDelete}>
-              Xác nhận
+
+            <Button
+              className="imgc-delete-confirm"
+              disabled={deleting}
+              onClick={handleAgreeDelete}
+            >
+              {deleting ? (
+                <>
+                  <Spinner animation="border" size="sm" />
+                  Đang xóa...
+                </>
+              ) : (
+                <>
+                  <CiTrash />
+                  Xác nhận xóa
+                </>
+              )}
             </Button>
           </div>
         </div>
       </Modal>
 
+      {/* ==================================================
+          TOAST
+      ================================================== */}
+
       <ToastContainer position="top-end" className="p-3">
         <Toast
-          bg="success"
+          bg={toastType}
           show={successAlertOpen}
           onClose={() => setSuccessAlertOpen(false)}
           delay={3000}
           autohide
         >
-          <Toast.Body className="text-white fw-bold">{alertMessage}</Toast.Body>
+          <Toast.Body className="text-white imgc-toast-body">
+            {alertMessage}
+          </Toast.Body>
         </Toast>
       </ToastContainer>
     </div>

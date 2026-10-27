@@ -47,6 +47,8 @@ import MyPayroll from "../../app/Salary/MyPayroll";
 import BankAccount from "../../app/Salary/BankAccount";
 import MyLeave from "../../app/Leave/MyLeave/index.js";
 import LeaveManagement from "../../app/Leave/LeaveManagement/index.js";
+import Workspace from "../../app/LeadAI/Workspace/index.js";
+import AdminLeadManagement from "../../app/LeadAI/Admin";
 
 import Image from "../../app/Image";
 
@@ -142,6 +144,8 @@ const RoutePage = () => {
         <Route path="bankAccount" element={<BankAccount />} />
         <Route path="myLeave" element={<MyLeave />} />
         <Route path="leaveManagement" element={<LeaveManagement />} />
+        <Route path="data-company" element={<Workspace />} />
+        <Route path="admin-Lead-Management" element={<AdminLeadManagement />} />
       </Route>
     </Routes>
   );

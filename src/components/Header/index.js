@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUserCircle, FaBars, FaTimes, FaChevronDown } from "react-icons/fa"; // Thêm icon
 import "./index.css";
-import { Nav } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import APIToken from "../../config/APIToken";
 
@@ -114,6 +113,9 @@ const Header = () => {
                       if (sub.name === "Quản lý phép nhân viên") {
                         return role === "admin";
                       }
+                      if (sub.name === "Quản lý CRMs") {
+                        return role === "admin";
+                      }
                       // Các mục khác (như Thoát, Thông tin...) thì hiện bình thường
                       return true;
                     })
@@ -198,6 +200,12 @@ const HeaderNavData = [
       { id: 3.5, name: "Hình ảnh", link: "/image" },
     ],
   },
+  {
+    id: 11,
+    name: "CRMs",
+    link: "#",
+    subMenu: [{ id: 11.1, name: "Data doanh nghiệp", link: "/data-company" }],
+  },
   { id: 4, name: "HỢP ĐỒNG", link: "/contract" },
   {
     id: 5,
@@ -239,6 +247,12 @@ const HeaderNavData = [
         id: 7.3,
         name: "Quản lý phép nhân viên",
         link: "/leaveManagement",
+        requiredRole: "admin",
+      },
+      {
+        id: 7.4,
+        name: "Quản lý CRMs",
+        link: "/admin-Lead-Management",
         requiredRole: "admin",
       },
     ],
