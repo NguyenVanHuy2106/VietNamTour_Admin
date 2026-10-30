@@ -49,6 +49,9 @@ import MyLeave from "../../app/Leave/MyLeave/index.js";
 import LeaveManagement from "../../app/Leave/LeaveManagement/index.js";
 import Workspace from "../../app/LeadAI/Workspace/index.js";
 import AdminLeadManagement from "../../app/LeadAI/Admin";
+import ProcurementWorkspace from "../../app/Procurement/workspace";
+
+import Tender from "../../app/Tender";
 
 import Image from "../../app/Image";
 
@@ -146,6 +149,11 @@ const RoutePage = () => {
         <Route path="leaveManagement" element={<LeaveManagement />} />
         <Route path="data-company" element={<Workspace />} />
         <Route path="admin-Lead-Management" element={<AdminLeadManagement />} />
+        <Route path="tender" element={<Tender />} />
+        <Route
+          path="procurement-workspace"
+          element={<ProcurementWorkspace />}
+        />
       </Route>
     </Routes>
   );

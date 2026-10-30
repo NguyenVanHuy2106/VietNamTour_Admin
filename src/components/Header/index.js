@@ -204,7 +204,15 @@ const HeaderNavData = [
     id: 11,
     name: "CRMs",
     link: "#",
-    subMenu: [{ id: 11.1, name: "Data doanh nghiệp", link: "/data-company" }],
+    subMenu: [
+      { id: 11.1, name: "Data doanh nghiệp", link: "/data-company" },
+      { id: 11.2, name: "Data gói thầu", link: "/tender" },
+      {
+        id: 11.3,
+        name: "Danh sách liên hệ công đoàn",
+        link: "/procurement-workspace",
+      },
+    ],
   },
   { id: 4, name: "HỢP ĐỒNG", link: "/contract" },
   {
