@@ -1,0 +1,1340 @@
+
+/* ==========================================================
+   VIET NAM TOUR ERP - QUOTATION TEAMS
+   Primary: #1D61AD
+========================================================== */
+
+.qteam-page {
+  width: 100%;
+  min-height: 100vh;
+  padding: 20px;
+  background: #f6f8fc;
+  color: #465b73;
+  font-size: 12px;
+}
+
+.qteam-page * {
+  box-sizing: border-box;
+}
+
+/* ==========================================================
+   HEADER
+========================================================== */
+
+.qteam-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 17px;
+}
+
+.qteam-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 5px;
+  color: #17345c;
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.qteam-header h2 svg {
+  color: #1d61ad;
+  font-size: 21px;
+}
+
+.qteam-header p {
+  margin: 0;
+  color: #8190a3;
+  font-size: 12.5px;
+}
+
+.qteam-eyebrow {
+  margin-bottom: 5px;
+  color: #1d61ad;
+  font-size: 10.5px;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+}
+
+.qteam-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qteam-btn-primary,
+.qteam-btn-secondary {
+  min-height: 40px;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 14px !important;
+  border-radius: 8px !important;
+  font-size: 11.5px !important;
+  font-weight: 800 !important;
+  white-space: nowrap;
+}
+
+.qteam-btn-primary {
+  background: #1d61ad !important;
+  border: 1px solid #1d61ad !important;
+  color: #fff !important;
+}
+
+.qteam-btn-primary:hover {
+  background: #174f8f !important;
+}
+
+.qteam-btn-secondary {
+  background: #fff;
+  border: 1px solid #dce4ed;
+  color: #60758c;
+  cursor: pointer;
+}
+
+.qteam-btn-secondary:hover {
+  color: #1d61ad;
+  background: #f8faff;
+}
+
+/* ==========================================================
+   STATISTICS
+========================================================== */
+
+.qteam-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 17px;
+}
+
+.qteam-stat {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 90px;
+  padding: 14px;
+  background: #fff;
+  border: 1px solid #e3e9f1;
+  border-radius: 11px;
+}
+
+.qteam-stat-icon {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  font-size: 19px;
+}
+
+.qteam-stat-icon.blue {
+  background: #eaf3ff;
+  color: #1d61ad;
+}
+
+.qteam-stat-icon.green {
+  background: #e9f8ef;
+  color: #19965a;
+}
+
+.qteam-stat-icon.purple {
+  background: #f1edff;
+  color: #7655bd;
+}
+
+.qteam-stat-icon.orange {
+  background: #fff3e5;
+  color: #db8c2f;
+}
+
+.qteam-stat > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.qteam-stat > div > span {
+  color: #8291a4;
+  font-size: 10.5px;
+  font-weight: 700;
+}
+
+.qteam-stat strong {
+  color: #17345c;
+  font-size: 23px;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+/* ==========================================================
+   TABS
+========================================================== */
+
+.qteam-tabs {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 14px;
+  padding: 5px;
+  background: #edf2f8;
+  border-radius: 10px;
+}
+
+.qteam-tabs button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 39px;
+  padding: 0 16px;
+  background: transparent;
+  border: none;
+  border-radius: 7px;
+  color: #64788f;
+  font-size: 11.5px;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.qteam-tabs button.active {
+  background: #fff;
+  color: #1d61ad;
+  box-shadow: 0 1px 5px rgba(28, 59, 95, 0.08);
+}
+
+/* ==========================================================
+   TOOLBAR
+========================================================== */
+
+.qteam-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 13px;
+  margin-bottom: 10px;
+  padding: 12px 14px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+
+.qteam-toolbar-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.qteam-toolbar-info strong {
+  color: #17345c;
+  font-size: 13.5px;
+  font-weight: 900;
+}
+
+.qteam-toolbar-info span {
+  color: #8794a6;
+  font-size: 10.5px;
+}
+
+.qteam-toolbar-info b {
+  color: #1d61ad;
+}
+
+.qteam-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.qteam-toolbar-actions .form-select {
+  width: 190px;
+  min-height: 39px;
+  border: 1px solid #dce4ed;
+  border-radius: 7px;
+  font-size: 11.5px;
+  color: #53677e;
+  box-shadow: none;
+}
+
+.qteam-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 295px;
+  min-height: 39px;
+  padding: 0 11px;
+  background: #f8faff;
+  border: 1px solid #dce4ed;
+  border-radius: 7px;
+}
+
+.qteam-search svg {
+  color: #8795a8;
+}
+
+.qteam-search input {
+  width: 100%;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #43566d;
+  font-size: 11.5px;
+}
+
+/* ==========================================================
+   TABLE
+========================================================== */
+
+.qteam-content-card {
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+
+.qteam-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.qteam-table {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: collapse;
+}
+
+.qteam-table thead th {
+  padding: 12px 13px;
+  background: #f7f9fc;
+  border-bottom: 1px solid #e8edf4;
+  color: #65768b;
+  font-size: 10.5px;
+  font-weight: 900;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.qteam-table tbody td {
+  padding: 12px 13px;
+  border-bottom: 1px solid #eef1f5;
+  color: #52667b;
+  font-size: 11.5px;
+  vertical-align: middle;
+}
+
+.qteam-table tbody tr:hover {
+  background: #fafcff;
+}
+
+.qteam-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.qteam-code {
+  display: inline-flex;
+  align-items: center;
+  min-height: 27px;
+  padding: 4px 9px;
+  background: #edf4ff;
+  border-radius: 6px;
+  color: #1d61ad;
+  font-size: 10.5px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.qteam-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 170px;
+}
+
+.qteam-name > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.qteam-name strong {
+  color: #17345c;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.qteam-name small {
+  color: #94a1b0;
+  font-size: 10px;
+}
+
+.qteam-name-icon {
+  width: 35px;
+  height: 35px;
+  flex: 0 0 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #edf4ff;
+  border-radius: 8px;
+  color: #1d61ad;
+  font-size: 15px;
+}
+
+.qteam-avatar {
+  width: 35px;
+  height: 35px;
+  flex: 0 0 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eaf3ff;
+  border-radius: 50%;
+  color: #1d61ad;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.qteam-desc {
+  max-width: 280px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #79899d;
+  font-size: 11px;
+}
+
+.qteam-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 29px;
+  padding: 4px 9px;
+  background: #edf4ff;
+  border: none;
+  border-radius: 7px;
+  color: #1d61ad;
+  font-size: 11.5px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.qteam-team-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 9px;
+  background: #f1f6fd;
+  border-radius: 6px;
+  color: #346ca8;
+  font-size: 10.5px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.qteam-muted {
+  margin-top: 3px;
+  color: #95a2b2;
+  font-size: 10px;
+}
+
+/* ==========================================================
+   STATUS / ACTIONS
+========================================================== */
+
+.qteam-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  padding: 4px 10px;
+  border-radius: 30px;
+  font-size: 10.5px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.qteam-status i {
+  width: 6px;
+  height: 6px;
+  background: currentColor;
+  border-radius: 50%;
+}
+
+.qteam-status.active {
+  background: #e9f8ef;
+  color: #13804b;
+}
+
+.qteam-status.inactive {
+  background: #edf1f6;
+  color: #6b7b8e;
+}
+
+.qteam-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.qteam-action {
+  width: 33px;
+  height: 33px;
+  flex: 0 0 33px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  border-radius: 7px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.qteam-action.view {
+  background: #f0f3f8;
+  color: #69809a;
+}
+
+.qteam-action.add {
+  background: #eaf7ef;
+  color: #20945b;
+}
+
+.qteam-action.edit {
+  background: #edf4ff;
+  color: #1d61ad;
+}
+
+.qteam-action.danger {
+  background: #fff0f0;
+  color: #c64e4e;
+}
+
+.qteam-action:hover:not(:disabled) {
+  filter: brightness(0.96);
+  transform: translateY(-1px);
+}
+
+.qteam-action:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.qteam-history-action {
+  display: inline-flex;
+  padding: 5px 9px;
+  border-radius: 6px;
+  font-size: 10.5px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.qteam-history-action.add {
+  background: #e9f8ef;
+  color: #198451;
+}
+
+.qteam-history-action.transfer {
+  background: #edf4ff;
+  color: #1d61ad;
+}
+
+.qteam-history-action.remove {
+  background: #fff0f0;
+  color: #bf4b4b;
+}
+
+/* ==========================================================
+   PAGINATION / LOADING
+========================================================== */
+
+.qteam-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  min-height: 55px;
+  padding: 10px 14px;
+  background: #fafbfd;
+  border-top: 1px solid #edf0f4;
+  color: #8391a3;
+  font-size: 10.5px;
+}
+
+.qteam-pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.qteam-pagination-controls button {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #dce4ed;
+  border-radius: 6px;
+  color: #52677e;
+  cursor: pointer;
+}
+
+.qteam-pagination-controls button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.qteam-loading,
+.qteam-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 280px;
+  padding: 25px;
+  color: #8292a5;
+  text-align: center;
+}
+
+.qteam-loading .spinner-border {
+  color: #1d61ad;
+}
+
+.qteam-empty > svg {
+  color: #bec8d5;
+  font-size: 37px;
+}
+
+.qteam-empty h4 {
+  margin: 4px 0 0;
+  color: #50657d;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.qteam-empty p {
+  margin: 0;
+  font-size: 11px;
+}
+
+/* ==========================================================
+   MODALS
+========================================================== */
+
+.qteam-form-modal {
+  max-width: 560px !important;
+}
+
+.qteam-detail-modal {
+  max-width: 760px !important;
+}
+
+.qteam-confirm-modal {
+  max-width: 430px !important;
+}
+
+.qteam-form-modal .modal-content,
+.qteam-detail-modal .modal-content,
+.qteam-confirm-modal .modal-content {
+  border: none;
+  border-radius: 13px;
+  box-shadow: 0 18px 50px rgba(24, 46, 74, 0.18);
+}
+
+.qteam-form-modal .modal-header,
+.qteam-detail-modal .modal-header {
+  padding: 15px 17px;
+  border-bottom: 1px solid #e7ecf2;
+}
+
+.qteam-form-modal .modal-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.qteam-form-modal .modal-title > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.qteam-form-modal .modal-title strong {
+  color: #17345c;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.qteam-form-modal .modal-title small {
+  color: #8795a8;
+  font-size: 10.5px;
+  font-weight: 400;
+}
+
+.qteam-modal-icon {
+  width: 39px;
+  height: 39px;
+  flex: 0 0 39px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #edf4ff;
+  border-radius: 8px;
+  color: #1d61ad;
+  font-size: 18px;
+}
+
+.qteam-form-modal .modal-body,
+.qteam-detail-modal .modal-body {
+  padding: 17px;
+  background: #f8faff;
+}
+
+/* Quan trọng: dropdown hiển thị không bị cắt */
+.qteam-assign-modal .modal-content,
+.qteam-assign-modal .modal-body {
+  overflow: visible;
+}
+
+.qteam-form-modal .modal-footer,
+.qteam-detail-modal .modal-footer {
+  padding: 12px 16px;
+  border-top: 1px solid #e7ecf2;
+}
+
+.qteam-form-group {
+  margin-bottom: 15px;
+}
+
+.qteam-form-group:last-child {
+  margin-bottom: 0;
+}
+
+.qteam-form-group .form-label {
+  margin-bottom: 6px;
+  color: #455a72;
+  font-size: 11.5px;
+  font-weight: 900;
+}
+
+.qteam-form-group em {
+  color: #d74c4c;
+  font-style: normal;
+}
+
+.qteam-form-group .form-control,
+.qteam-form-group .form-select {
+  min-height: 42px;
+  padding: 9px 11px;
+  background: #fff;
+  border: 1px solid #dce4ed;
+  border-radius: 7px;
+  color: #42566e;
+  font-size: 12px;
+  box-shadow: none !important;
+}
+
+.qteam-form-group textarea.form-control {
+  min-height: 95px;
+  resize: vertical;
+}
+
+.qteam-form-group .form-control:focus,
+.qteam-form-group .form-select:focus {
+  border-color: #7ba7d8;
+  box-shadow: 0 0 0 3px rgba(29, 97, 173, 0.08) !important;
+}
+
+.qteam-hint {
+  margin-top: 6px;
+  color: #94a1b2;
+  font-size: 10px;
+}
+
+.qteam-status-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 65px;
+  padding: 11px 13px;
+  background: #fff;
+  border: 1px solid #dfe6ee;
+  border-radius: 8px;
+}
+
+.qteam-status-box > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.qteam-status-box strong {
+  color: #40566e;
+  font-size: 11.5px;
+}
+
+.qteam-status-box small {
+  color: #8b98a8;
+  font-size: 10px;
+}
+
+.qteam-current-team {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 15px;
+  padding: 11px;
+  background: #edf4ff;
+  border: 1px solid #d5e5fa;
+  border-radius: 8px;
+  color: #1d61ad;
+}
+
+.qteam-current-team > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.qteam-current-team strong {
+  font-size: 10px;
+}
+
+.qteam-current-team span {
+  font-size: 11.5px;
+  font-weight: 900;
+}
+
+/* ==========================================================
+   SEARCHABLE EMPLOYEE DROPDOWN
+========================================================== */
+
+.qteam-employee-select {
+  position: relative;
+  width: 100%;
+  z-index: 5;
+}
+
+.qteam-employee-select.is-open {
+  z-index: 1060;
+}
+
+.qteam-select-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  min-height: 43px;
+  padding: 0 12px;
+  background: #fff;
+  border: 1px solid #dce4ed;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.qteam-employee-select.is-open .qteam-select-control {
+  border-color: #1d61ad;
+  box-shadow: 0 0 0 3px rgba(29, 97, 173, 0.08);
+}
+
+.qteam-select-control.is-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.qteam-select-control > svg {
+  color: #8b99aa;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.qteam-select-control input {
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  outline: none;
+  color: #40566e;
+  font-size: 12px;
+}
+
+.qteam-placeholder {
+  color: #98a5b4;
+  font-size: 12px;
+}
+
+.qteam-selected-text {
+  color: #40566e;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.qteam-select-dropdown {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #dce4ed;
+  border-radius: 9px;
+  box-shadow: 0 12px 30px rgba(30, 54, 85, 0.16);
+  z-index: 1100;
+}
+
+.qteam-select-meta {
+  padding: 10px 12px;
+  background: #f8faff;
+  border-bottom: 1px solid #edf1f5;
+  color: #8d9caf;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.qteam-select-options {
+  max-height: 240px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.qteam-select-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  background: #fff;
+  border: none;
+  border-bottom: 1px solid #f1f3f7;
+  text-align: left;
+  cursor: pointer;
+}
+
+.qteam-select-option:last-child {
+  border-bottom: none;
+}
+
+.qteam-select-option:hover,
+.qteam-select-option.highlighted {
+  background: #edf4ff;
+}
+
+.qteam-option-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.qteam-option-info strong {
+  color: #354e6a;
+  font-size: 11.5px;
+  font-weight: 800;
+}
+
+.qteam-option-info small {
+  color: #8494a7;
+  font-size: 10px;
+}
+
+.qteam-option-check {
+  color: #1d61ad;
+  font-size: 14px;
+}
+
+.qteam-select-empty {
+  padding: 22px 12px;
+  color: #91a0b1;
+  font-size: 11.5px;
+  text-align: center;
+}
+
+/* ==========================================================
+   MODAL BUTTONS
+========================================================== */
+
+.qteam-modal-cancel,
+.qteam-modal-save,
+.qteam-btn-danger {
+  min-height: 39px;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 15px !important;
+  border-radius: 7px !important;
+  font-size: 11.5px !important;
+  font-weight: 800 !important;
+}
+
+.qteam-modal-cancel {
+  background: #fff !important;
+  border: 1px solid #dce4ed !important;
+  color: #61758c !important;
+}
+
+.qteam-modal-save {
+  background: #1d61ad !important;
+  border: 1px solid #1d61ad !important;
+  color: #fff !important;
+}
+
+.qteam-btn-danger {
+  background: #c84f4f !important;
+  border: 1px solid #c84f4f !important;
+  color: #fff !important;
+}
+
+/* ==========================================================
+   DETAIL MODAL
+========================================================== */
+
+.qteam-detail-header {
+  margin-bottom: 17px;
+  padding: 15px;
+  background: #fff;
+  border: 1px solid #e3e9f1;
+  border-radius: 9px;
+}
+
+.qteam-detail-header h4 {
+  margin: 10px 0 6px;
+  color: #17345c;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.qteam-detail-header p {
+  margin: 0;
+  color: #8291a4;
+  font-size: 11.5px;
+}
+
+.qteam-detail-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.qteam-detail-title strong {
+  color: #17345c;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.qteam-detail-list {
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e3e9f1;
+  border-radius: 9px;
+}
+
+.qteam-detail-member {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 11px 13px;
+  border-bottom: 1px solid #edf1f5;
+}
+
+.qteam-detail-member:last-child {
+  border-bottom: none;
+}
+
+.qteam-detail-member > div {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.qteam-detail-member strong {
+  color: #17345c;
+  font-size: 11.5px;
+}
+
+.qteam-detail-member small {
+  color: #8c9bae;
+  font-size: 10px;
+}
+
+.qteam-detail-empty {
+  padding: 30px;
+  background: #fff;
+  border: 1px dashed #dce4ed;
+  border-radius: 8px;
+  color: #91a0b1;
+  text-align: center;
+}
+
+/* ==========================================================
+   CONFIRM
+========================================================== */
+
+.qteam-confirm-content {
+  padding: 27px 23px;
+  text-align: center;
+}
+
+.qteam-confirm-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 14px;
+  background: #fff3e3;
+  border-radius: 50%;
+  color: #d39431;
+  font-size: 26px;
+}
+
+.qteam-confirm-content h4 {
+  margin: 0 0 8px;
+  color: #263d57;
+  font-size: 17px;
+  font-weight: 900;
+}
+
+.qteam-confirm-content p {
+  margin-bottom: 16px;
+  color: #75869b;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.qteam-confirm-content textarea {
+  margin-bottom: 13px;
+  font-size: 12px;
+}
+
+.qteam-confirm-actions {
+  display: flex;
+  justify-content: center;
+  gap: 9px;
+  margin-top: 18px;
+}
+
+.qteam-toast-container {
+  z-index: 11000;
+}
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
+@media (max-width: 1100px) {
+  .qteam-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .qteam-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .qteam-toolbar-actions {
+    width: 100%;
+  }
+
+  .qteam-search {
+    flex: 1;
+    width: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .qteam-page {
+    padding: 13px;
+  }
+
+  .qteam-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .qteam-header-actions {
+    width: 100%;
+  }
+
+  .qteam-header h2 {
+    font-size: 21px;
+  }
+
+  .qteam-tabs {
+    overflow-x: auto;
+  }
+
+  .qteam-tabs button {
+    flex-shrink: 0;
+    padding: 0 13px;
+  }
+}
+
+@media (max-width: 540px) {
+  .qteam-page {
+    padding: 10px;
+  }
+
+  .qteam-stats {
+    gap: 9px;
+  }
+
+  .qteam-stat {
+    gap: 9px;
+    min-height: 80px;
+    padding: 10px;
+  }
+
+  .qteam-stat-icon {
+    flex-basis: 36px;
+    width: 36px;
+    height: 36px;
+    font-size: 15px;
+  }
+
+  .qteam-stat strong {
+    font-size: 19px;
+  }
+
+  .qteam-toolbar-actions {
+    flex-direction: column;
+  }
+
+  .qteam-toolbar-actions .form-select,
+  .qteam-search {
+    width: 100%;
+  }
+
+  .qteam-header-actions {
+    flex-direction: column;
+  }
+
+  .qteam-header-actions > * {
+    width: 100%;
+  }
+
+  .qteam-pagination {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .qteam-pagination-controls {
+    justify-content: space-between;
+    width: 100%;
+  }
+}
+
+/* ==========================================================
+   ADMIN NHÓM - CHỈ BỔ SUNG CSS, GIỮ NGUYÊN GIAO DIỆN CŨ
+========================================================== */
+
+.qteam-action.admin {
+  background: #fff5dc;
+  color: #a56c08;
+}
+
+.qteam-role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #eef2f7;
+  color: #77869a;
+  font-size: 10px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.qteam-role-badge.admin {
+  background: #fff3d9;
+  color: #996500;
+}
+
+.qteam-admin-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px !important;
+  color: #9b750d !important;
+}
+
+.qteam-admin-choice {
+  padding: 12px;
+  border: 1px solid #dce8f8;
+  background: #f3f8ff;
+  border-radius: 8px;
+}
+
+.qteam-admin-choice .form-check-label {
+  color: #244b79;
+  font-size: 11.5px;
+  font-weight: 800;
+}
+
+.qteam-admin-choice small {
+  display: block;
+  margin-top: 5px;
+  color: #74859a;
+  font-size: 10.5px;
+  line-height: 1.5;
+}
+
+.qteam-admin-current {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 16px;
+  padding: 12px;
+  border: 1px solid #dce7f4;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.qteam-admin-current strong {
+  color: #193b65;
+  font-size: 13px;
+}
+
+.qteam-admin-current span {
+  color: #64768b;
+  font-size: 11px;
+}
+
+.qteam-admin-detail {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  color: #9b750d;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.qteam-admin-detail button {
+  padding: 4px 8px;
+  background: #fff3d9;
+  border: 1px solid #f2e1ac;
+  border-radius: 6px;
+  color: #966400;
+  font-size: 10px;
+  cursor: pointer;
+}

@@ -180,6 +180,11 @@ const HeaderNavData = [
         name: "Khai báo tài khoản nhân viên",
         link: "/bankAccount",
       },
+      {
+        id: 1.12,
+        name: "Khai báo team kinh doanh",
+        link: "/quotationTeams",
+      },
     ],
   },
   {
@@ -211,6 +216,11 @@ const HeaderNavData = [
         id: 11.3,
         name: "Danh sách liên hệ công đoàn",
         link: "/procurement-workspace",
+      },
+      {
+        id: 11.4,
+        name: "Danh sách yêu cầu báo giá",
+        link: "/quotationRequests",
       },
     ],
   },

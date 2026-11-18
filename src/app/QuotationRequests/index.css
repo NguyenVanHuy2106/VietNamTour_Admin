@@ -1,0 +1,896 @@
+
+/* ============================================================
+   VIET NAM TOUR - QUOTATION REQUESTS
+   ============================================================ */
+
+.vqr-page {
+  --vqr-primary: #1d61ad;
+  --vqr-primary-dark: #144e8d;
+  --vqr-border: #e4eaf1;
+  --vqr-text: #243247;
+  --vqr-muted: #758398;
+
+  padding: 24px;
+  background: #f6f8fb;
+  min-height: 100vh;
+  color: var(--vqr-text);
+  font-size: 14px;
+}
+
+.vqr-page button,
+.vqr-page input,
+.vqr-page select,
+.vqr-page textarea {
+  font-size: 14px;
+}
+
+/* ============================================================
+   HEADING
+   ============================================================ */
+
+.vqr-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.vqr-heading h2 {
+  font-size: 23px;
+  font-weight: 700;
+  color: #1d3049;
+  margin: 0 0 7px;
+}
+
+.vqr-heading p {
+  margin: 0;
+  color: var(--vqr-muted);
+  font-size: 13px;
+}
+
+.vqr-heading-actions {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.vqr-heading-actions .btn {
+  white-space: nowrap;
+  min-height: 38px;
+}
+
+.vqr-primary {
+  background: var(--vqr-primary) !important;
+  border-color: var(--vqr-primary) !important;
+  color: #fff !important;
+}
+
+.vqr-primary:hover {
+  background: var(--vqr-primary-dark) !important;
+  border-color: var(--vqr-primary-dark) !important;
+}
+
+/* ============================================================
+   STATISTICS
+   ============================================================ */
+
+.vqr-stats {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 13px;
+  margin-bottom: 18px;
+}
+
+.vqr-stat {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  background: #fff;
+  border: 1px solid var(--vqr-border);
+  border-radius: 12px;
+  padding: 17px;
+  min-width: 0;
+}
+
+.vqr-stat-icon {
+  flex-shrink: 0;
+  height: 42px;
+  width: 42px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  background: #ebf3fc;
+  color: var(--vqr-primary);
+  font-size: 18px;
+}
+
+.vqr-stat > div:last-child {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 3px;
+}
+
+.vqr-stat span {
+  font-size: 12px;
+  color: var(--vqr-muted);
+  white-space: nowrap;
+}
+
+.vqr-stat strong {
+  font-size: 25px;
+  color: #1b2b41;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.vqr-stat-danger .vqr-stat-icon {
+  color: #d24c4c;
+  background: #fff0f0;
+}
+
+.vqr-stat-danger strong {
+  color: #c73e3e;
+}
+
+/* ============================================================
+   PANELS
+   ============================================================ */
+
+.vqr-panel {
+  background: #fff;
+  border: 1px solid var(--vqr-border);
+  border-radius: 12px;
+  padding: 17px;
+  margin-bottom: 17px;
+}
+
+.vqr-panel .form-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #40516a;
+  margin-bottom: 6px;
+}
+
+.vqr-panel .form-control,
+.vqr-panel .form-select {
+  border: 1px solid #dce3ec;
+  height: 39px;
+  border-radius: 7px;
+  box-shadow: none;
+}
+
+.vqr-panel .form-control:focus,
+.vqr-panel .form-select:focus {
+  border-color: var(--vqr-primary);
+  box-shadow: 0 0 0 3px rgba(29, 97, 173, 0.09);
+}
+
+.vqr-search {
+  position: relative;
+}
+
+.vqr-search > svg {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a0ae;
+  pointer-events: none;
+}
+
+.vqr-search .form-control {
+  padding-left: 37px;
+}
+
+.vqr-filter-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 14px;
+  color: var(--vqr-muted);
+  font-size: 12px;
+}
+
+.vqr-filter-footer strong {
+  color: #27354a;
+}
+
+/* ============================================================
+   TABLE
+   ============================================================ */
+
+.vqr-table-panel {
+  padding: 0;
+  overflow: hidden;
+}
+
+.vqr-table {
+  width: 100%;
+  margin: 0;
+}
+
+.vqr-table thead th {
+  background: #f3f6fa;
+  padding: 15px 12px;
+  color: #40516a;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--vqr-border);
+}
+
+.vqr-table tbody td {
+  padding: 13px 12px;
+  border-color: #edf0f5;
+  vertical-align: middle;
+  color: #35445a;
+  font-size: 13px;
+}
+
+.vqr-table tbody tr:hover td {
+  background: #f9fbfe;
+}
+
+.vqr-code {
+  color: var(--vqr-primary);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.vqr-small-muted {
+  font-size: 11px;
+  color: var(--vqr-muted);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+.vqr-small-danger {
+  color: #c63d3d;
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 3px;
+}
+
+.vqr-overdue {
+  color: #c63d3d;
+  font-weight: 600;
+}
+
+.vqr-cell-text {
+  max-width: 230px;
+  line-height: 1.6;
+}
+
+.vqr-title-button {
+  padding: 0;
+  background: none;
+  border: none;
+  text-align: left;
+  color: #26394f;
+  font-size: 12px !important;
+  font-weight: 600;
+  line-height: 1.55;
+  cursor: pointer;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+.vqr-title-button:hover {
+  color: var(--vqr-primary);
+}
+
+.vqr-status {
+  padding: 6px 9px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.vqr-status-RECEIVED {
+  background: #eef3f9 !important;
+  color: #58718e !important;
+}
+
+.vqr-status-PROCESSING {
+  background: #fff4dd !important;
+  color: #a56b0b !important;
+}
+
+.vqr-status-CONTACTED {
+  background: #e8f2ff !important;
+  color: #2467ac !important;
+}
+
+.vqr-status-COMPLETED {
+  background: #e6f6ee !important;
+  color: #27835b !important;
+}
+
+.vqr-badge-button {
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.vqr-table-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: nowrap;
+}
+
+.vqr-table-actions .btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 29px;
+  min-width: 29px;
+  height: 29px;
+  padding: 0;
+  color: #53647a;
+  background: #f4f6f9;
+  border-color: #e8edf2;
+  border-radius: 6px;
+}
+
+.vqr-table-actions .btn:hover {
+  background: #eaf2fc;
+  color: var(--vqr-primary);
+}
+
+.vqr-table-actions .vqr-delete-icon {
+  color: #c75050;
+}
+
+.vqr-table-actions .vqr-delete-icon:hover {
+  background: #fff0f0;
+  color: #ba2929;
+}
+
+/* ============================================================
+   PAGINATION
+   ============================================================ */
+
+.vqr-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 17px;
+  border-top: 1px solid var(--vqr-border);
+  color: var(--vqr-muted);
+  font-size: 12px;
+}
+
+/* ============================================================
+   DETAIL
+   ============================================================ */
+
+.vqr-detail-title {
+  color: #1f3550;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.vqr-detail-label {
+  color: #8592a1;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.vqr-detail-value {
+  color: #28384d;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.vqr-detail-note {
+  background: #f6f9fc;
+  padding: 14px;
+  border-radius: 8px;
+  margin-bottom: 18px;
+}
+
+.vqr-detail-note p {
+  margin: 6px 0 0;
+  white-space: pre-wrap;
+  color: #536178;
+}
+
+.vqr-detail-files {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.vqr-detail-file {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #e7ecf2;
+  border-radius: 7px;
+  font-size: 13px;
+}
+
+.vqr-detail-file span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.vqr-detail-file a {
+  color: var(--vqr-primary);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   ATTACHMENTS
+   ============================================================ */
+
+.vqr-attachments-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid #e9edf3;
+  padding-top: 16px;
+  margin-top: 5px;
+  margin-bottom: 13px;
+}
+
+/* ============================================================
+   HISTORY TIMELINE
+   ============================================================ */
+
+.vqr-timeline {
+  padding-left: 12px;
+  border-left: 2px solid #d9e6f5;
+  margin-left: 7px;
+}
+
+.vqr-timeline-item {
+  position: relative;
+  padding: 0 0 20px 18px;
+  color: #526078;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.vqr-timeline-item::before {
+  position: absolute;
+  content: "";
+  top: 5px;
+  left: -7px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--vqr-primary);
+  border: 3px solid #e6f0fc;
+}
+
+.vqr-timeline-top {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.vqr-timeline-top strong {
+  color: #273b56;
+}
+
+.vqr-timeline-top span {
+  color: #8a98a9;
+  font-size: 11px;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1400px) {
+  .vqr-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 991px) {
+  .vqr-page {
+    padding: 16px;
+  }
+
+  .vqr-heading {
+    flex-direction: column;
+  }
+
+  .vqr-heading-actions {
+    width: 100%;
+  }
+
+  .vqr-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 575px) {
+  .vqr-page {
+    padding: 12px;
+  }
+
+  .vqr-heading h2 {
+    font-size: 20px;
+  }
+
+  .vqr-heading-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .vqr-heading-actions .btn:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .vqr-stats {
+    gap: 9px;
+  }
+
+  .vqr-stat {
+    padding: 12px;
+    gap: 9px;
+  }
+
+  .vqr-stat-icon {
+    width: 35px;
+    height: 35px;
+    font-size: 15px;
+  }
+
+  .vqr-stat span {
+    font-size: 11px;
+  }
+
+  .vqr-stat strong {
+    font-size: 20px;
+  }
+
+  .vqr-panel {
+    padding: 12px;
+  }
+
+  .vqr-table-panel {
+    padding: 0;
+  }
+
+  .vqr-pagination {
+    padding: 12px;
+  }
+}
+/* ============================================================
+   TOAST NOTIFICATION - TOP RIGHT
+   ============================================================ */
+
+.vqr-toast-container {
+  position: fixed !important;
+  top: 20px !important;
+  right: 20px !important;
+  left: auto !important;
+  bottom: auto !important;
+  z-index: 99999 !important;
+  padding: 0 !important;
+  width: min(380px, calc(100vw - 32px));
+  pointer-events: none;
+}
+
+.vqr-toast {
+  width: 100%;
+  max-width: 380px;
+  border: 1px solid #d7e9dd;
+  border-left: 4px solid #24a36b;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 10px 35px rgba(21, 37, 62, 0.16);
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+.vqr-toast .toast-body {
+  padding: 14px 16px;
+}
+
+.vqr-toast-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.vqr-toast-icon {
+  color: #24a36b;
+  font-size: 21px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.vqr-toast-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 4px;
+  min-width: 0;
+}
+
+.vqr-toast-text strong {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e3940;
+}
+
+.vqr-toast-text span {
+  font-size: 13px;
+  color: #657386;
+  line-height: 1.5;
+}
+
+.vqr-toast-close {
+  border: none;
+  background: transparent;
+  color: #8995a5;
+  font-size: 23px;
+  line-height: 1;
+  padding: 0 2px;
+  cursor: pointer;
+}
+
+.vqr-toast-close:hover {
+  color: #27364a;
+}
+
+@media (max-width: 575px) {
+  .vqr-toast-container {
+    top: 12px !important;
+    right: 12px !important;
+    width: calc(100vw - 24px);
+  }
+}
+
+/* CỘT NỘI DUNG YÊU CẦU */
+
+.vqr-table .vqr-content-column {
+  width: 300px;
+  min-width: 280px;
+  max-width: 500px;
+}
+
+.vqr-table .vqr-title-button {
+  display: -webkit-box;
+  width: 100%;
+  max-width: 100%;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.vqr-table .vqr-content-column .vqr-small-muted {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.procurement-workspace-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 20px;
+}
+
+.procurement-workspace-eyebrow {
+  margin-bottom: 6px;
+
+  color: #1d61ad;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  letter-spacing: 1.2px;
+}
+
+.procurement-workspace-header h2 {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  margin: 0;
+
+  color: #17345c;
+
+  font-size: 27px;
+  font-weight: 800;
+}
+
+.procurement-workspace-header h2 svg {
+  color: #1d61ad;
+}
+
+.procurement-workspace-header p {
+  margin: 7px 0 0;
+
+  color: #718096;
+
+  font-size: 14px;
+}
+
+.procurement-workspace-header-actions {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+}
+
+/* ============================================================
+   NHÓM PHỤ TRÁCH - COMPACT
+   ============================================================ */
+
+.vqr-team-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+
+  padding: 5px 8px;
+  border-radius: 6px;
+
+  font-size: 11px !important;
+  font-weight: 600;
+  line-height: 1.3;
+
+  max-width: 165px;
+  border: 1px solid transparent;
+}
+
+/* Đã phân công */
+.vqr-team-assigned {
+  background: #e8f2ff;
+  border-color: #c8dffa;
+  color: #1d61ad;
+}
+
+/* Chưa phân công */
+.vqr-team-unassigned {
+  background: #f1f3f6;
+  border-color: #e2e6eb;
+  color: #7b8796;
+}
+
+/* Icon */
+.vqr-team-icon {
+  font-size: 11px !important;
+  flex-shrink: 0;
+}
+
+/* Tên nhóm */
+.vqr-team-name {
+  font-size: 11px !important;
+  font-weight: 600;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Hover khi có thể bấm để phân công */
+.vqr-team-clickable {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.vqr-team-clickable:hover {
+  background: #d9eaff;
+  border-color: #a5c9f3;
+}
+
+/* ============================================================
+   ERROR TOAST - VIET NAM TOUR
+   ============================================================ */
+
+.vqr-toast-danger {
+  border-color: #f5d2d2 !important;
+  border-left: 4px solid #dc3545 !important;
+  background: #fff !important;
+}
+
+.vqr-toast-danger .vqr-toast-icon {
+  color: #dc3545 !important;
+}
+
+.vqr-toast-danger .vqr-toast-text strong {
+  color: #b42332;
+}
+
+.vqr-toast-danger .vqr-toast-text span {
+  color: #6c4650;
+}
+/* ============================================================
+   CỘT HIỆU LỰC BÁO GIÁ
+   ============================================================ */
+
+.vqr-table .vqr-validity-column {
+  width: 190px;
+  min-width: 170px;
+  max-width: 210px;
+}
+
+.vqr-validity-text {
+  display: -webkit-box;
+  width: 100%;
+
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #40516a;
+
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
+}
+
+
+/* ============================================================
+   VIET NAM TOUR - QUOTATION STATUS COLORS
+   Bổ sung màu cho các trạng thái báo giá mới
+   ============================================================ */
+
+/* Đã nộp báo giá - Xanh dương */
+.vqr-page .vqr-status-SUBMITTED {
+  background-color: #e8f2ff !important;
+  color: #175cd3 !important;
+  border: 1px solid #bdd7ff !important;
+}
+
+/* Trúng báo giá - Xanh lá */
+.vqr-page .vqr-status-WON {
+  background-color: #e6f6ee !important;
+  color: #167347 !important;
+  border: 1px solid #b5e4ca !important;
+}
+
+/* Không trúng báo giá - Đỏ */
+.vqr-page .vqr-status-LOST {
+  background-color: #fdecec !important;
+  color: #b42318 !important;
+  border: 1px solid #f7c6c6 !important;
+}
+
+/* Đã hủy - Xám */
+.vqr-page .vqr-status-CANCELLED {
+  background-color: #edf0f4 !important;
+  color: #596579 !important;
+  border: 1px solid #d5dce5 !important;
+}

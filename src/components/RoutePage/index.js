@@ -50,6 +50,8 @@ import LeaveManagement from "../../app/Leave/LeaveManagement/index.js";
 import Workspace from "../../app/LeadAI/Workspace/index.js";
 import AdminLeadManagement from "../../app/LeadAI/Admin";
 import ProcurementWorkspace from "../../app/Procurement/workspace";
+import QuotationTeams from "../../app/QuotationTeams/index.js";
+import QuotationRequests from "../../app/QuotationRequests/index.js";
 
 import Tender from "../../app/Tender";
 
@@ -154,6 +156,8 @@ const RoutePage = () => {
           path="procurement-workspace"
           element={<ProcurementWorkspace />}
         />
+        <Route path="quotationTeams" element={<QuotationTeams />} />
+        <Route path="quotationRequests" element={<QuotationRequests />} />
       </Route>
     </Routes>
   );
