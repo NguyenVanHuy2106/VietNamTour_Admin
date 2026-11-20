@@ -1,1234 +1,604 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+
+import { Alert, Button, Modal, Spinner, ProgressBar } from "react-bootstrap";
 
 import {
-  Alert,
-  Button,
-  Form,
-  Modal,
-  Spinner,
-  Toast,
-  ToastContainer,
-} from "react-bootstrap";
-
-import {
-  FaLink,
-  FaSearch,
-  FaFileImport,
-  FaUsers,
-  FaExternalLinkAlt,
   FaFilePdf,
+  FaFileImport,
   FaCheckCircle,
-  FaBuilding,
   FaExclamationTriangle,
-  FaInfoCircle,
+  FaCloudUploadAlt,
+  FaDatabase,
 } from "react-icons/fa";
 
 import APIToken from "../../config/APIToken";
+
 import "./ProcurementImportModal.css";
 
-// ========================================================
-// CONFIG
-// ========================================================
+// ==========================================================
+// VIET NAM TOUR ERP - AUTO IMPORT QUOTATION PDF
+//
+// CHỌN PDF
+//   -> POST /quotationRequest/import-from-pdf
+//   -> Nhận JSON
+//   -> POST /quotationRequest/save-import
+//   -> Lưu database
+//   -> Đóng Modal
+//   -> onSaved() để parent hiện Toast
+//
+// Không cần nút Phân tích / Lưu.
+// ==========================================================
 
-const IMPORT_API = "/procurement/import-from-url";
-const TEAM_API = "/quotationTeam";
+const IMPORT_API = "/quotationRequest/import-from-pdf";
+const SAVE_API = "/quotationRequest/save-import";
 
-const EMPTY_FORM = {
-  notificationId: "",
-  notificationCode: "",
-  notificationType: "",
-  packageName: "",
-  requestName: "",
-  procuringEntity: "",
-  publishDate: "",
-  closingDate: "",
-  location: "",
-  quantity: "",
-  unit: "",
-  packagePrice: "",
-  attachments: [],
-  sourceUrl: "",
-  quotationValidity: "",
-};
+const MAX_FILE_SIZE = 15 * 1024 * 1024;
 
-// ========================================================
+// ==========================================================
 // HELPERS
-// ========================================================
+// ==========================================================
 
-const trim = (value) => String(value ?? "").trim();
-
-const readError = (error) =>
-  error?.response?.data?.message ||
-  error?.message ||
-  "Có lỗi xảy ra. Vui lòng thử lại.";
-
-const getCurrentUserId = () => {
-  const raw = localStorage.getItem("userId");
-  const id = Number(raw);
-
-  return Number.isSafeInteger(id) && id > 0 ? id : null;
-};
-
-const getFirstMatch = (text, regex) => {
-  if (!text) return "";
-
-  const match = String(text).match(regex);
-
-  return match?.[1] ? trim(match[1]) : "";
-};
-
-// ========================================================
-// FALLBACK: TRÍCH XUẤT TỪ PAGE TEXT
-//
-// Chỉ áp dụng khi Backend trả extractionStatus=url_only.
-// Các thông tin tách bằng regex cần được người dùng kiểm tra.
-//
-// Không tự đoán các trường chưa có dữ liệu.
-// ========================================================
-
-const extractFromPageText = (pageText) => {
-  const text = trim(pageText);
-
-  if (!text) return {};
-
-  const requestName = getFirstMatch(
-    text,
-    /Tên yêu cầu báo giá\s+([\s\S]*?)\s+Đơn vị yêu cầu báo giá/i,
-  );
-
-  const procuringEntity = getFirstMatch(
-    text,
-    /Đơn vị yêu cầu báo giá\s+([\s\S]*?)\s+Phân loại báo giá/i,
-  );
-
-  const publishDate = getFirstMatch(
-    text,
-    /Ngày đăng tải\s+(\d{2}\/\d{2}\/\d{4})/i,
-  );
-
-  const location = getFirstMatch(
-    text,
-    /Địa điểm thực hiện\s+([\s\S]*?)\s+Thông tin liên hệ/i,
-  );
-
-  // ============================================================
-  // HẠN TIẾP NHẬN BÁO GIÁ
-  // ============================================================
-
-  const deadlineMatch = text.match(
-    /Thời hạn tiếp nhận báo giá\s+(\d{1,2}:\d{2})\s+(\d{2}\/\d{2}\/\d{4})/i,
-  );
-
-  let closingDate = "";
-
-  if (deadlineMatch) {
-    closingDate = `${deadlineMatch[2]} ${deadlineMatch[1]}`;
-  } else {
-    closingDate = getFirstMatch(
-      text,
-      /Thời hạn tiếp nhận báo giá\s+từ ngày\s+\d{2}\/\d{2}\/\d{4}\s+đến ngày\s+(\d{2}\/\d{2}\/\d{4})/i,
-    );
-  }
-
-  // ============================================================
-  // THỜI GIAN CÓ HIỆU LỰC TỐI THIỂU CỦA BÁO GIÁ
-  //
-  // Ví dụ:
-  // 3 ngày kể từ ngày 21/11/2026
-  // 30 ngày kể từ ngày 22/11/2026
-  // 60 ngày kể từ thời điểm đóng báo giá
-  // ============================================================
-
-  let quotationValidity = "";
-
-  // Trường hợp có số ngày và ngày bắt đầu cụ thể.
-  const validityWithDate = text.match(
-    /Thời gian có hiệu lực tối thiểu của báo giá\s*:?\s*(\d+\s+ngày\s+kể từ ngày\s+\d{1,2}\/\d{1,2}\/\d{4})/i,
-  );
-
-  if (validityWithDate) {
-    quotationValidity = trim(validityWithDate[1]);
-  } else {
-    // Trường hợp có số ngày nhưng không ghi ngày cụ thể.
-    const validityOther = text.match(
-      /Thời gian có hiệu lực tối thiểu của báo giá\s*:?\s*(\d+\s+ngày(?:\s+kể từ\s+(?:thời điểm|ngày)\s+[^.\r\n]{1,100})?)/i,
-    );
-
-    if (validityOther) {
-      quotationValidity = trim(validityOther[1]);
-    }
-  }
-
-  return {
-    requestName,
-    procuringEntity,
-    publishDate,
-    closingDate,
-    location,
-    quotationValidity,
-  };
-};
-
-// ========================================================
-// NORMALIZE API RESPONSE
-// ========================================================
-
-const normalizeResponse = (response, inputUrl) => {
-  const root = response?.data || {};
-
-  if (root.success === false) {
-    throw new Error(root.message || "Trích xuất thất bại.");
-  }
-
-  const data = root.data || {};
-
-  // Trích xuất bổ sung từ pageText khi Backend
-  // không trả đầy đủ các trường dữ liệu.
-  const fallback = extractFromPageText(data.pageText);
-
-  const form = {
-    notificationId: trim(data.notificationId),
-    notificationCode: trim(data.notificationCode),
-    notificationType: trim(data.notificationType),
-
-    packageName: trim(data.packageName),
-
-    requestName: trim(data.requestName) || fallback.requestName || "",
-
-    procuringEntity:
-      trim(data.procuringEntity) || fallback.procuringEntity || "",
-
-    publishDate: trim(data.publishDate) || fallback.publishDate || "",
-
-    closingDate: trim(data.closingDate) || fallback.closingDate || "",
-
-    // ============================================================
-    // HIỆU LỰC TỐI THIỂU CỦA BÁO GIÁ
-    // ============================================================
-
-    quotationValidity:
-      trim(data.quotationValidity) ||
-      trim(data.quotation_validity) ||
-      fallback.quotationValidity ||
-      "",
-
-    location: trim(data.location) || fallback.location || "",
-
-    quantity: data.quantity ?? "",
-    unit: trim(data.unit),
-
-    packagePrice: data.packagePrice ?? "",
-
-    attachments: Array.isArray(data.attachments) ? data.attachments : [],
-
-    sourceUrl: data.sourceUrl || inputUrl,
-  };
-
-  return {
-    form,
-
-    extractionStatus:
-      root.extractionStatus || (data.requestName ? "complete" : "unknown"),
-
-    extractionMessage: root.message || "",
-
-    warnings: Array.isArray(root.warnings) ? root.warnings : [],
-  };
-};
-
-// ========================================================
-// DATE VALIDATION
-// ========================================================
-
-const isValidVietnameseDate = (value, requireTime = false) => {
-  if (!value) return false;
-
-  const match = trim(value).match(
-    /^(\d{2})\/(\d{2})\/(\d{4})(?:\s+(\d{1,2}):(\d{2}))?$/,
-  );
-
-  if (!match) return false;
-
-  if (requireTime && !match[4]) {
-    return false;
-  }
-
-  const day = Number(match[1]);
-  const month = Number(match[2]);
-  const year = Number(match[3]);
-  const hour = Number(match[4] || 0);
-  const minute = Number(match[5] || 0);
-
-  const date = new Date(year, month - 1, day, hour, minute);
-
+const getError = (error) => {
   return (
-    date.getFullYear() === year &&
-    date.getMonth() === month - 1 &&
-    date.getDate() === day &&
-    date.getHours() === hour &&
-    date.getMinutes() === minute
+    error?.response?.data?.message ||
+    error?.message ||
+    "Đã xảy ra lỗi. Vui lòng thử lại."
   );
 };
 
-// ========================================================
-// COMPONENT
-// ========================================================
+const formatDate = (value) => {
+  if (!value) return "—";
 
-const ProcurementImportModal = ({ show, onHide, onSaved }) => {
-  // ======================================================
-  // FORM
-  // ======================================================
+  if (/^\d{4}-\d{2}-\d{2}$/.test(String(value))) {
+    const [year, month, day] = value.split("-");
+    return `${day}/${month}/${year}`;
+  }
 
-  const [url, setUrl] = useState("");
+  return String(value);
+};
 
-  const [form, setForm] = useState({
-    ...EMPTY_FORM,
-  });
+const formatSize = (bytes) => {
+  if (!bytes) return "0 KB";
 
-  // ======================================================
-  // TEAMS
-  // ======================================================
+  if (bytes < 1024 * 1024) {
+    return `${(bytes / 1024).toFixed(1)} KB`;
+  }
 
-  const [teams, setTeams] = useState([]);
+  return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+};
 
-  const [selectedTeamId, setSelectedTeamId] = useState("");
+const validatePdf = (file) => {
+  if (!file) {
+    throw new Error("Vui lòng chọn file PDF.");
+  }
 
-  // ======================================================
-  // LOADING
-  // ======================================================
+  if (!file.name.toLowerCase().endsWith(".pdf")) {
+    throw new Error("Chỉ hỗ trợ file định dạng PDF.");
+  }
 
-  const [extracting, setExtracting] = useState(false);
+  if (file.type && file.type !== "application/pdf") {
+    throw new Error("File tải lên không phải PDF hợp lệ.");
+  }
 
-  const [loadingTeams, setLoadingTeams] = useState(false);
+  if (file.size === 0) {
+    throw new Error("File PDF đang rỗng.");
+  }
 
-  const [saving, setSaving] = useState(false);
+  if (file.size > MAX_FILE_SIZE) {
+    throw new Error("Dung lượng PDF không được vượt quá 15 MB.");
+  }
+};
 
-  // ======================================================
-  // EXTRACTION STATUS
-  // ======================================================
+const validateExtractedData = (data) => {
+  if (!data || typeof data !== "object") {
+    throw new Error("API đọc PDF không trả về dữ liệu hợp lệ.");
+  }
 
-  const [extracted, setExtracted] = useState(false);
-
-  const [extractionStatus, setExtractionStatus] = useState("");
-
-  const [extractionMessage, setExtractionMessage] = useState("");
-
-  const [warnings, setWarnings] = useState([]);
-
-  const [error, setError] = useState("");
-  const [teamError, setTeamError] = useState("");
-  const getError = (error) => {
-    const data = error?.response?.data;
-
-    return (
-      data?.message || error?.message || "Đã xảy ra lỗi. Vui lòng thử lại."
+  if (!String(data.request_name || "").trim()) {
+    throw new Error(
+      "PDF chưa trích xuất được tên yêu cầu báo giá. " +
+        "Vui lòng kiểm tra file hoặc tạo yêu cầu thủ công.",
     );
-  };
-  const [toast, setToast] = useState({
-    show: false,
-    message: "",
-    variant: "danger",
+  }
+
+  if (!String(data.procuring_entity || "").trim()) {
+    throw new Error(
+      "PDF chưa trích xuất được đơn vị yêu cầu báo giá. " +
+        "Vui lòng kiểm tra file hoặc tạo yêu cầu thủ công.",
+    );
+  }
+
+  if (!Array.isArray(data.items) || data.items.length === 0) {
+    throw new Error(
+      "PDF chưa trích xuất được danh mục dịch vụ. " +
+        "Vui lòng kiểm tra file hoặc tạo yêu cầu thủ công.",
+    );
+  }
+
+  const invalidItem = data.items.find(
+    (item) => !String(item.item_name || "").trim(),
+  );
+
+  if (invalidItem) {
+    throw new Error(
+      "Có hạng mục dịch vụ chưa xác định được tên. " + "Vui lòng kiểm tra PDF.",
+    );
+  }
+};
+
+// ==========================================================
+// POST MULTIPART
+// ==========================================================
+
+const uploadFormData = async (url, formData) => {
+  const response = await APIToken.post(url, formData, {
+    // Axios sẽ xử lý FormData/multipart.
+    // Không truyền JSON string thay cho File.
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+
+    timeout: 120000,
   });
 
-  const showToast = (message, variant = "danger") => {
-    setToast({
-      show: true,
-      message,
-      variant,
-    });
-  };
+  return response.data;
+};
 
-  // ======================================================
-  // UPDATE FIELDS
-  // ======================================================
+// ==========================================================
+// COMPONENT
+// ==========================================================
 
-  const setField = (field, value) => {
-    setForm((previous) => ({
-      ...previous,
-      [field]: value,
-    }));
+export default function ProcurementImportModal({
+  show,
+  onHide,
+  onSaved,
+  mode = "web-admin",
+  teamId = null,
+}) {
+  const isTeamAdmin = mode === "team-admin";
 
-    if (error) {
-      setError("");
-    }
-  };
+  const inputRef = useRef(null);
+  const busyRef = useRef(false);
 
-  // ======================================================
-  // LOAD TEAM LIST
-  // ======================================================
+  const [file, setFile] = useState(null);
+  const [stage, setStage] = useState("IDLE");
 
-  const loadTeams = useCallback(async () => {
-    try {
-      setLoadingTeams(true);
-      setTeamError("");
+  const [preview, setPreview] = useState(null);
+  const [warnings, setWarnings] = useState([]);
+  const [error, setError] = useState("");
 
-      const response = await APIToken.get(TEAM_API);
+  // ========================================================
+  // RESET
+  // ========================================================
 
-      if (response.data?.success === false) {
-        throw new Error(
-          response.data.message || "Không thể lấy danh sách nhóm.",
-        );
-      }
+  const reset = useCallback(() => {
+    setFile(null);
+    setStage("IDLE");
+    setPreview(null);
+    setWarnings([]);
+    setError("");
 
-      const list = response.data?.data;
-
-      if (!Array.isArray(list)) {
-        throw new Error("API danh sách nhóm không trả về mảng dữ liệu.");
-      }
-
-      setTeams(list.filter((team) => Number(team.status) === 1));
-    } catch (err) {
-      console.error("Load quotation teams error:", err);
-
-      setTeamError(readError(err));
-      setTeams([]);
-    } finally {
-      setLoadingTeams(false);
+    if (inputRef.current) {
+      inputRef.current.value = "";
     }
   }, []);
 
   useEffect(() => {
-    if (show) {
-      loadTeams();
+    if (!show && !busyRef.current) {
+      reset();
     }
-  }, [show, loadTeams]);
+  }, [show, reset]);
 
-  // ======================================================
-  // SELECTED TEAM
-  // ======================================================
+  const processing = stage === "READING" || stage === "SAVING";
 
-  const selectedTeam = useMemo(
-    () => teams.find((team) => String(team.team_id) === String(selectedTeamId)),
-    [teams, selectedTeamId],
-  );
+  // ========================================================
+  // AUTO IMPORT
+  // ========================================================
 
-  // ======================================================
-  // RESET MODAL
-  // ======================================================
+  const handleSelectPdf = async (event) => {
+    const selectedFile = event.target.files?.[0];
 
-  const resetForm = () => {
-    setUrl("");
-    setForm({ ...EMPTY_FORM });
-    setSelectedTeamId("");
+    if (!selectedFile) return;
 
-    setExtracted(false);
-    setExtractionStatus("");
-    setExtractionMessage("");
+    // Khóa đồng bộ để tránh gọi API trùng khi double click.
+    if (busyRef.current) return;
+
+    try {
+      validatePdf(selectedFile);
+
+      if (isTeamAdmin && !teamId) {
+        throw new Error(
+          "Không xác định được nhóm của Admin nhóm. " +
+            "Vui lòng tải lại trang.",
+        );
+      }
+    } catch (err) {
+      setError(getError(err));
+
+      if (inputRef.current) {
+        inputRef.current.value = "";
+      }
+
+      return;
+    }
+
+    busyRef.current = true;
+
+    setFile(selectedFile);
+    setPreview(null);
     setWarnings([]);
-
     setError("");
-    setTeamError("");
+
+    // ======================================================
+    // BƯỚC 1: ĐỌC PDF
+    // ======================================================
+
+    setStage("READING");
+
+    let extractedData = null;
+
+    try {
+      const importForm = new FormData();
+
+      // QUAN TRỌNG:
+      // Backend Multer đọc req.file từ field "file".
+      importForm.append("file", selectedFile, selectedFile.name);
+
+      const importResult = await uploadFormData(IMPORT_API, importForm);
+
+      if (importResult?.success !== true || !importResult?.data) {
+        throw new Error(
+          importResult?.message || "Không thể trích xuất dữ liệu từ PDF.",
+        );
+      }
+
+      extractedData = importResult.data;
+
+      // Load dữ liệu vừa đọc lên Modal.
+      setPreview(extractedData);
+
+      setWarnings(
+        Array.isArray(importResult.warnings) ? importResult.warnings : [],
+      );
+
+      // Không lưu PDF nếu thiếu dữ liệu bắt buộc.
+      validateExtractedData(extractedData);
+
+      // ====================================================
+      // BƯỚC 2: TỰ ĐỘNG LƯU DATABASE
+      // ====================================================
+
+      setStage("SAVING");
+
+      const payload = {
+        ...extractedData,
+
+        // Giữ nguyên các trường ngày từ API parser:
+        // reception_start_date: YYYY-MM-DD
+        // reception_end_date:   YYYY-MM-DD
+        // execution_date:       YYYY-MM-DD
+        // closing_date:         ISO hoặc null
+
+        // Không tự đoán giờ đóng báo giá.
+        closing_date: extractedData.closing_date || null,
+
+        // Chuẩn hóa lại item_no.
+        items: extractedData.items.map((item, index) => ({
+          ...item,
+          item_no: index + 1,
+        })),
+
+        // Admin web: chưa phân nhóm.
+        // Admin nhóm: gửi ID để tham chiếu.
+        // Backend bắt buộc xác minh lại role và team.
+        team_id: isTeamAdmin ? Number(teamId) : null,
+      };
+
+      const saveForm = new FormData();
+
+      // PDF gốc được gửi lại để lưu attachment.
+      saveForm.append("file", selectedFile, selectedFile.name);
+
+      // JSON từ API đọc PDF.
+      saveForm.append("data", JSON.stringify(payload));
+
+      const saveResult = await uploadFormData(SAVE_API, saveForm);
+
+      if (saveResult?.success !== true || saveResult?.saved !== true) {
+        throw new Error(
+          saveResult?.message || "Không thể lưu yêu cầu báo giá.",
+        );
+      }
+
+      // ====================================================
+      // HOÀN TẤT
+      // ====================================================
+
+      setStage("SUCCESS");
+
+      const savedRequest = saveResult.data;
+
+      // Đóng Modal.
+      onHide?.();
+
+      // Thông báo cho trang cha để:
+      // - Hiển thị Toast góc trên bên phải
+      // - Tải lại danh sách và thống kê.
+      //
+      // Không gọi API thêm mới nào khác ở đây.
+      if (typeof onSaved === "function") {
+        try {
+          await onSaved(savedRequest);
+        } catch (refreshError) {
+          // DB đã lưu thành công, nên lỗi refresh
+          // không được báo thành lỗi import.
+          console.error("[QUOTATION_REFRESH_ERROR]", refreshError);
+        }
+      }
+
+      reset();
+    } catch (err) {
+      console.error("[QUOTATION_AUTO_IMPORT_ERROR]", err);
+
+      setError(getError(err));
+      setStage("ERROR");
+    } finally {
+      busyRef.current = false;
+    }
   };
 
-  // ======================================================
-  // CLOSE MODAL
-  // ======================================================
+  // ========================================================
+  // CLOSE
+  // ========================================================
 
-  const closeModal = () => {
-    if (extracting || saving) return;
+  const handleClose = () => {
+    if (busyRef.current) return;
 
-    resetForm();
+    reset();
     onHide?.();
   };
 
-  // ======================================================
-  // VALIDATE SOURCE URL
-  // ======================================================
-
-  const validateUrl = (input) => {
-    try {
-      const parsed = new URL(input);
-
-      if (parsed.protocol !== "https:") {
-        return "Đường dẫn phải sử dụng HTTPS.";
-      }
-
-      if (parsed.hostname.toLowerCase() !== "muasamcong.mof.gov.vn") {
-        return "Chỉ hỗ trợ URL từ " + "muasamcong.mof.gov.vn.";
-      }
-
-      return "";
-    } catch {
-      return "Đường dẫn URL không hợp lệ.";
-    }
-  };
-
-  // ======================================================
-  // EXTRACT PROCUREMENT DATA
-  //
-  // POST /api/procurement/import-from-url
-  // ======================================================
-
-  const handleExtract = async () => {
-    if (extracting || saving) return;
-
-    const inputUrl = trim(url);
-
-    if (!inputUrl) {
-      setError("Vui lòng dán đường dẫn yêu cầu báo giá.");
-      return;
-    }
-
-    const urlError = validateUrl(inputUrl);
-
-    if (urlError) {
-      setError(urlError);
-      return;
-    }
-
-    try {
-      setExtracting(true);
-      setError("");
-
-      setExtracted(false);
-      setExtractionStatus("");
-      setExtractionMessage("");
-      setWarnings([]);
-      setForm({ ...EMPTY_FORM });
-
-      const response = await APIToken.post(IMPORT_API, {
-        url: inputUrl,
-      });
-
-      const result = normalizeResponse(response, inputUrl);
-
-      setForm(result.form);
-
-      setExtractionStatus(result.extractionStatus);
-
-      setExtractionMessage(result.extractionMessage);
-
-      setWarnings(result.warnings);
-
-      setExtracted(true);
-    } catch (err) {
-      showToast(getError(err), "danger");
-    } finally {
-      setExtracting(false);
-    }
-  };
-
-  // ======================================================
-  // VALIDATE BEFORE SAVE
-  // ======================================================
-
-  const validateForm = () => {
-    if (!extracted) {
-      return "Vui lòng trích xuất dữ liệu trước.";
-    }
-
-    if (!trim(form.notificationCode)) {
-      return "Chưa có mã yêu cầu báo giá.";
-    }
-
-    if (!trim(form.requestName)) {
-      return "Vui lòng nhập tên yêu cầu báo giá.";
-    }
-
-    if (!trim(form.closingDate)) {
-      return "Vui lòng nhập hạn nhận báo giá.";
-    }
-
-    if (!isValidVietnameseDate(form.closingDate, true)) {
-      return "Hạn nhận báo giá phải có dạng " + "DD/MM/YYYY HH:mm.";
-    }
-
-    if (trim(form.publishDate) && !isValidVietnameseDate(form.publishDate)) {
-      return "Ngày đăng tải phải có dạng DD/MM/YYYY.";
-    }
-
-    if (
-      form.quantity !== "" &&
-      (!Number.isFinite(Number(form.quantity)) || Number(form.quantity) < 0)
-    ) {
-      return "Khối lượng không hợp lệ.";
-    }
-
-    if (
-      form.packagePrice !== "" &&
-      form.packagePrice !== null &&
-      (!Number.isFinite(Number(form.packagePrice)) ||
-        Number(form.packagePrice) < 0)
-    ) {
-      return "Giá gói thầu không hợp lệ.";
-    }
-
-    return "";
-  };
-
-  // ======================================================
-  // SAVE / SEND DATA TO PARENT
-  //
-  // onSaved(payload) sẽ đưa dữ liệu về
-  // QuotationRequests/index.js.
-  //
-  // Việc ghi database phụ thuộc API lưu
-  // yêu cầu báo giá của hệ thống ERP.
-  // ======================================================
-
-  const handleSave = async () => {
-    if (saving || extracting) return;
-
-    const validationError = validateForm();
-
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
-
-    const userId = getCurrentUserId();
-
-    if (!userId) {
-      setError(
-        "Không tìm thấy userId đăng nhập trong " +
-          "localStorage. Vui lòng đăng nhập lại.",
-      );
-      return;
-    }
-
-    if (typeof onSaved !== "function") {
-      setError("Chưa cấu hình chức năng lưu " + "yêu cầu báo giá ở trang cha.");
-      return;
-    }
-
-    try {
-      setSaving(true);
-      setError("");
-
-      const payload = {
-        notificationId: form.notificationId || null,
-
-        notificationCode: trim(form.notificationCode),
-
-        notificationType: form.notificationType || "es-ycbg",
-
-        packageName: trim(form.packageName) || null,
-
-        requestName: trim(form.requestName),
-
-        procuringEntity: trim(form.procuringEntity) || null,
-
-        publishDate: trim(form.publishDate) || null,
-
-        closingDate: trim(form.closingDate),
-
-        location: trim(form.location) || null,
-
-        quantity: form.quantity === "" ? null : Number(form.quantity),
-
-        unit: trim(form.unit) || null,
-
-        packagePrice:
-          form.packagePrice === "" || form.packagePrice === null
-            ? null
-            : Number(form.packagePrice),
-
-        attachments: form.attachments,
-
-        sourceUrl: form.sourceUrl,
-
-        team_id: selectedTeamId ? Number(selectedTeamId) : null,
-
-        created_by: userId,
-
-        extractionStatus,
-        quotationValidity: trim(form.quotationValidity) || null,
-      };
-
-      await onSaved(payload);
-
-      resetForm();
-      onHide?.();
-    } catch (err) {
-      showToast(
-        err?.response?.data?.message ||
-          err?.message ||
-          "Không thể lưu yêu cầu báo giá.",
-        "danger",
-      );
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  // ======================================================
+  // ========================================================
   // RENDER
-  // ======================================================
+  // ========================================================
 
   return (
-    <>
-      <Modal
-        show={show}
-        onHide={closeModal}
-        centered
-        size="xl"
-        backdrop={extracting || saving ? "static" : true}
-        keyboard={!extracting && !saving}
-        dialogClassName="pim-modal"
-      >
-        {/* ==================================================
-          HEADER
-      ================================================== */}
+    <Modal
+      show={show}
+      onHide={handleClose}
+      size="lg"
+      centered
+      dialogClassName="pim-modal"
+      backdrop={processing ? "static" : true}
+      keyboard={!processing}
+    >
+      <Modal.Header closeButton={!processing}>
+        <Modal.Title>
+          <FaFileImport className="me-2" />
+          Import yêu cầu báo giá từ PDF
+        </Modal.Title>
+      </Modal.Header>
 
-        <Modal.Header closeButton={!extracting && !saving}>
-          <Modal.Title>
-            <span className="pim-title-icon">
-              <FaFileImport />
+      <Modal.Body>
+        {/* ==============================================
+            INTRO
+        ============================================== */}
+
+        <div className="pim-section">
+          <div className="pim-section-heading">
+            <strong>
+              <FaCloudUploadAlt className="me-2" />
+              Tải tài liệu yêu cầu báo giá
+            </strong>
+
+            <span>
+              Chọn PDF để hệ thống tự động đọc dữ liệu và lưu yêu cầu báo giá.
             </span>
+          </div>
 
-            <span className="pim-title-content">
-              <strong>Nhập yêu cầu báo giá từ Mua sắm công</strong>
+          {isTeamAdmin ? (
+            <Alert variant="info">
+              <FaDatabase className="me-2" />
+              Yêu cầu mới sẽ được phân về nhóm của bạn (ID: {teamId || "—"}).
+            </Alert>
+          ) : (
+            <Alert variant="info">
+              <FaDatabase className="me-2" />
+              Yêu cầu mới sẽ được tạo ở trạng thái chưa phân nhóm. Admin có thể
+              phân công sau.
+            </Alert>
+          )}
 
-              <small>
-                Trích xuất thông tin và phân công nhóm kinh doanh tiếp nhận
-              </small>
-            </span>
-          </Modal.Title>
-        </Modal.Header>
+          {/* INPUT FILE */}
 
-        <Modal.Body>
-          {/* ================================================
-            1. ĐƯỜNG DẪN YÊU CẦU BÁO GIÁ
-        ================================================ */}
+          <FormPdfInput
+            inputRef={inputRef}
+            disabled={processing}
+            onChange={handleSelectPdf}
+          />
 
+          {file && (
+            <div className="mt-3">
+              <div className="d-flex align-items-center gap-2">
+                <FaFilePdf style={{ color: "#d84d4d" }} />
+
+                <strong
+                  style={{
+                    fontSize: 12,
+                    overflowWrap: "anywhere",
+                  }}
+                >
+                  {file.name}
+                </strong>
+              </div>
+
+              <small className="text-muted">{formatSize(file.size)}</small>
+            </div>
+          )}
+        </div>
+
+        {/* ==============================================
+            PROCESSING
+        ============================================== */}
+
+        {processing && (
+          <div className="pim-section">
+            <div className="d-flex align-items-center gap-3 mb-3">
+              <Spinner
+                animation="border"
+                size="sm"
+                style={{ color: "#1D61AD" }}
+              />
+
+              <div>
+                <strong>
+                  {stage === "READING"
+                    ? "Đang phân tích file PDF..."
+                    : "Đang lưu vào database..."}
+                </strong>
+
+                <div className="text-muted small mt-1">
+                  {stage === "READING"
+                    ? "Đang trích xuất thông tin yêu cầu báo giá."
+                    : "Đã đọc PDF. Đang tạo yêu cầu và lưu tài liệu."}
+                </div>
+              </div>
+            </div>
+
+            <ProgressBar
+              now={stage === "READING" ? 40 : 85}
+              animated
+              style={{ height: 7 }}
+            />
+
+            <small className="text-muted d-block mt-2">
+              {stage === "READING"
+                ? "Bước 1/2: Đọc dữ liệu"
+                : "Bước 2/2: Lưu dữ liệu"}
+            </small>
+          </div>
+        )}
+
+        {/* ==============================================
+            PREVIEW DURING SAVE
+        ============================================== */}
+
+        {preview && (
           <div className="pim-section">
             <div className="pim-section-heading">
               <strong>
-                <FaLink />
-                1. Đường dẫn yêu cầu báo giá
+                <FaCheckCircle className="me-2" />
+                Dữ liệu đã trích xuất
               </strong>
-
-              <span>
-                Sao chép đường dẫn chi tiết từ hệ thống Mua sắm công và dán vào
-                bên dưới.
-              </span>
             </div>
 
-            <div className="pim-url-row">
-              <div className="pim-url-input">
-                <FaLink />
+            <div className="row g-3">
+              <div className="col-md-6">
+                <div className="text-muted small">Mã yêu cầu báo giá</div>
 
-                <Form.Control
-                  as="textarea"
-                  rows={2}
-                  value={url}
-                  disabled={extracting || saving}
-                  placeholder={
-                    "https://muasamcong.mof.gov.vn/" +
-                    "web/guest/contractor-selection?..."
-                  }
-                  onChange={(event) => {
-                    setUrl(event.target.value);
-
-                    // Đổi link thì kết quả trích xuất cũ
-                    // không còn hợp lệ.
-                    setExtracted(false);
-                    setForm({ ...EMPTY_FORM });
-                    setExtractionStatus("");
-                    setExtractionMessage("");
-                    setWarnings([]);
-                    setError("");
-                  }}
-                />
+                <strong>{preview.notification_code || "—"}</strong>
               </div>
 
-              <div className="pim-url-actions">
-                <Button
-                  type="button"
-                  className="pim-extract-button"
-                  disabled={extracting || saving}
-                  onClick={handleExtract}
-                >
-                  {extracting ? (
-                    <>
-                      <Spinner size="sm" animation="border" />
-                      Đang trích xuất...
-                    </>
-                  ) : (
-                    <>
-                      <FaSearch />
-                      Trích xuất dữ liệu
-                    </>
-                  )}
-                </Button>
+              <div className="col-md-6">
+                <div className="text-muted small">Đơn vị yêu cầu</div>
+
+                <strong>{preview.procuring_entity || "—"}</strong>
+              </div>
+
+              <div className="col-12">
+                <div className="text-muted small">Tên yêu cầu báo giá</div>
+
+                <strong>{preview.request_name || "—"}</strong>
+              </div>
+
+              <div className="col-md-6">
+                <div className="text-muted small">Hạn tiếp nhận báo giá</div>
+
+                <strong>{formatDate(preview.reception_end_date)}</strong>
+              </div>
+
+              <div className="col-md-6">
+                <div className="text-muted small">Số hạng mục</div>
+
+                <strong>{preview.items?.length || 0}</strong>
               </div>
             </div>
           </div>
+        )}
 
-          {/* ================================================
-            2. PHÂN CÔNG NHÓM
-            ĐƯA LÊN TRÊN THÔNG TIN TRÍCH XUẤT
-        ================================================ */}
+        {/* ==============================================
+            WARNINGS
+        ============================================== */}
 
-          <div className="pim-section pim-assignment-section">
-            <div className="pim-section-heading">
-              <strong>
-                <FaUsers />
-                2. Phân công nhóm kinh doanh tiếp nhận
-              </strong>
+        {warnings.length > 0 && stage === "ERROR" && (
+          <Alert variant="warning">
+            <FaExclamationTriangle className="me-2" />
 
-              <span>
-                Có thể chọn nhóm ngay từ đầu, không cần kéo xuống cuối biểu mẫu.
-              </span>
-            </div>
+            {warnings.map((warning, index) => (
+              <div key={index}>
+                {typeof warning === "string"
+                  ? warning
+                  : JSON.stringify(warning)}
+              </div>
+            ))}
+          </Alert>
+        )}
 
-            <Form.Group>
-              <Form.Label>Nhóm kinh doanh</Form.Label>
-
-              <Form.Select
-                value={selectedTeamId}
-                disabled={loadingTeams || saving}
-                onChange={(event) => {
-                  setSelectedTeamId(event.target.value);
-
-                  if (error) setError("");
-                }}
-              >
-                <option value="">
-                  {loadingTeams
-                    ? "Đang tải nhóm kinh doanh..."
-                    : "-- Chọn nhóm kinh doanh --"}
-                </option>
-
-                {teams.map((team) => (
-                  <option key={team.team_id} value={team.team_id}>
-                    {team.team_code}
-                    {" — "}
-                    {team.team_name}
-                  </option>
-                ))}
-              </Form.Select>
-
-              {teamError && (
-                <div className="pim-team-error">
-                  <FaExclamationTriangle />
-                  {teamError}
-
-                  <button type="button" onClick={loadTeams}>
-                    Thử lại
-                  </button>
-                </div>
-              )}
-
-              {!loadingTeams && !teamError && teams.length === 0 && (
-                <div className="pim-team-help">
-                  Chưa có nhóm kinh doanh đang hoạt động. Vui lòng khai báo nhóm
-                  trước.
-                </div>
-              )}
-
-              {selectedTeam && (
-                <div className="pim-team-selected">
-                  <FaCheckCircle />
-
-                  <span>
-                    Nhóm tiếp nhận: <strong>{selectedTeam.team_name}</strong>
-                  </span>
-                </div>
-              )}
-            </Form.Group>
-          </div>
-
-          {/* ================================================
+        {/* ==============================================
             ERROR
-        ================================================ */}
+        ============================================== */}
 
-          {/* ================================================
-            3. THÔNG TIN SAU TRÍCH XUẤT
-        ================================================ */}
+        {error && (
+          <Alert variant="danger">
+            <FaExclamationTriangle className="me-2" />
 
-          {extracted ? (
-            <>
-              {/* EXTRACTION STATUS */}
+            {error}
 
-              <Alert
-                variant={
-                  extractionStatus === "url_only" ? "warning" : "success"
-                }
-                className="pim-alert pim-extraction-alert"
-              >
-                {extractionStatus === "url_only" ? (
-                  <>
-                    <FaInfoCircle className="me-2" />
-                    <strong>Dữ liệu trích xuất chưa hoàn chỉnh.</strong> Backend
-                    mới nhận diện URL. Một số thông tin được tách từ nội dung
-                    trang web. Bạn cần kiểm tra và bổ sung trước khi lưu.
-                  </>
-                ) : (
-                  <>
-                    <FaCheckCircle className="me-2" />
-                    {extractionMessage || "Đã trích xuất dữ liệu thành công."}
-                  </>
-                )}
-              </Alert>
-
-              {/* WARNINGS */}
-
-              {warnings.map((warning, index) => (
-                <Alert variant="warning" className="pim-alert" key={index}>
-                  {typeof warning === "string"
-                    ? warning
-                    : JSON.stringify(warning)}
-                </Alert>
-              ))}
-
-              {/* BASIC INFORMATION */}
-
-              <div className="pim-section">
-                <div className="pim-section-heading">
-                  <strong>
-                    <FaFileImport />
-                    3. Thông tin yêu cầu báo giá
-                  </strong>
-
-                  <span>
-                    Dữ liệu tự động điền từ Mua sắm công. Bạn có thể kiểm tra và
-                    chỉnh sửa.
-                  </span>
-                </div>
-
-                <div className="pim-form-grid">
-                  {/* NOTIFICATION CODE */}
-
-                  <Form.Group>
-                    <Form.Label>
-                      Mã yêu cầu báo giá <em>*</em>
-                    </Form.Label>
-
-                    <Form.Control
-                      value={form.notificationCode}
-                      placeholder="RQ2600104558"
-                      onChange={(event) =>
-                        setField("notificationCode", event.target.value)
-                      }
-                    />
-                  </Form.Group>
-
-                  {/* TYPE */}
-
-                  <Form.Group>
-                    <Form.Label>Loại thông báo</Form.Label>
-
-                    <Form.Control
-                      value={form.notificationType}
-                      placeholder="es-ycbg"
-                      onChange={(event) =>
-                        setField("notificationType", event.target.value)
-                      }
-                    />
-                  </Form.Group>
-
-                  {/* REQUEST NAME */}
-
-                  <Form.Group className="pim-span-2">
-                    <Form.Label>
-                      Tên yêu cầu báo giá <em>*</em>
-                    </Form.Label>
-
-                    <Form.Control
-                      as="textarea"
-                      rows={3}
-                      value={form.requestName}
-                      placeholder="Tên yêu cầu báo giá..."
-                      onChange={(event) =>
-                        setField("requestName", event.target.value)
-                      }
-                    />
-                  </Form.Group>
-
-                  {/* ENTITY */}
-
-                  <Form.Group className="pim-span-2">
-                    <Form.Label>Đơn vị yêu cầu báo giá</Form.Label>
-
-                    <Form.Control
-                      value={form.procuringEntity}
-                      placeholder="Tên đơn vị..."
-                      onChange={(event) =>
-                        setField("procuringEntity", event.target.value)
-                      }
-                    />
-                  </Form.Group>
-
-                  {/* PACKAGE NAME */}
-
-                  <Form.Group className="pim-span-2">
-                    <Form.Label>Tên gói thầu</Form.Label>
-
-                    <Form.Control
-                      value={form.packageName}
-                      placeholder="Chưa có thông tin"
-                      onChange={(event) =>
-                        setField("packageName", event.target.value)
-                      }
-                    />
-                  </Form.Group>
-
-                  {/* PUBLISH DATE */}
-
-                  <Form.Group>
-                    <Form.Label>Ngày đăng tải</Form.Label>
-
-                    <Form.Control
-                      value={form.publishDate}
-                      placeholder="DD/MM/YYYY"
-                      onChange={(event) =>
-                        setField("publishDate", event.target.value)
-                      }
-                    />
-                  </Form.Group>
-
-                  {/* DEADLINE */}
-
-                  <Form.Group>
-                    <Form.Label>
-                      Thời hạn nhận báo giá <em>*</em>
-                    </Form.Label>
-
-                    <Form.Control
-                      value={form.closingDate}
-                      placeholder="DD/MM/YYYY HH:mm"
-                      onChange={(event) =>
-                        setField("closingDate", event.target.value)
-                      }
-                    />
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label>
-                      Thời gian có hiệu lực tối thiểu của báo giá
-                    </Form.Label>
-
-                    <Form.Control
-                      type="text"
-                      maxLength={255}
-                      value={form.quotationValidity || ""}
-                      onChange={(e) =>
-                        setForm((prev) => ({
-                          ...prev,
-                          quotationValidity: e.target.value,
-                        }))
-                      }
-                      placeholder="Ví dụ: 3 ngày kể từ ngày 21/11/2026"
-                    />
-                  </Form.Group>
-
-                  {/* LOCATION */}
-
-                  <Form.Group className="pim-span-2">
-                    <Form.Label>Địa điểm thực hiện</Form.Label>
-
-                    <Form.Control
-                      value={form.location}
-                      placeholder="Ví dụ: Tỉnh An Giang"
-                      onChange={(event) =>
-                        setField("location", event.target.value)
-                      }
-                    />
-                  </Form.Group>
-
-                  {/* QUANTITY */}
-
-                  <Form.Group>
-                    <Form.Label>Khối lượng</Form.Label>
-
-                    <Form.Control
-                      type="number"
-                      min="0"
-                      value={form.quantity}
-                      placeholder="Ví dụ: 1"
-                      onChange={(event) =>
-                        setField("quantity", event.target.value)
-                      }
-                    />
-                  </Form.Group>
-
-                  {/* UNIT */}
-
-                  <Form.Group>
-                    <Form.Label>Đơn vị tính</Form.Label>
-
-                    <Form.Control
-                      value={form.unit}
-                      placeholder="Ví dụ: gói"
-                      onChange={(event) => setField("unit", event.target.value)}
-                    />
-                  </Form.Group>
-
-                  {/* PACKAGE PRICE */}
-
-                  <Form.Group className="pim-span-2">
-                    <Form.Label>Giá gói thầu (VNĐ)</Form.Label>
-
-                    <Form.Control
-                      type="number"
-                      min="0"
-                      value={form.packagePrice}
-                      placeholder="Chưa công bố"
-                      onChange={(event) =>
-                        setField("packagePrice", event.target.value)
-                      }
-                    />
-                  </Form.Group>
-                </div>
-
-                {/* ATTACHMENTS */}
-
-                <div className="pim-attachments">
-                  <strong>
-                    <FaFilePdf />
-                    Tài liệu đính kèm
-                  </strong>
-
-                  {form.attachments.length > 0 ? (
-                    form.attachments.map((file, index) => (
-                      <div
-                        className="pim-file"
-                        key={`${file.fileName || "file"}-${index}`}
-                      >
-                        <FaFilePdf />
-
-                        <span>{file.fileName || "Tài liệu"}</span>
-
-                        {file.downloadUrl ? (
-                          <a
-                            href={file.downloadUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            Tải tài liệu
-                          </a>
-                        ) : (
-                          <small>Chưa có link tải</small>
-                        )}
-                      </div>
-                    ))
-                  ) : (
-                    <p>Chưa trích xuất được tài liệu đính kèm.</p>
-                  )}
-                </div>
-
-                {/* SOURCE URL */}
-
-                {form.sourceUrl && (
-                  <a
-                    className="pim-source"
-                    href={form.sourceUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <FaExternalLinkAlt />
-                    Mở yêu cầu báo giá gốc
-                  </a>
-                )}
-              </div>
-            </>
-          ) : (
-            <div className="pim-empty">
-              {extracting ? (
-                <>
-                  <Spinner animation="border" />
-                  <strong>Đang trích xuất thông tin...</strong>
-                  <span>Hệ thống đang xử lý đường dẫn Mua sắm công.</span>
-                </>
-              ) : (
-                <>
-                  <FaFileImport />
-
-                  <strong>Chưa có dữ liệu trích xuất</strong>
-
-                  <span>
-                    Dán đường dẫn Mua sắm công, chọn nhóm tiếp nhận và bấm Trích
-                    xuất dữ liệu.
-                  </span>
-                </>
-              )}
+            <div className="mt-2 small">
+              Bạn có thể chọn lại PDF để thử lại.
             </div>
-          )}
-        </Modal.Body>
+          </Alert>
+        )}
 
-        {/* ==================================================
-          FOOTER
-      ================================================== */}
+        {stage === "IDLE" && (
+          <div className="pim-empty">
+            <FaFilePdf />
 
-        <Modal.Footer>
-          <Button
-            type="button"
-            className="pim-cancel-button"
-            disabled={extracting || saving}
-            onClick={closeModal}
-          >
-            Hủy
-          </Button>
+            <strong>Chưa có tài liệu</strong>
 
-          <Button
-            type="button"
-            className="pim-save-button"
-            disabled={!extracted || extracting || saving}
-            onClick={handleSave}
-          >
-            {saving ? (
-              <>
-                <Spinner size="sm" animation="border" />
-                Đang lưu...
-              </>
-            ) : (
-              <>
-                <FaCheckCircle />
-                Thêm vào hệ thống báo giá
-              </>
-            )}
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      <ToastContainer position="top-end" className="pim-toast-container">
-        <Toast
-          show={toast.show}
-          onClose={() =>
-            setToast((prev) => ({
-              ...prev,
-              show: false,
-            }))
-          }
-          autohide
-          delay={3000}
-          className={`pim-toast pim-toast-${toast.variant}`}
+            <span>
+              Chọn PDF, hệ thống sẽ tự động xử lý và lưu vào cơ sở dữ liệu.
+            </span>
+          </div>
+        )}
+      </Modal.Body>
+
+      <Modal.Footer>
+        <Button
+          variant="outline-secondary"
+          onClick={handleClose}
+          disabled={processing}
         >
-          <Toast.Body>
-            <div className="pim-toast-content">
-              {toast.variant === "danger" ? (
-                <FaExclamationTriangle className="pim-toast-icon" />
-              ) : (
-                <FaCheckCircle className="pim-toast-icon" />
-              )}
-
-              <div className="pim-toast-text">
-                <strong>
-                  {toast.variant === "danger"
-                    ? "Không thành công"
-                    : "Thành công"}
-                </strong>
-
-                <span>{toast.message}</span>
-              </div>
-
-              <button
-                type="button"
-                className="pim-toast-close"
-                onClick={() =>
-                  setToast((prev) => ({
-                    ...prev,
-                    show: false,
-                  }))
-                }
-              >
-                ×
-              </button>
-            </div>
-          </Toast.Body>
-        </Toast>
-      </ToastContainer>
-    </>
+          Đóng
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
-};
+}
 
-export default ProcurementImportModal;
+// ==========================================================
+// FILE INPUT
+// ==========================================================
+
+function FormPdfInput({ inputRef, disabled, onChange }) {
+  return (
+    <input
+      ref={inputRef}
+      type="file"
+      accept=".pdf,application/pdf"
+      className="form-control"
+      disabled={disabled}
+      onChange={onChange}
+    />
+  );
+}

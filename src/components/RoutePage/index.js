@@ -52,11 +52,10 @@ import AdminLeadManagement from "../../app/LeadAI/Admin";
 import ProcurementWorkspace from "../../app/Procurement/workspace";
 import QuotationTeams from "../../app/QuotationTeams/index.js";
 import QuotationRequests from "../../app/QuotationRequests/index.js";
+import QuotationRequestDetail from "../../app/QuotationRequests/QuotationRequestDetail.js";
 
 import Tender from "../../app/Tender";
-
 import Image from "../../app/Image";
-
 import SignIn from "../SignIn";
 import APIToken from "../../config/APIToken";
 
@@ -158,6 +157,10 @@ const RoutePage = () => {
         />
         <Route path="quotationTeams" element={<QuotationTeams />} />
         <Route path="quotationRequests" element={<QuotationRequests />} />
+        <Route
+          path="/quotation-request-detail"
+          element={<QuotationRequestDetail />}
+        />
       </Route>
     </Routes>
   );

@@ -726,3 +726,10 @@
     width: calc(100vw - 24px);
   }
 }
+/* PDF import additions (preserve existing design) */
+.pim-modal input[type="file"] { cursor: pointer; }
+.pim-modal .pim-items-table { font-size: 12px; }
+.pim-modal .pim-items-table textarea { resize: vertical; min-height: 60px; }
+.pim-modal .pim-items-table th { background: #f2f6fb; color: #40516a; white-space: nowrap; }
+.pim-modal .pim-items-table td { vertical-align: top; }
+.pim-modal .pim-items-table .form-control { min-width: 70px; font-size: 12px; }

@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import {
   Alert,
@@ -10,6 +11,8 @@ import {
   Table,
   Row,
   Col,
+  Toast,
+  ToastContainer,
 } from "react-bootstrap";
 
 import {
@@ -21,9 +24,12 @@ import {
   FaUsers,
   FaSearch,
   FaExternalLinkAlt,
+  FaFileImport,
+  FaPlus,
 } from "react-icons/fa";
 
 import APIToken from "../../config/APIToken";
+import ProcurementImportModal from "./ProcurementImportModal";
 
 import "./index.css";
 
@@ -35,7 +41,7 @@ const API = "/quotationRequest/team";
 const PAGE_SIZE = 20;
 
 const STATUSES = [
-  { value: "RECEIVED", label: "Đã tiếp nhận" },
+  { value: "RECEIVED", label: "Tạo mới" },
   { value: "PROCESSING", label: "Đang thực hiện" },
   { value: "SUBMITTED", label: "Đã nộp báo giá" },
   { value: "WON", label: "Trúng báo giá" },
@@ -75,6 +81,22 @@ const SOURCE = {
 const getError = (err) =>
   err?.response?.data?.message || err?.message || "Có lỗi xảy ra.";
 
+const formatDate = (value) => {
+  if (!value) return "—";
+
+  const raw = String(value);
+
+  // PostgreSQL DATE hoặc ISO datetime: YYYY-MM-DD
+  const match = raw.match(/^(\d{4})-(\d{2})-(\d{2})/);
+
+  if (match) {
+    const [, year, month, day] = match;
+    return `${day}/${month}/${year}`;
+  }
+
+  return raw;
+};
+
 const dateText = (value, withTime = false) => {
   if (!value) return "—";
 
@@ -104,6 +126,59 @@ const dateText = (value, withTime = false) => {
         }
       : {}),
   }).format(date);
+};
+
+const getDeadlineRemaining = (dateValue) => {
+  if (!dateValue) return null;
+
+  // Chỉ lấy phần ngày YYYY-MM-DD.
+  // Tránh sai lệch do UTC và múi giờ.
+  const match = String(dateValue).match(/^(\d{4})-(\d{2})-(\d{2})/);
+
+  if (!match) return null;
+
+  const [, year, month, day] = match;
+
+  // Ngày hiện tại theo giờ Việt Nam
+  const todayVN = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Ho_Chi_Minh",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+
+  const [ty, tm, td] = todayVN.split("-").map(Number);
+
+  const currentDate = Date.UTC(ty, tm - 1, td);
+  const deadlineDate = Date.UTC(Number(year), Number(month) - 1, Number(day));
+
+  const days = Math.round((deadlineDate - currentDate) / 86400000);
+
+  if (days < 0) {
+    return {
+      text: `Đã hết hạn`,
+      type: "expired",
+    };
+  }
+
+  if (days === 0) {
+    return {
+      text: "Hạn hôm nay",
+      type: "today",
+    };
+  }
+
+  if (days === 1) {
+    return {
+      text: "Còn 1 ngày",
+      type: "soon",
+    };
+  }
+
+  return {
+    text: `Còn ${days} ngày`,
+    type: days <= 3 ? "soon" : "normal",
+  };
 };
 
 const money = (value) =>
@@ -140,6 +215,7 @@ export default function QuotationRequestsTeam() {
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
+  const navigate = useNavigate();
 
   // --------------------------------------------------------
   // MODALS
@@ -153,9 +229,46 @@ export default function QuotationRequestsTeam() {
   const [history, setHistory] = useState([]);
   const [historyLoading, setHistoryLoading] = useState(false);
 
+  const [importOpen, setImportOpen] = useState(false);
+  const [createOpen, setCreateOpen] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [createForm, setCreateForm] = useState({
+    request_name: "",
+    procuring_entity: "",
+    notification_code: "",
+    package_name: "",
+    location: "",
+    reception_end_date: "",
+    quotation_validity: "",
+    notes: "",
+  });
+
   const [statusOpen, setStatusOpen] = useState(false);
   const [newStatus, setNewStatus] = useState("");
   const [reason, setReason] = useState("");
+
+  const [importToast, setImportToast] = useState({
+    show: false,
+    message: "",
+  });
+
+  const showImportToast = (message) => {
+    setImportToast({
+      show: true,
+      message,
+    });
+  };
+
+  const handleGoToDetail = (requestId) => {
+    navigate("/quotation-request-detail", {
+      state: {
+        requestId: requestId,
+      },
+    });
+  };
+  const openDetail = (item) => {
+    handleGoToDetail(item.request_id);
+  };
 
   // --------------------------------------------------------
   // PERMISSION
@@ -164,6 +277,13 @@ export default function QuotationRequestsTeam() {
   // API trả role thực tế theo bảng QuotationTeamMember.
   // --------------------------------------------------------
 
+  // API my-list phải trả team.my_role (ADMIN/MEMBER) từ membership thực tế.
+  // Không dùng role=admin trên localStorage để suy luận quyền Admin nhóm.
+  const teamMemberRole = String(
+    team?.my_role ?? team?.membership_role ?? "",
+  ).toUpperCase();
+  const canCreate = teamMemberRole === "ADMIN";
+  // Giữ nguyên rule cập nhật trạng thái hiện tại, chưa tự mở quyền cho Admin nhóm.
   const isTeamAdmin = false;
   const allowedStatuses = (TRANSITIONS[selected?.status] || [])
     .map((value) => STATUSES.find((status) => status.value === value))
@@ -220,26 +340,6 @@ export default function QuotationRequestsTeam() {
   useEffect(() => {
     loadRequests();
   }, [loadRequests]);
-
-  // ========================================================
-  // GET DETAIL
-  // ========================================================
-
-  const openDetail = async (item) => {
-    setSaving(true);
-    setError("");
-
-    try {
-      const response = await APIToken.get(`${API}/${item.request_id}`);
-
-      setSelected(response.data?.data);
-      setDetailOpen(true);
-    } catch (err) {
-      setError(getError(err));
-    } finally {
-      setSaving(false);
-    }
-  };
 
   // ========================================================
   // GET HISTORY
@@ -328,6 +428,47 @@ export default function QuotationRequestsTeam() {
     }
   };
 
+  // Admin nhóm tạo yêu cầu thủ công; Backend bắt buộc xác minh role và tự gán team_id.
+  const createTeamRequest = async (event) => {
+    event.preventDefault();
+    if (!canCreate || !team?.team_id) return;
+    if (!createForm.request_name.trim()) {
+      setError("Vui lòng nhập tên yêu cầu báo giá.");
+      return;
+    }
+    setCreating(true);
+    setError("");
+    try {
+      await APIToken.post("/quotationRequest", {
+        ...createForm,
+        request_name: createForm.request_name.trim(),
+        package_name: createForm.package_name.trim() || null,
+        procuring_entity: createForm.procuring_entity.trim() || null,
+        notification_code: createForm.notification_code.trim() || null,
+        reception_end_date: createForm.reception_end_date || null,
+        source_type: "MANUAL",
+        team_id: Number(team.team_id),
+      });
+      setCreateOpen(false);
+      setCreateForm({
+        request_name: "",
+        procuring_entity: "",
+        notification_code: "",
+        package_name: "",
+        location: "",
+        reception_end_date: "",
+        quotation_validity: "",
+        notes: "",
+      });
+      setSuccess("Đã tạo yêu cầu báo giá của nhóm.");
+      await loadRequests();
+    } catch (err) {
+      setError(getError(err));
+    } finally {
+      setCreating(false);
+    }
+  };
+
   // ========================================================
   // RENDER HELPERS
   // ========================================================
@@ -376,6 +517,19 @@ export default function QuotationRequestsTeam() {
         </div>
 
         <div className="vqr-heading-actions">
+          {canCreate && (
+            <Button className="vqr-primary" onClick={() => setCreateOpen(true)}>
+              <FaPlus className="me-2" /> Thêm yêu cầu
+            </Button>
+          )}
+          {canCreate && (
+            <Button
+              variant="outline-primary"
+              onClick={() => setImportOpen(true)}
+            >
+              <FaFileImport className="me-2" /> Import PDF
+            </Button>
+          )}
           <Button
             variant="outline-secondary"
             onClick={loadRequests}
@@ -411,9 +565,9 @@ export default function QuotationRequestsTeam() {
 
           {" · "}
 
-          {isTeamAdmin
-            ? "Admin nhóm: được cập nhật trạng thái"
-            : "Thành viên: chỉ được xem"}
+          {canCreate
+            ? "Admin nhóm: được import PDF, yêu cầu mới tự gán về nhóm"
+            : "Thành viên: chỉ xem yêu cầu của nhóm"}
         </Alert>
       )}
 
@@ -491,42 +645,56 @@ export default function QuotationRequestsTeam() {
         </Form>
       </div>
 
-      {/* DATA TABLE */}
+      {/* ============================================================
+    DATA TABLE - TEAM
+    Đồng bộ giao diện với Admin
+============================================================ */}
 
       <div className="vqr-panel vqr-table-panel">
         <div className="table-responsive">
-          <Table hover className="vqr-table align-middle">
+          <Table hover className="vqr-table vqr-team-list-table align-middle">
             <thead>
               <tr>
-                <th>STT</th>
-                <th>Mã yêu cầu</th>
+                <th style={{ width: 50 }}>STT</th>
+
+                <th style={{ minWidth: 145 }}>Mã yêu cầu</th>
+
                 <th className="vqr-content-column">Tên báo giá</th>
-                <th>Đơn vị</th>
-                <th>Hạn nộp báo giá</th>
-                <th>Hiệu lực báo giá</th>
-                <th>Nhóm phụ trách</th>
+
+                <th className="vqr-deadline-column">Hạn nộp báo giá</th>
+
+                <th className="vqr-validity-column">Hiệu lực báo giá</th>
+
+                <th style={{ minWidth: 155 }}>Nhóm phụ trách</th>
+
                 <th>Trạng thái</th>
-                <th>Thao tác</th>
+
+                <th style={{ minWidth: 120 }}>Thao tác</th>
               </tr>
             </thead>
 
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={9} className="text-center py-5">
-                    <Spinner size="sm" animation="border" /> Đang tải...
+                  <td colSpan={8} className="text-center py-5">
+                    <Spinner animation="border" size="sm" className="me-2" />
+                    Đang tải dữ liệu...
                   </td>
                 </tr>
               ) : rows.length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="text-center py-5 text-muted">
+                  <td colSpan={8} className="text-center py-5 text-muted">
                     Chưa có yêu cầu báo giá phù hợp.
                   </td>
                 </tr>
               ) : (
                 rows.map((item, index) => (
                   <tr key={item.request_id}>
+                    {/* STT */}
+
                     <td>{(page - 1) * PAGE_SIZE + index + 1}</td>
+
+                    {/* MÃ YÊU CẦU */}
 
                     <td>
                       <strong className="vqr-code">
@@ -538,34 +706,75 @@ export default function QuotationRequestsTeam() {
                       </div>
                     </td>
 
+                    {/* TÊN BÁO GIÁ + ĐỊA ĐIỂM + ĐƠN VỊ */}
+
                     <td className="vqr-content-column">
                       <button
                         type="button"
                         className="vqr-title-button"
                         onClick={() => openDetail(item)}
                       >
-                        {item.request_name}
+                        {item.request_name || "Chưa có tên"}
                       </button>
 
                       <div className="vqr-small-muted">
                         {item.location || "Chưa có địa điểm"}
                       </div>
+
+                      <div
+                        className="vqr-small-muted"
+                        title={item.procuring_entity || ""}
+                      >
+                        Đơn vị: {item.procuring_entity || "—"}
+                      </div>
                     </td>
 
-                    <td className="vqr-cell-text">
-                      {item.procuring_entity || "—"}
+                    {/* HẠN NỘP BÁO GIÁ */}
+
+                    <td className="vqr-deadline-column">
+                      <div className="vqr-deadline-cell">
+                        <span className="vqr-deadline-date">
+                          {formatDate(
+                            item.closing_date || item.reception_end_date,
+                          )}
+                        </span>
+
+                        {(() => {
+                          const remaining = getDeadlineRemaining(
+                            item.closing_date || item.reception_end_date,
+                          );
+
+                          if (!remaining) return null;
+
+                          return (
+                            <span
+                              className={`vqr-deadline-remaining vqr-deadline-${remaining.type}`}
+                            >
+                              {remaining.text}
+                            </span>
+                          );
+                        })()}
+                      </div>
                     </td>
 
-                    <td>{dateText(item.closing_date, true)}</td>
+                    {/* HIỆU LỰC BÁO GIÁ */}
 
                     <td className="vqr-validity-column">
-                      <span className="vqr-validity-text">
+                      <span
+                        className="vqr-validity-text"
+                        title={item.quotation_validity || ""}
+                      >
                         {item.quotation_validity || "—"}
                       </span>
                     </td>
 
+                    {/* NHÓM PHỤ TRÁCH */}
+
                     <td>
-                      <span className="vqr-team-badge vqr-team-assigned">
+                      <span
+                        className="vqr-team-badge vqr-team-assigned"
+                        title={item.team?.team_name || team?.team_name || ""}
+                      >
                         <FaUsers className="vqr-team-icon" />
 
                         <span className="vqr-team-name">
@@ -574,7 +783,11 @@ export default function QuotationRequestsTeam() {
                       </span>
                     </td>
 
+                    {/* TRẠNG THÁI */}
+
                     <td>{badge(item.status)}</td>
+
+                    {/* THAO TÁC */}
 
                     <td>
                       <div className="vqr-table-actions">
@@ -616,7 +829,9 @@ export default function QuotationRequestsTeam() {
           </Table>
         </div>
 
-        {/* PAGINATION */}
+        {/* ======================================================
+      PAGINATION
+  ====================================================== */}
 
         <div className="vqr-pagination">
           <span>
@@ -644,6 +859,97 @@ export default function QuotationRequestsTeam() {
           </div>
         </div>
       </div>
+
+      {canCreate && (
+        <Modal
+          show={createOpen}
+          onHide={() => !creating && setCreateOpen(false)}
+          centered
+          size="lg"
+        >
+          <Form onSubmit={createTeamRequest}>
+            <Modal.Header closeButton={!creating}>
+              <Modal.Title>Thêm yêu cầu báo giá của nhóm</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Row>
+                {[
+                  ["Tên yêu cầu báo giá *", "request_name", true],
+                  ["Đơn vị mời báo giá", "procuring_entity", false],
+                  ["Mã yêu cầu", "notification_code", false],
+                  ["Tên gói thầu", "package_name", false],
+                  ["Địa điểm", "location", false],
+                  [
+                    "Ngày kết thúc tiếp nhận",
+                    "reception_end_date",
+                    false,
+                    "date",
+                  ],
+                  ["Hiệu lực báo giá", "quotation_validity", false],
+                  ["Ghi chú", "notes", false],
+                ].map(([label, key, required, type]) => (
+                  <Col
+                    md={key === "request_name" || key === "notes" ? 12 : 6}
+                    key={key}
+                    className="mb-3"
+                  >
+                    <Form.Label>{label}</Form.Label>
+                    <Form.Control
+                      required={required}
+                      type={type || "text"}
+                      value={createForm[key]}
+                      onChange={(e) =>
+                        setCreateForm((prev) => ({
+                          ...prev,
+                          [key]: e.target.value,
+                        }))
+                      }
+                    />
+                  </Col>
+                ))}
+              </Row>
+              <div className="text-muted small">
+                Yêu cầu được phân cho nhóm của bạn. Backend xác minh quyền từ
+                JWT.
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="outline-secondary"
+                disabled={creating}
+                onClick={() => setCreateOpen(false)}
+              >
+                Hủy
+              </Button>
+              <Button type="submit" className="vqr-primary" disabled={creating}>
+                {creating ? "Đang lưu..." : "Lưu yêu cầu"}
+              </Button>
+            </Modal.Footer>
+          </Form>
+        </Modal>
+      )}
+
+      {canCreate && (
+        <ProcurementImportModal
+          show={importOpen}
+          onHide={() => setImportOpen(false)}
+          mode="team-admin"
+          teamId={team?.team_id}
+          onSaved={async () => {
+            setImportOpen(false);
+
+            // Báo thành công ngay.
+            showImportToast("Thêm yêu cầu báo giá thành công!");
+
+            // Load lại yêu cầu của nhóm.
+            try {
+              await loadRequests();
+            } catch (err) {
+              console.error("Lỗi tải lại yêu cầu nhóm:", err);
+            }
+          }}
+        />
+      )}
 
       {/* DETAIL MODAL */}
 
@@ -888,6 +1194,35 @@ export default function QuotationRequestsTeam() {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      <ToastContainer
+        position="top-end"
+        className="position-fixed p-3"
+        style={{ zIndex: 11000 }}
+      >
+        <Toast
+          show={importToast.show}
+          onClose={() => {
+            setImportToast((previous) => ({
+              ...previous,
+              show: false,
+            }));
+          }}
+          autohide
+          delay={3500}
+        >
+          <Toast.Header>
+            <strong className="me-auto">Việt Nam Tour</strong>
+            <small>Vừa xong</small>
+          </Toast.Header>
+
+          <Toast.Body>
+            <span className="text-success fw-bold">
+              ✓ {importToast.message}
+            </span>
+          </Toast.Body>
+        </Toast>
+      </ToastContainer>
     </div>
   );
 }

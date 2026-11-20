@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import {
   Alert,
@@ -47,7 +48,7 @@ const TEAM_API = "/quotationTeam";
 const PAGE_SIZE = 20;
 
 const STATUS_OPTIONS = [
-  { value: "RECEIVED", label: "Đã tiếp nhận" },
+  { value: "RECEIVED", label: "Tạo mới" },
   { value: "PROCESSING", label: "Đang thực hiện" },
   { value: "SUBMITTED", label: "Đã nộp báo giá" },
   { value: "WON", label: "Trúng báo giá" },
@@ -141,6 +142,59 @@ const formatDate = (value, withTime = false) => {
         }
       : {}),
   }).format(date);
+};
+
+const getDeadlineRemaining = (dateValue) => {
+  if (!dateValue) return null;
+
+  // Chỉ lấy phần ngày YYYY-MM-DD.
+  // Tránh sai lệch do UTC và múi giờ.
+  const match = String(dateValue).match(/^(\d{4})-(\d{2})-(\d{2})/);
+
+  if (!match) return null;
+
+  const [, year, month, day] = match;
+
+  // Ngày hiện tại theo giờ Việt Nam
+  const todayVN = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Ho_Chi_Minh",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+
+  const [ty, tm, td] = todayVN.split("-").map(Number);
+
+  const currentDate = Date.UTC(ty, tm - 1, td);
+  const deadlineDate = Date.UTC(Number(year), Number(month) - 1, Number(day));
+
+  const days = Math.round((deadlineDate - currentDate) / 86400000);
+
+  if (days < 0) {
+    return {
+      text: `Đã hết hạn`,
+      type: "expired",
+    };
+  }
+
+  if (days === 0) {
+    return {
+      text: "Hạn hôm nay",
+      type: "today",
+    };
+  }
+
+  if (days === 1) {
+    return {
+      text: "Còn 1 ngày",
+      type: "soon",
+    };
+  }
+
+  return {
+    text: `Còn ${days} ngày`,
+    type: days <= 3 ? "soon" : "normal",
+  };
 };
 
 // Backend nhận DD/MM/YYYY
@@ -300,6 +354,19 @@ export default function QuotationRequests() {
   const [statusFilter, setStatusFilter] = useState("");
   const [teamFilter, setTeamFilter] = useState("");
   const [sourceFilter, setSourceFilter] = useState("");
+
+  const navigate = useNavigate();
+  const handleGoToDetail = (requestId) => {
+    navigate("/quotation-request-detail", {
+      state: {
+        requestId: requestId,
+      },
+    });
+  };
+
+  const openDetail = (item) => {
+    handleGoToDetail(item.request_id);
+  };
 
   // UI state
   const [loading, setLoading] = useState(false);
@@ -583,58 +650,31 @@ export default function QuotationRequests() {
   // IMPORT FROM PROCUREMENT
   // ============================================================
 
-  const handleImportedQuote = async (imported) => {
-    const userId = getUserId();
+  // Import modal tự gọi POST /quotationRequest/save-import; không tạo trùng tại đây.
 
-    if (!userId) {
-      throw new Error("Không tìm thấy userId. Vui lòng đăng nhập lại.");
-    }
-
-    if (!imported?.requestName && !imported?.request_name) {
-      throw new Error(
-        "Yêu cầu báo giá chưa có tên. Vui lòng kiểm tra dữ liệu trích xuất.",
-      );
-    }
-
-    const payload = {
-      ...imported,
-      source_type: "PROCUREMENT",
-      created_by: userId,
-      team_id: imported.team_id ? Number(imported.team_id) : null,
-      attachments: Array.isArray(imported.attachments)
-        ? imported.attachments
-        : [],
-    };
-
-    // Không lưu localStorage.
-    // Lưu trực tiếp vào PostgreSQL qua Backend.
-    await APIToken.post(BASE_API, payload);
+  const handleImportedQuote = async () => {
+    // save-import đã lưu database thành công.
+    // Không gọi thêm API tạo yêu cầu thủ công.
 
     setShowImport(false);
-    await afterMutation("Đã nhập yêu cầu báo giá từ Mua sắm công thành công.");
+    setError("");
 
-    return true;
+    // Hiện Toast thành công góc trên bên phải.
+    showToast("Thêm yêu cầu báo giá thành công!", "success");
+
+    // Quay về trang đầu để xem yêu cầu mới.
+    setPage(1);
+
+    try {
+      await Promise.all([loadRequests(), loadStats(), loadTeams()]);
+    } catch (err) {
+      console.error("Không thể tải lại danh sách:", err);
+    }
   };
 
   // ============================================================
   // DETAIL
   // ============================================================
-
-  const openDetail = async (item) => {
-    setSaving(true);
-    setError("");
-
-    try {
-      const response = await APIToken.get(`${BASE_API}/${item.request_id}`);
-
-      setSelected(normalizeApiRequest(unwrap(response)));
-      setShowDetail(true);
-    } catch (err) {
-      setError(getError(err));
-    } finally {
-      setSaving(false);
-    }
-  };
 
   // ============================================================
   // ASSIGN TEAM
@@ -937,7 +977,7 @@ export default function QuotationRequests() {
 
           <Button variant="outline-primary" onClick={() => setShowImport(true)}>
             <FaFileImport className="me-2" />
-            Nhập Mua sắm công
+            Import PDF
           </Button>
 
           <Button className="vqr-primary" onClick={openCreate}>
@@ -970,7 +1010,7 @@ export default function QuotationRequests() {
             icon: <FaClipboardList />,
           },
           {
-            label: "Đã tiếp nhận",
+            label: "Tạo mới",
             value: stats?.received ?? "—",
             icon: <FaClock />,
           },
@@ -1105,7 +1145,7 @@ export default function QuotationRequests() {
                 <th style={{ width: 50 }}>STT</th>
                 <th style={{ minWidth: 145 }}>Mã yêu cầu</th>
                 <th className="vqr-content-column">Tên báo giá</th>
-                <th style={{ minWidth: 170 }}>Đơn vị</th>
+                {/* <th style={{ minWidth: 170 }}>Đơn vị</th> */}
                 <th style={{ minWidth: 130 }}>Hạn nộp báo giá</th>
                 <th className="vqr-validity-column">Hiệu lực báo giá</th>
                 <th style={{ minWidth: 155 }}>Nhóm phụ trách</th>
@@ -1152,19 +1192,39 @@ export default function QuotationRequests() {
                       <div className="vqr-small-muted">
                         {item.location || "Chưa có địa điểm"}
                       </div>
+                      <div className="vqr-small-muted">
+                        Đơn vị: {item.procuring_entity || "—"}
+                      </div>
                     </td>
 
-                    <td className="vqr-cell-text">
+                    {/* <td className="vqr-cell-text">
                       {item.procuring_entity || "—"}
-                    </td>
+                    </td> */}
 
                     <td>
-                      <span className={isOverdue(item) ? "vqr-overdue" : ""}>
-                        {formatDate(item.closing_date, true)}
-                      </span>
-                      {isOverdue(item) && (
-                        <div className="vqr-small-danger">Quá hạn</div>
-                      )}
+                      <div className="vqr-deadline-cell">
+                        <span className="vqr-deadline-date">
+                          {formatDate(
+                            item.closing_date || item.reception_end_date,
+                          )}
+                        </span>
+
+                        {(() => {
+                          const remaining = getDeadlineRemaining(
+                            item.closing_date || item.reception_end_date,
+                          );
+
+                          if (!remaining) return null;
+
+                          return (
+                            <span
+                              className={`vqr-deadline-remaining vqr-deadline-${remaining.type}`}
+                            >
+                              {remaining.text}
+                            </span>
+                          );
+                        })()}
+                      </div>
                     </td>
 
                     <td className="vqr-validity-column">
@@ -1295,6 +1355,7 @@ export default function QuotationRequests() {
         show={showImport}
         onHide={() => setShowImport(false)}
         onSaved={handleImportedQuote}
+        mode="web-admin"
       />
 
       {/* =========================

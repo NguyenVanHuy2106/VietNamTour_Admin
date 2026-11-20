@@ -674,7 +674,7 @@
 .vqr-table .vqr-content-column {
   width: 300px;
   min-width: 280px;
-  max-width: 500px;
+  max-width: 400px;
 }
 
 .vqr-table .vqr-title-button {
@@ -893,4 +893,200 @@
   background-color: #edf0f4 !important;
   color: #596579 !important;
   border: 1px solid #d5dce5 !important;
+}
+
+/* ===============================================
+   TEAM - FIX QUOTATION REQUEST TABLE
+   Chỉnh cột Đơn vị không bị ép xuống dòng
+=============================================== */
+
+
+/* =====================================================
+   QUOTATION REQUEST TABLE - ADMIN & TEAM
+   Cân đối chiều rộng các cột
+===================================================== */
+
+/* Cả hai bảng giữ cùng cách phân bổ chiều ngang */
+
+.vqr-page .vqr-table {
+  width: 100%;
+  min-width: 1150px;
+  table-layout: auto;
+}
+
+/* Tên báo giá: ưu tiên không gian nội dung */
+
+.vqr-page .vqr-table .vqr-content-column {
+  width: auto;
+  min-width: 280px;
+  max-width: 460px;
+}
+
+/* Hạn nộp: không bị giãn quá mức */
+
+.vqr-page .vqr-table th.vqr-deadline-column,
+.vqr-page .vqr-table td.vqr-deadline-column {
+  width: 145px;
+  min-width: 145px;
+  max-width: 145px;
+  padding-left: 10px;
+  padding-right: 10px;
+  white-space: nowrap;
+}
+
+/* Ngày và thời gian còn lại */
+
+.vqr-page .vqr-deadline-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.vqr-page .vqr-deadline-date {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.vqr-page .vqr-deadline-remaining {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Hiệu lực báo giá */
+
+.vqr-page .vqr-table .vqr-validity-column {
+  width: 180px;
+  min-width: 170px;
+  max-width: 200px;
+}
+
+/* Nội dung tên báo giá */
+
+.vqr-page .vqr-table .vqr-title-button {
+  font-size: 13px !important;
+  line-height: 1.55;
+  font-weight: 650;
+
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
+/* Thông tin phụ bên dưới tên */
+
+.vqr-page .vqr-table
+.vqr-content-column .vqr-small-muted {
+  font-size: 11px;
+  line-height: 1.5;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Bảng Team: không ép 1600px nữa */
+
+.vqr-page .vqr-team-list-table {
+  min-width: 1150px;
+}
+
+/* Cột thao tác của Team gọn hơn Admin */
+
+.vqr-page .vqr-team-list-table
+.vqr-table-actions {
+  gap: 5px;
+  white-space: nowrap;
+}
+
+/* =========================================
+   QUOTATION DEADLINE - DAYS REMAINING
+========================================= */
+
+.vqr-deadline-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.vqr-deadline-date {
+  color: #304760;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.vqr-deadline-remaining {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.vqr-deadline-normal {
+  color: #16825d;
+}
+
+.vqr-deadline-soon {
+  color: #d58a13;
+}
+
+.vqr-deadline-today {
+  color: #dc8121;
+}
+
+.vqr-deadline-expired {
+  color: #d44d4d;
+}
+
+
+/* ================================================
+   FIX WIDTH - DEADLINE COLUMN
+   ADMIN WEB + TEAM
+================================================ */
+
+.vqr-table th.vqr-deadline-column,
+.vqr-table td.vqr-deadline-column,
+.vqr-team-table-fixed th.vqr-deadline-column,
+.vqr-team-table-fixed td.vqr-deadline-column {
+  width: 145px !important;
+  min-width: 145px !important;
+  max-width: 145px !important;
+  box-sizing: border-box;
+}
+
+/* Ngày và số ngày còn lại nằm sát nhau */
+
+.vqr-deadline-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  width: 100%;
+  white-space: nowrap;
+}
+
+.vqr-deadline-date {
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.vqr-deadline-remaining {
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Không để padding làm cột quá rộng */
+
+.vqr-table th.vqr-deadline-column,
+.vqr-table td.vqr-deadline-column,
+.vqr-team-table-fixed th.vqr-deadline-column,
+.vqr-team-table-fixed td.vqr-deadline-column {
+  padding-left: 10px !important;
+  padding-right: 10px !important;
 }
